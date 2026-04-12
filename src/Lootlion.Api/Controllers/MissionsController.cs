@@ -20,41 +20,26 @@ public sealed class MissionsController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(MissionDto), StatusCodes.Status200OK)]
-    public Task<MissionDto> Create([FromBody] CreateMissionRequest request, CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _missions.CreateAsync(userId, request, cancellationToken);
-    }
+    public Task<MissionDto> Create([FromBody] CreateMissionRequest request, CancellationToken cancellationToken) =>
+        _missions.CreateAsync(this.GetCurrentUserId(), request, cancellationToken);
 
     [HttpGet("household/{householdId:guid}")]
     [ProducesResponseType(typeof(IReadOnlyList<MissionDto>), StatusCodes.Status200OK)]
-    public Task<IReadOnlyList<MissionDto>> List(Guid householdId, CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _missions.ListForHouseholdAsync(userId, householdId, cancellationToken);
-    }
+    public Task<IReadOnlyList<MissionDto>> List(Guid householdId, CancellationToken cancellationToken) =>
+        _missions.ListForHouseholdAsync(this.GetCurrentUserId(), householdId, cancellationToken);
 
     [HttpPost("{missionId:guid}/submit")]
     [ProducesResponseType(typeof(MissionDto), StatusCodes.Status200OK)]
-    public Task<MissionDto> Submit(Guid missionId, CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _missions.SubmitAsync(userId, missionId, cancellationToken);
-    }
+    public Task<MissionDto> Submit(Guid missionId, CancellationToken cancellationToken) =>
+        _missions.SubmitAsync(this.GetCurrentUserId(), missionId, cancellationToken);
 
     [HttpPost("{missionId:guid}/approve")]
     [ProducesResponseType(typeof(MissionDto), StatusCodes.Status200OK)]
-    public Task<MissionDto> Approve(Guid missionId, CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _missions.ApproveAsync(userId, missionId, cancellationToken);
-    }
+    public Task<MissionDto> Approve(Guid missionId, CancellationToken cancellationToken) =>
+        _missions.ApproveAsync(this.GetCurrentUserId(), missionId, cancellationToken);
 
     [HttpPost("{missionId:guid}/reject")]
     [ProducesResponseType(typeof(MissionDto), StatusCodes.Status200OK)]
-    public Task<MissionDto> Reject(Guid missionId, CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _missions.RejectAsync(userId, missionId, cancellationToken);
-    }
+    public Task<MissionDto> Reject(Guid missionId, CancellationToken cancellationToken) =>
+        _missions.RejectAsync(this.GetCurrentUserId(), missionId, cancellationToken);
 }

@@ -1,9 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TuiButton } from '@taiga-ui/core';
 import { AuthService } from '../../api/generated/api/auth.service';
+import { readApiErrorMessage } from '../../core/auth/api-error';
 import { AuthSessionService } from '../../core/auth/auth-session.service';
 import { EMPTY, catchError, finalize } from 'rxjs';
 
@@ -39,20 +39,14 @@ export class LoginComponent {
     this.authApi
       .apiAuthLoginPost({ email: email.trim(), password })
       .pipe(
-        catchError((err: HttpErrorResponse) => {
-          const body = err.error as { error?: string } | undefined;
-          this.errorMessage.set(
-            typeof body?.error === 'string' ? body.error : err.message || 'เข้าสู่ระบบไม่สำเร็จ'
-          );
+        catchError((err) => {
+          this.errorMessage.set(readApiErrorMessage(err, 'เข้าสู่ระบบไม่สำเร็จ'));
           return EMPTY;
         }),
         finalize(() => this.submitting.set(false))
       )
       .subscribe((res) => {
-        const access = res.accessToken;
-        const refresh = res.refreshToken;
-        if (access && refresh) {
-          this.session.setSession(access, refresh);
+        if (this.session.storeFromAuthResponse(res)) {
           void this.router.navigateByUrl('/');
         } else {
           this.errorMessage.set('ไม่ได้รับ token จากเซิร์ฟเวอร์');

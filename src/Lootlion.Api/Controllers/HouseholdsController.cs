@@ -21,27 +21,18 @@ public sealed class HouseholdsController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(HouseholdDto), StatusCodes.Status200OK)]
-    public Task<HouseholdDto> Create([FromBody] CreateHouseholdRequest request, CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _households.CreateAsync(userId, request, cancellationToken);
-    }
+    public Task<HouseholdDto> Create([FromBody] CreateHouseholdRequest request, CancellationToken cancellationToken) =>
+        _households.CreateAsync(this.GetCurrentUserId(), request, cancellationToken);
 
     [HttpGet("mine")]
     [ProducesResponseType(typeof(IReadOnlyList<HouseholdDto>), StatusCodes.Status200OK)]
-    public Task<IReadOnlyList<HouseholdDto>> ListMine(CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _households.ListMineAsync(userId, cancellationToken);
-    }
+    public Task<IReadOnlyList<HouseholdDto>> ListMine(CancellationToken cancellationToken) =>
+        _households.ListMineAsync(this.GetCurrentUserId(), cancellationToken);
 
     [HttpGet("{householdId:guid}/members")]
     [ProducesResponseType(typeof(IReadOnlyList<HouseholdMemberDto>), StatusCodes.Status200OK)]
-    public Task<IReadOnlyList<HouseholdMemberDto>> Members(Guid householdId, CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _households.GetMembersAsync(userId, householdId, cancellationToken);
-    }
+    public Task<IReadOnlyList<HouseholdMemberDto>> Members(Guid householdId, CancellationToken cancellationToken) =>
+        _households.GetMembersAsync(this.GetCurrentUserId(), householdId, cancellationToken);
 
     public sealed record AddMemberBody(Guid MemberUserId, MemberRole Role);
 
@@ -49,8 +40,7 @@ public sealed class HouseholdsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> AddMember(Guid householdId, [FromBody] AddMemberBody body, CancellationToken cancellationToken)
     {
-        var userId = User.GetUserId();
-        await _households.AddMemberAsync(userId, householdId, body.MemberUserId, body.Role, cancellationToken);
+        await _households.AddMemberAsync(this.GetCurrentUserId(), householdId, body.MemberUserId, body.Role, cancellationToken);
         return NoContent();
     }
 }

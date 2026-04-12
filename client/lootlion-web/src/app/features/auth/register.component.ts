@@ -1,10 +1,11 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TuiButton } from '@taiga-ui/core';
 import { AuthService } from '../../api/generated/api/auth.service';
+import { readApiErrorMessage } from '../../core/auth/api-error';
 import { AuthSessionService } from '../../core/auth/auth-session.service';
+import { PASSWORD_MIN_LENGTH, PASSWORD_PATTERN } from '../../core/auth/password-policy';
 import { EMPTY, catchError, finalize } from 'rxjs';
 
 @Component({
@@ -23,16 +24,14 @@ export class RegisterComponent {
   readonly submitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
 
-  /** สอดคล้องกับ ASP.NET Identity ใน API: อย่างน้อย 8 ตัว + ตัวเล็ก ใหญ่ ตัวเลข อักขระพิเศษ */
-  private static readonly passwordPattern =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+  readonly passwordMinLength = PASSWORD_MIN_LENGTH;
 
   readonly form = this.fb.nonNullable.group({
     displayName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     password: [
       '',
-      [Validators.required, Validators.minLength(8), Validators.pattern(RegisterComponent.passwordPattern)],
+      [Validators.required, Validators.minLength(PASSWORD_MIN_LENGTH), Validators.pattern(PASSWORD_PATTERN)],
     ],
   });
 
@@ -51,20 +50,14 @@ export class RegisterComponent {
         password,
       })
       .pipe(
-        catchError((err: HttpErrorResponse) => {
-          const body = err.error as { error?: string } | undefined;
-          this.errorMessage.set(
-            typeof body?.error === 'string' ? body.error : err.message || 'สมัครสมาชิกไม่สำเร็จ'
-          );
+        catchError((err) => {
+          this.errorMessage.set(readApiErrorMessage(err, 'สมัครสมาชิกไม่สำเร็จ'));
           return EMPTY;
         }),
         finalize(() => this.submitting.set(false))
       )
       .subscribe((res) => {
-        const access = res.accessToken;
-        const refresh = res.refreshToken;
-        if (access && refresh) {
-          this.session.setSession(access, refresh);
+        if (this.session.storeFromAuthResponse(res)) {
           void this.router.navigateByUrl('/');
         } else {
           this.errorMessage.set('ไม่ได้รับ token จากเซิร์ฟเวอร์');

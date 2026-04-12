@@ -20,17 +20,11 @@ public sealed class WalletController : ControllerBase
 
     [HttpGet("household/{householdId:guid}/balance")]
     [ProducesResponseType(typeof(WalletBalanceDto), StatusCodes.Status200OK)]
-    public Task<WalletBalanceDto> Balance(Guid householdId, CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _wallet.GetBalanceAsync(userId, householdId, cancellationToken);
-    }
+    public Task<WalletBalanceDto> Balance(Guid householdId, CancellationToken cancellationToken) =>
+        _wallet.GetBalanceAsync(this.GetCurrentUserId(), householdId, cancellationToken);
 
     [HttpGet("household/{householdId:guid}/ledger")]
     [ProducesResponseType(typeof(IReadOnlyList<LedgerEntryDto>), StatusCodes.Status200OK)]
-    public Task<IReadOnlyList<LedgerEntryDto>> Ledger(Guid householdId, [FromQuery] int take = 50, CancellationToken cancellationToken = default)
-    {
-        var userId = User.GetUserId();
-        return _wallet.GetLedgerAsync(userId, householdId, take, cancellationToken);
-    }
+    public Task<IReadOnlyList<LedgerEntryDto>> Ledger(Guid householdId, [FromQuery] int take = 50, CancellationToken cancellationToken = default) =>
+        _wallet.GetLedgerAsync(this.GetCurrentUserId(), householdId, take, cancellationToken);
 }

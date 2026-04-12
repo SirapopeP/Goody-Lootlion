@@ -20,33 +20,21 @@ public sealed class WishlistController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(WishlistItemDto), StatusCodes.Status200OK)]
-    public Task<WishlistItemDto> Create([FromBody] CreateWishlistRequest request, CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _wishlist.CreateAsync(userId, request, cancellationToken);
-    }
+    public Task<WishlistItemDto> Create([FromBody] CreateWishlistRequest request, CancellationToken cancellationToken) =>
+        _wishlist.CreateAsync(this.GetCurrentUserId(), request, cancellationToken);
 
     [HttpGet("household/{householdId:guid}")]
     [ProducesResponseType(typeof(IReadOnlyList<WishlistItemDto>), StatusCodes.Status200OK)]
-    public Task<IReadOnlyList<WishlistItemDto>> List(Guid householdId, CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _wishlist.ListAsync(userId, householdId, cancellationToken);
-    }
+    public Task<IReadOnlyList<WishlistItemDto>> List(Guid householdId, CancellationToken cancellationToken) =>
+        _wishlist.ListAsync(this.GetCurrentUserId(), householdId, cancellationToken);
 
     [HttpPost("{wishlistItemId:guid}/approve")]
     [ProducesResponseType(typeof(RewardCatalogItemDto), StatusCodes.Status200OK)]
-    public Task<RewardCatalogItemDto> Approve(Guid wishlistItemId, [FromBody] ApproveWishlistRequest request, CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _wishlist.ApproveAsync(userId, wishlistItemId, request, cancellationToken);
-    }
+    public Task<RewardCatalogItemDto> Approve(Guid wishlistItemId, [FromBody] ApproveWishlistRequest request, CancellationToken cancellationToken) =>
+        _wishlist.ApproveAsync(this.GetCurrentUserId(), wishlistItemId, request, cancellationToken);
 
     [HttpPost("{wishlistItemId:guid}/reject")]
     [ProducesResponseType(typeof(WishlistItemDto), StatusCodes.Status200OK)]
-    public Task<WishlistItemDto> Reject(Guid wishlistItemId, CancellationToken cancellationToken)
-    {
-        var userId = User.GetUserId();
-        return _wishlist.RejectAsync(userId, wishlistItemId, cancellationToken);
-    }
+    public Task<WishlistItemDto> Reject(Guid wishlistItemId, CancellationToken cancellationToken) =>
+        _wishlist.RejectAsync(this.GetCurrentUserId(), wishlistItemId, cancellationToken);
 }

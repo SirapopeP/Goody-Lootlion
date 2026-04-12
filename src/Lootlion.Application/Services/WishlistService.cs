@@ -17,7 +17,7 @@ public sealed class WishlistService : IWishlistService
 
     public async Task<WishlistItemDto> CreateAsync(Guid actorUserId, CreateWishlistRequest request, CancellationToken cancellationToken = default)
     {
-        await EnsureMemberAsync(actorUserId, request.HouseholdId, cancellationToken);
+        await HouseholdAccess.EnsureMemberAsync(_db, actorUserId, request.HouseholdId, cancellationToken);
 
         var item = new WishlistItem
         {
@@ -37,7 +37,7 @@ public sealed class WishlistService : IWishlistService
 
     public async Task<IReadOnlyList<WishlistItemDto>> ListAsync(Guid userId, Guid householdId, CancellationToken cancellationToken = default)
     {
-        await EnsureMemberAsync(userId, householdId, cancellationToken);
+        await HouseholdAccess.EnsureMemberAsync(_db, userId, householdId, cancellationToken);
 
         var rows = await _db.WishlistItems
             .AsNoTracking()
@@ -53,7 +53,7 @@ public sealed class WishlistService : IWishlistService
         var item = await _db.WishlistItems.FirstOrDefaultAsync(w => w.Id == wishlistItemId, cancellationToken)
             ?? throw new InvalidOperationException("Wishlist item not found.");
 
-        await EnsureParentAsync(actorUserId, item.HouseholdId, cancellationToken);
+        await HouseholdAccess.EnsureParentAsync(_db, actorUserId, item.HouseholdId, cancellationToken);
 
         if (item.Status != WishlistStatus.Pending)
             throw new InvalidOperationException("Wishlist item is not pending.");
@@ -92,7 +92,7 @@ public sealed class WishlistService : IWishlistService
         var item = await _db.WishlistItems.FirstOrDefaultAsync(w => w.Id == wishlistItemId, cancellationToken)
             ?? throw new InvalidOperationException("Wishlist item not found.");
 
-        await EnsureParentAsync(actorUserId, item.HouseholdId, cancellationToken);
+        await HouseholdAccess.EnsureParentAsync(_db, actorUserId, item.HouseholdId, cancellationToken);
 
         if (item.Status != WishlistStatus.Pending)
             throw new InvalidOperationException("Wishlist item is not pending.");
@@ -114,21 +114,4 @@ public sealed class WishlistService : IWishlistService
             w.ApprovedRewardId,
             w.CreatedUtc);
 
-    private async Task EnsureMemberAsync(Guid userId, Guid householdId, CancellationToken cancellationToken)
-    {
-        var ok = await _db.HouseholdMembers
-            .AsNoTracking()
-            .AnyAsync(m => m.HouseholdId == householdId && m.UserId == userId, cancellationToken);
-        if (!ok)
-            throw new InvalidOperationException("Household not found or access denied.");
-    }
-
-    private async Task EnsureParentAsync(Guid userId, Guid householdId, CancellationToken cancellationToken)
-    {
-        var row = await _db.HouseholdMembers
-            .AsNoTracking()
-            .FirstOrDefaultAsync(m => m.HouseholdId == householdId && m.UserId == userId, cancellationToken);
-        if (row is null || row.Role != MemberRole.Parent)
-            throw new InvalidOperationException("Only a parent can perform this action.");
-    }
 }

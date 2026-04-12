@@ -59,7 +59,7 @@ public sealed class HouseholdService : IHouseholdService
 
     public async Task<IReadOnlyList<HouseholdMemberDto>> GetMembersAsync(Guid userId, Guid householdId, CancellationToken cancellationToken = default)
     {
-        await EnsureMemberAsync(userId, householdId, cancellationToken);
+        await HouseholdAccess.EnsureMemberAsync(_db, userId, householdId, cancellationToken);
 
         var members = await _db.HouseholdMembers
             .AsNoTracking()
@@ -83,10 +83,7 @@ public sealed class HouseholdService : IHouseholdService
 
     public async Task AddMemberAsync(Guid actorUserId, Guid householdId, Guid memberUserId, MemberRole role, CancellationToken cancellationToken = default)
     {
-        var actor = await _db.HouseholdMembers
-            .FirstOrDefaultAsync(m => m.HouseholdId == householdId && m.UserId == actorUserId, cancellationToken);
-        if (actor is null || actor.Role != MemberRole.Parent)
-            throw new InvalidOperationException("Only a parent in this household can add members.");
+        await HouseholdAccess.EnsureParentAsync(_db, actorUserId, householdId, cancellationToken);
 
         var exists = await _db.HouseholdMembers
             .AnyAsync(m => m.HouseholdId == householdId && m.UserId == memberUserId, cancellationToken);
@@ -102,14 +99,5 @@ public sealed class HouseholdService : IHouseholdService
             JoinedUtc = DateTime.UtcNow
         });
         await _db.SaveChangesAsync(cancellationToken);
-    }
-
-    private async Task EnsureMemberAsync(Guid userId, Guid householdId, CancellationToken cancellationToken)
-    {
-        var ok = await _db.HouseholdMembers
-            .AsNoTracking()
-            .AnyAsync(m => m.HouseholdId == householdId && m.UserId == userId, cancellationToken);
-        if (!ok)
-            throw new InvalidOperationException("Household not found or access denied.");
     }
 }

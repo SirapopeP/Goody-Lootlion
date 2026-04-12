@@ -30,7 +30,7 @@
     <p class="field-error">กรุณากรอกรหัสผ่าน</p>
   }
   @if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
-    <p class="field-error">รหัสผ่านอย่างน้อย 8 ตัวอักษร</p>
+    <p class="field-error">รหัสผ่านอย่างน้อย {{ passwordMinLength }} ตัวอักษร</p>
   }
   @if (form.controls.password.touched && form.controls.password.hasError('pattern')) {
     <p class="field-error">

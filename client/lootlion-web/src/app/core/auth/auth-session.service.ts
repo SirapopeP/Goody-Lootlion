@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { AuthResponse } from '../../api/generated/model/authResponse';
 
 const ACCESS_KEY = 'lootlion.accessToken';
 const REFRESH_KEY = 'lootlion.refreshToken';
@@ -28,6 +29,17 @@ export class AuthSessionService {
     sessionStorage.setItem(ACCESS_KEY, accessToken);
     sessionStorage.setItem(REFRESH_KEY, refreshToken);
     this._token.set(accessToken);
+  }
+
+  /** @returns true ถ้ามีคู่ token และบันทึกแล้ว */
+  storeFromAuthResponse(res: AuthResponse): boolean {
+    const access = res.accessToken;
+    const refresh = res.refreshToken;
+    if (!access || !refresh) {
+      return false;
+    }
+    this.setSession(access, refresh);
+    return true;
   }
 
   clear(): void {

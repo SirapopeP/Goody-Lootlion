@@ -15,24 +15,28 @@ public sealed class WalletService : IWalletService
 
     public async Task<WalletBalanceDto> GetBalanceAsync(Guid userId, Guid householdId, CancellationToken cancellationToken = default)
     {
-        await EnsureMemberAsync(userId, householdId, cancellationToken);
+        await HouseholdAccess.EnsureMemberAsync(_db, userId, householdId, cancellationToken);
 
-        var coin = await _db.LedgerEntries
+        var agg = await _db.LedgerEntries
             .AsNoTracking()
             .Where(e => e.HouseholdId == householdId && e.UserId == userId)
-            .SumAsync(e => (long?)e.DeltaCoin, cancellationToken) ?? 0;
+            .GroupBy(_ => 1)
+            .Select(g => new
+            {
+                Coin = g.Sum(e => (long?)e.DeltaCoin) ?? 0,
+                Exp = g.Sum(e => (int?)e.DeltaExp) ?? 0
+            })
+            .FirstOrDefaultAsync(cancellationToken);
 
-        var exp = await _db.LedgerEntries
-            .AsNoTracking()
-            .Where(e => e.HouseholdId == householdId && e.UserId == userId)
-            .SumAsync(e => (int?)e.DeltaExp, cancellationToken) ?? 0;
+        var coin = agg?.Coin ?? 0;
+        var exp = agg?.Exp ?? 0;
 
         return new WalletBalanceDto(householdId, userId, coin, exp);
     }
 
     public async Task<IReadOnlyList<LedgerEntryDto>> GetLedgerAsync(Guid userId, Guid householdId, int take, CancellationToken cancellationToken = default)
     {
-        await EnsureMemberAsync(userId, householdId, cancellationToken);
+        await HouseholdAccess.EnsureMemberAsync(_db, userId, householdId, cancellationToken);
 
         var rows = await _db.LedgerEntries
             .AsNoTracking()
@@ -51,14 +55,5 @@ public sealed class WalletService : IWalletService
                 e.ReferenceId,
                 e.ReferenceType))
             .ToList();
-    }
-
-    private async Task EnsureMemberAsync(Guid userId, Guid householdId, CancellationToken cancellationToken)
-    {
-        var ok = await _db.HouseholdMembers
-            .AsNoTracking()
-            .AnyAsync(m => m.HouseholdId == householdId && m.UserId == userId, cancellationToken);
-        if (!ok)
-            throw new InvalidOperationException("Household not found or access denied.");
     }
 }

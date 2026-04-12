@@ -1,9 +1,4 @@
-import {
-  HttpBackend,
-  HttpClient,
-  HttpErrorResponse,
-  HttpInterceptorFn,
-} from '@angular/common/http';
+import { HttpBackend, HttpClient, HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthSessionService } from './auth-session.service';
 import { environment } from '../../../environments/environment';
@@ -11,15 +6,11 @@ import { AuthResponse } from '../../api/generated/model/authResponse';
 import { catchError, switchMap, throwError } from 'rxjs';
 
 const SKIP_REFRESH = 'X-Skip-Auth-Refresh';
+const REFRESH_PATH = '/api/Auth/refresh';
 
-/** ไม่แนบ Bearer / ไม่พยายาม refresh */
 function isAuthPublicPath(url: string): boolean {
   const u = url.toLowerCase();
-  return (
-    u.includes('/api/auth/login') ||
-    u.includes('/api/auth/register') ||
-    u.includes('/api/auth/refresh')
-  );
+  return u.includes('/api/auth/login') || u.includes('/api/auth/register') || u.includes('/api/auth/refresh');
 }
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
@@ -34,9 +25,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (!isAuthPublicPath(req.url)) {
     const token = session.getAccessToken();
     if (token) {
-      outgoing = req.clone({
-        setHeaders: { Authorization: `Bearer ${token}` },
-      });
+      outgoing = req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
     }
   }
 
@@ -50,33 +39,27 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         session.clear();
         return throwError(() => err);
       }
-      const rawHttp = new HttpClient(backend);
-      return rawHttp
-        .post<AuthResponse>(`${environment.apiBaseUrl}/api/Auth/refresh`, {
-          refreshToken: rt,
-        })
-        .pipe(
-          switchMap((res) => {
-            const access = res.accessToken;
-            const refresh = res.refreshToken;
-            if (!access || !refresh) {
-              session.clear();
-              return throwError(() => err);
-            }
-            session.setSession(access, refresh);
-            const retry = req.clone({
-              setHeaders: {
-                [SKIP_REFRESH]: '1',
-                Authorization: `Bearer ${access}`,
-              },
-            });
-            return next(retry);
-          }),
-          catchError(() => {
+      const url = `${environment.apiBaseUrl}${REFRESH_PATH}`;
+      return new HttpClient(backend).post<AuthResponse>(url, { refreshToken: rt }).pipe(
+        switchMap((res) => {
+          if (!session.storeFromAuthResponse(res)) {
             session.clear();
             return throwError(() => err);
-          })
-        );
+          }
+          const access = res.accessToken!;
+          const retry = req.clone({
+            setHeaders: {
+              [SKIP_REFRESH]: '1',
+              Authorization: `Bearer ${access}`,
+            },
+          });
+          return next(retry);
+        }),
+        catchError(() => {
+          session.clear();
+          return throwError(() => err);
+        })
+      );
     })
   );
 };

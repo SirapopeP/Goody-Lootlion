@@ -17,7 +17,7 @@ public sealed class RewardService : IRewardService
 
     public async Task<RewardCatalogItemDto> CreateCatalogItemAsync(Guid actorUserId, CreateRewardRequest request, CancellationToken cancellationToken = default)
     {
-        await EnsureParentAsync(actorUserId, request.HouseholdId, cancellationToken);
+        await HouseholdAccess.EnsureParentAsync(_db, actorUserId, request.HouseholdId, cancellationToken);
 
         var item = new RewardCatalogItem
         {
@@ -36,7 +36,7 @@ public sealed class RewardService : IRewardService
 
     public async Task<IReadOnlyList<RewardCatalogItemDto>> ListCatalogAsync(Guid userId, Guid householdId, CancellationToken cancellationToken = default)
     {
-        await EnsureMemberAsync(userId, householdId, cancellationToken);
+        await HouseholdAccess.EnsureMemberAsync(_db, userId, householdId, cancellationToken);
 
         var rows = await _db.RewardCatalogItems
             .AsNoTracking()
@@ -49,7 +49,7 @@ public sealed class RewardService : IRewardService
 
     public async Task<RedemptionDto> RedeemAsync(Guid actorUserId, Guid householdId, Guid rewardId, CancellationToken cancellationToken = default)
     {
-        await EnsureMemberAsync(actorUserId, householdId, cancellationToken);
+        await HouseholdAccess.EnsureMemberAsync(_db, actorUserId, householdId, cancellationToken);
 
         var reward = await _db.RewardCatalogItems
             .FirstOrDefaultAsync(r => r.Id == rewardId && r.HouseholdId == householdId, cancellationToken)
@@ -93,7 +93,7 @@ public sealed class RewardService : IRewardService
 
     public async Task<IReadOnlyList<RedemptionDto>> ListRedemptionsAsync(Guid userId, Guid householdId, CancellationToken cancellationToken = default)
     {
-        await EnsureMemberAsync(userId, householdId, cancellationToken);
+        await HouseholdAccess.EnsureMemberAsync(_db, userId, householdId, cancellationToken);
 
         var rows = await _db.Redemptions
             .AsNoTracking()
@@ -110,21 +110,4 @@ public sealed class RewardService : IRewardService
     private static RedemptionDto MapRedemption(Redemption r) =>
         new(r.Id, r.RewardCatalogItemId, r.CoinSpent, r.Status.ToString(), r.CreatedUtc);
 
-    private async Task EnsureMemberAsync(Guid userId, Guid householdId, CancellationToken cancellationToken)
-    {
-        var ok = await _db.HouseholdMembers
-            .AsNoTracking()
-            .AnyAsync(m => m.HouseholdId == householdId && m.UserId == userId, cancellationToken);
-        if (!ok)
-            throw new InvalidOperationException("Household not found or access denied.");
-    }
-
-    private async Task EnsureParentAsync(Guid userId, Guid householdId, CancellationToken cancellationToken)
-    {
-        var row = await _db.HouseholdMembers
-            .AsNoTracking()
-            .FirstOrDefaultAsync(m => m.HouseholdId == householdId && m.UserId == userId, cancellationToken);
-        if (row is null || row.Role != MemberRole.Parent)
-            throw new InvalidOperationException("Only a parent can perform this action.");
-    }
 }

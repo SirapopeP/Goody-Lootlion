@@ -17,8 +17,8 @@ public sealed class MissionService : IMissionService
 
     public async Task<MissionDto> CreateAsync(Guid actorUserId, CreateMissionRequest request, CancellationToken cancellationToken = default)
     {
-        await EnsureMemberAsync(actorUserId, request.HouseholdId, cancellationToken);
-        await EnsureMemberAsync(request.AssignedToUserId, request.HouseholdId, cancellationToken);
+        await HouseholdAccess.EnsureMemberAsync(_db, actorUserId, request.HouseholdId, cancellationToken);
+        await HouseholdAccess.EnsureMemberAsync(_db, request.AssignedToUserId, request.HouseholdId, cancellationToken);
 
         var mission = new Mission
         {
@@ -41,7 +41,7 @@ public sealed class MissionService : IMissionService
 
     public async Task<IReadOnlyList<MissionDto>> ListForHouseholdAsync(Guid userId, Guid householdId, CancellationToken cancellationToken = default)
     {
-        await EnsureMemberAsync(userId, householdId, cancellationToken);
+        await HouseholdAccess.EnsureMemberAsync(_db, userId, householdId, cancellationToken);
 
         var rows = await _db.Missions
             .AsNoTracking()
@@ -57,7 +57,7 @@ public sealed class MissionService : IMissionService
         var mission = await _db.Missions.FirstOrDefaultAsync(m => m.Id == missionId, cancellationToken)
             ?? throw new InvalidOperationException("Mission not found.");
 
-        await EnsureMemberAsync(actorUserId, mission.HouseholdId, cancellationToken);
+        await HouseholdAccess.EnsureMemberAsync(_db, actorUserId, mission.HouseholdId, cancellationToken);
 
         if (mission.AssignedToUserId != actorUserId)
             throw new InvalidOperationException("Only the assignee can submit this mission.");
@@ -88,7 +88,7 @@ public sealed class MissionService : IMissionService
         var mission = await _db.Missions.FirstOrDefaultAsync(m => m.Id == missionId, cancellationToken)
             ?? throw new InvalidOperationException("Mission not found.");
 
-        await EnsureParentAsync(actorUserId, mission.HouseholdId, cancellationToken);
+        await HouseholdAccess.EnsureParentAsync(_db, actorUserId, mission.HouseholdId, cancellationToken);
 
         if (mission.Status != MissionStatus.Submitted)
             throw new InvalidOperationException("Mission is not waiting for approval.");
@@ -106,7 +106,7 @@ public sealed class MissionService : IMissionService
         var mission = await _db.Missions.FirstOrDefaultAsync(m => m.Id == missionId, cancellationToken)
             ?? throw new InvalidOperationException("Mission not found.");
 
-        await EnsureParentAsync(actorUserId, mission.HouseholdId, cancellationToken);
+        await HouseholdAccess.EnsureParentAsync(_db, actorUserId, mission.HouseholdId, cancellationToken);
 
         if (mission.Status != MissionStatus.Submitted)
             throw new InvalidOperationException("Mission is not waiting for approval.");
@@ -154,21 +154,4 @@ public sealed class MissionService : IMissionService
             m.SubmittedUtc,
             m.CompletedUtc);
 
-    private async Task EnsureMemberAsync(Guid userId, Guid householdId, CancellationToken cancellationToken)
-    {
-        var ok = await _db.HouseholdMembers
-            .AsNoTracking()
-            .AnyAsync(m => m.HouseholdId == householdId && m.UserId == userId, cancellationToken);
-        if (!ok)
-            throw new InvalidOperationException("Household not found or access denied.");
-    }
-
-    private async Task EnsureParentAsync(Guid userId, Guid householdId, CancellationToken cancellationToken)
-    {
-        var row = await _db.HouseholdMembers
-            .AsNoTracking()
-            .FirstOrDefaultAsync(m => m.HouseholdId == householdId && m.UserId == userId, cancellationToken);
-        if (row is null || row.Role != MemberRole.Parent)
-            throw new InvalidOperationException("Only a parent can perform this action.");
-    }
 }
