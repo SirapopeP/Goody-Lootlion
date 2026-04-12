@@ -105,6 +105,10 @@ npm run generate:api
 - เปลี่ยน URL สเปกชั่วคราว: ตั้ง `OPENAPI_SPEC_URL` แล้วรันคำสั่งเดิม  
 - **Base URL ของ client** ตั้งใน `src/environments/environment.ts` (`apiBaseUrl`) — production ใช้ `environment.prod.ts` (แทนที่ตอน `ng build --configuration production`)
 
+**Auth (เฟส 2):** หน้า `/auth/login`, `/auth/register` — เก็บ **access token** + **refresh token** ใน `sessionStorage` (คีย์ `lootlion.accessToken`, `lootlion.refreshToken`) แล้ว interceptor แนบ `Authorization` ให้คำขอไป API (ยกเว้น login/register/refresh) — ถ้าได้ `401` จะลอง `POST /api/Auth/refresh` แล้วส่งคำขอซ้ำหนึ่งครั้ง
+
+**เช็คว่ามี token หรือไม่ (Chrome DevTools):** เปิดแท็บ **Application** → **Session Storage** → เลือก origin `http://localhost:4200` → ดูคีย์ด้านบน หรือในแท็บ **Network** เลือกคำขอ **login** (POST) แล้วดู **Response** ว่ามี `accessToken` / `refreshToken`
+
 **ส่งออกไฟล์ OpenAPI แบบ manual:** เปิด Swagger UI แล้วดาวน์โหลด JSON หรือเรียก  
 `http://localhost:5088/swagger/v1/swagger.json`
 

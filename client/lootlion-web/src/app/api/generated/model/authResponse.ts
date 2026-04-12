@@ -11,6 +11,7 @@
 
 export interface AuthResponse { 
     accessToken?: string | null;
+    refreshToken?: string | null;
     userId?: string;
     email?: string | null;
     displayName?: string | null;

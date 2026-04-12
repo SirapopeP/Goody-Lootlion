@@ -8,4 +8,6 @@ public sealed class JwtOptions
     public string Audience { get; set; } = string.Empty;
     public string SigningKey { get; set; } = string.Empty;
     public int AccessTokenMinutes { get; set; } = 60;
+    /// <summary>อายุ refresh token (วัน) — หมุนเวียนผ่าน endpoint refresh</summary>
+    public int RefreshTokenDays { get; set; } = 14;
 }

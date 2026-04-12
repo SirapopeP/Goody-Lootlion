@@ -21,6 +21,7 @@ public sealed class LootlionDbContext : IdentityDbContext<AppUser, IdentityRole<
     public DbSet<RewardCatalogItem> RewardCatalogItems => Set<RewardCatalogItem>();
     public DbSet<WishlistItem> WishlistItems => Set<WishlistItem>();
     public DbSet<Redemption> Redemptions => Set<Redemption>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -83,6 +84,14 @@ public sealed class LootlionDbContext : IdentityDbContext<AppUser, IdentityRole<
         {
             e.HasKey(x => x.Id);
             e.HasIndex(x => new { x.HouseholdId, x.UserId, x.CreatedUtc });
+        });
+
+        builder.Entity<RefreshToken>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.Property(x => x.TokenHash).HasMaxLength(64);
+            e.HasIndex(x => x.TokenHash).IsUnique();
+            e.HasIndex(x => x.UserId);
         });
     }
 }

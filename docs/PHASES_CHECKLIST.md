@@ -18,9 +18,9 @@
 
 ## เฟส 2 — Auth บน Angular
 
-- [ ] หน้า login / register เรียก `POST /api/auth/login`, `register`
-- [ ] เก็บ JWT (แนวทางที่ทีมเลือก: memory + refresh หรือ cookie/BFF)
-- [ ] HTTP interceptor แนบ `Authorization: Bearer`
+- [x] หน้า login / register เรียก `POST /api/auth/login`, `register`
+- [x] เก็บ JWT + refresh token (`sessionStorage` + `AuthSessionService`) — รีเฟรชแท็บแล้วยังล็อกอิน; access หมดอายุแล้ว interceptor ลอง `POST /api/Auth/refresh`
+- [x] HTTP interceptor แนบ `Authorization: Bearer` และจัดการ refresh เมื่อได้ 401
 
 ## เฟส 3 — ครอบครัว
 

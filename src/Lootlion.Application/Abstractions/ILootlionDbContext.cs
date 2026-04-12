@@ -12,6 +12,7 @@ public interface ILootlionDbContext
     DbSet<RewardCatalogItem> RewardCatalogItems { get; }
     DbSet<WishlistItem> WishlistItems { get; }
     DbSet<Redemption> Redemptions { get; }
+    DbSet<RefreshToken> RefreshTokens { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

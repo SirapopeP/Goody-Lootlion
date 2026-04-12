@@ -1,0 +1,44 @@
+<h1>สมัครสมาชิก</h1>
+<p class="hint">มีบัญชีแล้ว <a routerLink="/auth/login">เข้าสู่ระบบ</a></p>
+
+@if (errorMessage(); as err) {
+  <p class="error" role="alert">{{ err }}</p>
+}
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <label class="field">
+    <span>ชื่อที่แสดง</span>
+    <input type="text" formControlName="displayName" autocomplete="name" />
+  </label>
+  @if (form.controls.displayName.touched && form.controls.displayName.invalid) {
+    <p class="field-error">กรุณากรอกชื่อ</p>
+  }
+
+  <label class="field">
+    <span>อีเมล</span>
+    <input type="email" formControlName="email" autocomplete="email" />
+  </label>
+  @if (form.controls.email.touched && form.controls.email.invalid) {
+    <p class="field-error">กรุณากรอกอีเมลให้ถูกต้อง</p>
+  }
+
+  <label class="field">
+    <span>รหัสผ่าน</span>
+    <input type="password" formControlName="password" autocomplete="new-password" />
+  </label>
+  @if (form.controls.password.touched && form.controls.password.hasError('required')) {
+    <p class="field-error">กรุณากรอกรหัสผ่าน</p>
+  }
+  @if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
+    <p class="field-error">รหัสผ่านอย่างน้อย 8 ตัวอักษร</p>
+  }
+  @if (form.controls.password.touched && form.controls.password.hasError('pattern')) {
+    <p class="field-error">
+      ต้องมีตัวพิมพ์เล็ก ใหญ่ ตัวเลข และอักขระพิเศษ ตามมาตรฐานเดียวกับเซิร์ฟเวอร์
+    </p>
+  }
+
+  <button type="submit" tuiButton [disabled]="submitting()">
+    {{ submitting() ? 'กำลังสมัคร…' : 'สมัครสมาชิก' }}
+  </button>
+</form>

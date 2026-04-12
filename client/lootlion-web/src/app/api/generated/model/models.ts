@@ -15,6 +15,7 @@ export * from './missionStatus';
 export * from './redeemBody';
 export * from './redemptionDto';
 export * from './registerRequest';
+export * from './refreshRequest';
 export * from './rewardCatalogItemDto';
 export * from './walletBalanceDto';
 export * from './wishlistItemDto';

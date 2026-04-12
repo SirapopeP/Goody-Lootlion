@@ -3,7 +3,13 @@
     <div class="brand">{{ title }}</div>
     <nav class="nav">
       <a routerLink="/">หน้าแรก</a>
-      <a routerLink="/auth">เข้าสู่ระบบ</a>
+      @if (session.isAuthenticated()) {
+        <button type="button" tuiButton appearance="secondary" size="s" (click)="logout()">
+          ออกจากระบบ
+        </button>
+      } @else {
+        <a routerLink="/auth/login">เข้าสู่ระบบ</a>
+      }
       <a routerLink="/households">ครอบครัว</a>
       <a routerLink="/missions">ภารกิจ</a>
       <a routerLink="/rewards">รางวัล</a>

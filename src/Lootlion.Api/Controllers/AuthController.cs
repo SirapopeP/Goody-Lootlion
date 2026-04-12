@@ -31,4 +31,12 @@ public sealed class AuthController : ControllerBase
     {
         return _auth.LoginAsync(request, cancellationToken);
     }
+
+    [AllowAnonymous]
+    [HttpPost("refresh")]
+    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+    public Task<AuthResponse> Refresh([FromBody] RefreshRequest request, CancellationToken cancellationToken)
+    {
+        return _auth.RefreshAsync(request, cancellationToken);
+    }
 }
