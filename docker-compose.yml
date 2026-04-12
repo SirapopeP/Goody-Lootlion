@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: lootlion
+    ports:
+      - "5432:5432"
+    volumes:
+      - lootlion_pg:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Default: "Host=postgres;Port=5432;Database=lootlion;Username=postgres;Password=postgres"
+    ports:
+      - "5088:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  lootlion_pg:

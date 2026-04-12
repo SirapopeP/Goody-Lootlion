@@ -1,0 +1,10 @@
+{
+  "name": "Lootlion",
+  "short_name": "Lootlion",
+  "theme_color": "#1a1a2e",
+  "background_color": "#16213e",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": []
+}

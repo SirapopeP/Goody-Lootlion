@@ -1,0 +1,17 @@
+<tui-root>
+  <header class="bar">
+    <div class="brand">{{ title }}</div>
+    <nav class="nav">
+      <a routerLink="/">หน้าแรก</a>
+      <a routerLink="/auth">เข้าสู่ระบบ</a>
+      <a routerLink="/households">ครอบครัว</a>
+      <a routerLink="/missions">ภารกิจ</a>
+      <a routerLink="/rewards">รางวัล</a>
+      <a routerLink="/wishlist">Wishlist</a>
+      <a routerLink="/profile">โปรไฟล์</a>
+    </nav>
+  </header>
+  <main class="main">
+    <router-outlet />
+  </main>
+</tui-root>

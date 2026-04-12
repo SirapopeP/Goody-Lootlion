@@ -1,0 +1,13 @@
+export * from './auth.service';
+import { AuthService } from './auth.service';
+export * from './households.service';
+import { HouseholdsService } from './households.service';
+export * from './missions.service';
+import { MissionsService } from './missions.service';
+export * from './rewards.service';
+import { RewardsService } from './rewards.service';
+export * from './wallet.service';
+import { WalletService } from './wallet.service';
+export * from './wishlist.service';
+import { WishlistService } from './wishlist.service';
+export const APIS = [AuthService, HouseholdsService, MissionsService, RewardsService, WalletService, WishlistService];

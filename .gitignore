@@ -1,0 +1,19 @@
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+*.cache
+
+# Node / Angular
+node_modules/
+client/lootlion-web/dist/
+client/lootlion-web/.angular/
+
+# IDE
+.idea/
+.vs/
+
+# OS
+Thumbs.db
+.DS_Store
