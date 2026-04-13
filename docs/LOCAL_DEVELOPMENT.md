@@ -119,7 +119,7 @@ npm start
 ```
 
 - เปิด `http://localhost:4200` เพื่อดู UI  
-- ตอนนี้หน้าจอหลายส่วนอาจยังเป็น placeholder — การทดสอบ API แบบเต็มทำที่ Swagger ได้ก่อน
+- พื้นหลังแบบอนุภาค (canvas) ใช้คอมโพเนนต์ `lootlion-particles-background` ใน `src/app/shared/ui/particles-background/` — อิงแนวคิดจากโปรเจกต์ sirapope-schoolie-frontend; ปรับสี/จำนวนจุดได้ผ่าน `@Input()` (`color`, `particleCount`, `connectionDistance`, `trailAlpha`, `orbitRadiusMin` / `orbitRadiusMax` = รัศมีวงโคจรของจุดเป็น px จากกลางจอ — เพิ่มคู่นี้เมื่อต้องการให้วงกว้างขึ้น)
 
 ### 5) สร้าง TypeScript client จาก OpenAPI (เฟส 1)
 

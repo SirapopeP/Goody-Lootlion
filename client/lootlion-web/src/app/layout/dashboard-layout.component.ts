@@ -4,11 +4,19 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { parseJwtUserDisplay } from '../core/auth/jwt-payload';
 import { AuthSessionService } from '../core/auth/auth-session.service';
 import { LanguageToggleComponent } from '../core/i18n/language-toggle.component';
+import { ParticlesBackgroundComponent } from '../shared/ui/particles-background/particles-background.component';
 
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslocoPipe, LanguageToggleComponent],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    TranslocoPipe,
+    LanguageToggleComponent,
+    ParticlesBackgroundComponent,
+  ],
   templateUrl: './dashboard-layout.component.html',
   styleUrl: './dashboard-layout.component.css',
 })

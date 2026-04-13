@@ -8,6 +8,14 @@
   padding: 2rem 1rem 3rem;
   box-sizing: border-box;
   background: var(--lootlion-bg);
+  isolation: isolate;
+  overflow-x: hidden;
+}
+
+.shell > .card,
+.shell > .wizard-card {
+  position: relative;
+  z-index: 1;
 }
 
 .card {

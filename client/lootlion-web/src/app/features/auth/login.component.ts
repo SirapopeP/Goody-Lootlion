@@ -7,12 +7,19 @@ import { applyAuthResult } from '../../core/auth/apply-auth-result';
 import { readApiErrorMessage } from '../../core/auth/api-error';
 import { AuthSessionService } from '../../core/auth/auth-session.service';
 import { LanguageToggleComponent } from '../../core/i18n/language-toggle.component';
+import { ParticlesBackgroundComponent } from '../../shared/ui/particles-background/particles-background.component';
 import { EMPTY, catchError, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe, LanguageToggleComponent],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    TranslocoPipe,
+    LanguageToggleComponent,
+    ParticlesBackgroundComponent,
+  ],
   templateUrl: './login.component.html',
   styleUrls: ['./auth-shell.css', './auth-forms.css'],
 })

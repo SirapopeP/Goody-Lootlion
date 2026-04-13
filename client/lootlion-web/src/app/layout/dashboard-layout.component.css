@@ -1,9 +1,17 @@
 .dashboard {
+  position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: var(--lootlion-bg);
   color: var(--lootlion-text);
+  isolation: isolate;
+}
+
+.dashboard > .top,
+.dashboard > .body {
+  position: relative;
+  z-index: 1;
 }
 
 .top {

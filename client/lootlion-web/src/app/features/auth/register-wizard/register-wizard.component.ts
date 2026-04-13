@@ -8,6 +8,7 @@ import { HouseholdDto } from '../../../api/generated/model/householdDto';
 import { readApiErrorMessage } from '../../../core/auth/api-error';
 import { AuthSessionService } from '../../../core/auth/auth-session.service';
 import { LanguageToggleComponent } from '../../../core/i18n/language-toggle.component';
+import { ParticlesBackgroundComponent } from '../../../shared/ui/particles-background/particles-background.component';
 import { PASSWORD_MIN_LENGTH, PASSWORD_PATTERN } from '../../../core/auth/password-policy';
 import { EMPTY, catchError, finalize } from 'rxjs';
 
@@ -40,7 +41,13 @@ const emptyDraft = (): Draft => ({
 @Component({
   selector: 'app-register-wizard',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe, LanguageToggleComponent],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    TranslocoPipe,
+    LanguageToggleComponent,
+    ParticlesBackgroundComponent,
+  ],
   templateUrl: './register-wizard.component.html',
   styleUrls: ['../auth-shell.css', '../auth-forms.css', './register-wizard.component.css'],
 })
