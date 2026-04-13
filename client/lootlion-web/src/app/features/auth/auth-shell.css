@@ -10,25 +10,6 @@
   background: var(--lootlion-bg);
 }
 
-.lang {
-  position: absolute;
-  top: 1.25rem;
-  right: 1.5rem;
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
-  color: var(--lootlion-text-muted);
-}
-
-.lang span {
-  color: var(--lootlion-text);
-  cursor: default;
-}
-
-.lang .sep {
-  margin: 0 0.35rem;
-  color: var(--lootlion-border);
-}
-
 .card {
   width: 100%;
   max-width: 400px;

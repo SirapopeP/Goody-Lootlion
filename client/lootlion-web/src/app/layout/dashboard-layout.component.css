@@ -104,22 +104,6 @@
   text-decoration: underline;
 }
 
-.lang {
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
-  color: var(--lootlion-text-muted);
-}
-
-.lang span:first-of-type,
-.lang span:last-of-type {
-  color: var(--lootlion-text);
-}
-
-.sep {
-  margin: 0 0.35rem;
-  color: var(--lootlion-border);
-}
-
 .body {
   flex: 1;
   display: grid;

@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AuthService } from '../../api/generated/api/auth.service';
+import { applyAuthResult } from '../../core/auth/apply-auth-result';
 import { readApiErrorMessage } from '../../core/auth/api-error';
 import { AuthSessionService } from '../../core/auth/auth-session.service';
 import { LanguageToggleComponent } from '../../core/i18n/language-toggle.component';
@@ -61,11 +62,7 @@ export class RegisterComponent {
         finalize(() => this.submitting.set(false))
       )
       .subscribe((res) => {
-        if (this.session.storeFromAuthResponse(res)) {
-          void this.router.navigateByUrl('/');
-        } else {
-          this.errorMessage.set(this.transloco.translate('auth.noToken'));
-        }
+        applyAuthResult(this.session, this.router, this.transloco, this.errorMessage, res);
       });
   }
 }
