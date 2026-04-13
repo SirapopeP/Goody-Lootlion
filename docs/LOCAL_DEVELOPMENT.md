@@ -138,7 +138,9 @@ npm run generate:api
 - เปลี่ยน URL สเปกชั่วคราว: ตั้ง `OPENAPI_SPEC_URL` แล้วรันคำสั่งเดิม  
 - **Base URL ของ client** ตั้งใน `src/environments/environment.ts` (`apiBaseUrl`) — production ใช้ `environment.prod.ts` (แทนที่ตอน `ng build --configuration production`)
 
-**Auth (เฟส 2):** หน้า `/auth/login`, `/auth/register` — เก็บ **access token** + **refresh token** ใน `sessionStorage` (คีย์ `lootlion.accessToken`, `lootlion.refreshToken`) แล้ว interceptor แนบ `Authorization` ให้คำขอไป API (ยกเว้น login/register/refresh) — ถ้าได้ `401` จะลอง `POST /api/Auth/refresh` แล้วส่งคำขอซ้ำหนึ่งครั้ง
+**Auth (เฟส 2):** หน้า `/auth/login`, `/auth/register` (wizard) — เก็บ **access token** + **refresh token** ใน `sessionStorage` (คีย์ `lootlion.accessToken`, `lootlion.refreshToken`) แล้ว interceptor แนบ `Authorization` ให้คำขอไป API (ยกเว้น login/register/refresh) — ถ้าได้ `401` จะลอง `POST /api/Auth/refresh` แล้วส่งคำขอซ้ำหนึ่งครั้ง
+
+**บัญชีเด็ก guest (อ้างอิงโค้ด):** Identity ตั้ง `RequireUniqueEmail` — เด็กที่ยังไม่มีอีเมลจริงจะได้อีเมลสังเคราะห์ใน DB (`*@guest.lootlion.internal`) ผ่าน `GuestAccountConstants` / `IdentityAuthService` แต่ **ไม่ส่งอีเมลนี้ใน JWT/response** ขณะยังเป็น guest; ผู้ปกครองกรอกบัญชีครบผ่าน `POST /api/Auth/complete-guest-child` ตามเฟสผลิตภัณฑ์
 
 **เช็คว่ามี token หรือไม่ (Chrome DevTools):** เปิดแท็บ **Application** → **Session Storage** → เลือก origin `http://localhost:4200` → ดูคีย์ด้านบน หรือในแท็บ **Network** เลือกคำขอ **login** (POST) แล้วดู **Response** ว่ามี `accessToken` / `refreshToken`
 
@@ -175,6 +177,12 @@ npm run generate:api
 
 - **`dotnet build` / `dotnet run` ขึ้น `MSB3027` / `MSB3021` — ล็อกไฟล์ `Lootlion.Api.exe`**  
   มักเกิดเพราะ **ยังมีโปรเซส API รันอยู่** (เทอร์มินัลอื่น, หรือรัน `dotnet run` ค้างไว้) — ให้หยุดก่อน: ไปที่เทอร์มินัลที่รัน API แล้วกด **Ctrl+C** หรือปิดโปรเซส `Lootlion.Api` ใน Task Manager แล้วค่อย build/run ใหม่
+
+- **Angular ขึ้น `Http failure … 0` / ต่อ API ไม่ได้**  
+  ตรวจ `client/lootlion-web/src/environments/environment.ts` (และ `environment.prod.ts` สำหรับ build production) ให้ `apiBaseUrl` ชี้พอร์ตเดียวกับ API จริง — ค่าเริ่มต้นโปรเจกต์คือ **`http://localhost:5088`** ไม่ใช่ `5000` เว้นแต่คุณเปลี่ยน `launchSettings.json` / พอร์ตรัน API
+
+- **รัน `dotnet ef database update` แล้ว log ว่า `HostAbortedException` / Application terminated**  
+  มักเป็นเหตุการณ์ปกติของเครื่องมือ EF — ถ้าได้ `Done.` และฐานข้อมูลอัปเดตตามคาด ให้ดูที่บรรทัด `Done.` / ข้อความ migration; โค้ด API กรองการ log แบบนี้ใน `Program.cs` แล้ว
 
 ---
 

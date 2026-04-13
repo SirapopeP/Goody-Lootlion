@@ -14,11 +14,6 @@ namespace Lootlion.Infrastructure.Identity;
 
 public sealed class IdentityAuthService : IAuthService
 {
-    public const int GuestAccountExpiryDays = 7;
-
-    /// <summary>อีเมลภายในสำหรับ guest เท่านั้น — ผ่าน Identity (RequireUniqueEmail) แต่ไม่ส่งให้ client/JWT เมื่อยังเป็น guest</summary>
-    internal const string GuestSyntheticEmailDomain = "@guest.lootlion.internal";
-
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
     private readonly IJwtTokenService _jwt;
@@ -54,13 +49,9 @@ public sealed class IdentityAuthService : IAuthService
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
-        if (!result.Succeeded)
-        {
-            var msg = string.Join("; ", result.Errors.Select(e => e.Description));
-            throw new InvalidOperationException(msg);
-        }
+        EnsureSucceeded(result);
 
-        return await IssueTokensAsync(user, cancellationToken, false);
+        return await IssueTokensAsync(user, cancellationToken, isGuestChild: false);
     }
 
     public async Task<AuthResponse> RegisterWizardAsync(RegisterWizardRequest request, CancellationToken cancellationToken = default)
@@ -69,91 +60,9 @@ public sealed class IdentityAuthService : IAuthService
         if (nickname.Length == 0)
             throw new InvalidOperationException("Nickname is required.");
 
-        if (request.Role == RegistrationRoleDto.Child)
-        {
-            if (!request.JoinHouseholdIdAsChild.HasValue)
-                throw new InvalidOperationException("Select a family to join.");
-            if (!string.IsNullOrWhiteSpace(request.UserName) || !string.IsNullOrWhiteSpace(request.Password))
-                throw new InvalidOperationException("Child accounts do not use a password at signup.");
-
-            var householdId = request.JoinHouseholdIdAsChild.Value;
-            var household = await _db.Households.AsNoTracking().FirstOrDefaultAsync(h => h.Id == householdId, cancellationToken);
-            if (household is null)
-                throw new InvalidOperationException("Family not found.");
-            if (!household.AllowChildPickJoin)
-                throw new InvalidOperationException("This family is not open for child join.");
-
-            var guestUserName = await AllocateGuestUserNameAsync(cancellationToken);
-            var password = GenerateInternalPassword();
-            var userId = Guid.NewGuid();
-            var syntheticEmail = $"{userId:N}{GuestSyntheticEmailDomain}";
-            var user = new AppUser
-            {
-                Id = userId,
-                UserName = guestUserName,
-                NormalizedUserName = _userManager.NormalizeName(guestUserName),
-                Email = syntheticEmail,
-                NormalizedEmail = _userManager.NormalizeEmail(syntheticEmail),
-                DisplayName = nickname,
-                EmailConfirmed = true,
-                GuestAccountExpiresUtc = DateTime.UtcNow.AddDays(GuestAccountExpiryDays)
-            };
-
-            var create = await _userManager.CreateAsync(user, password);
-            if (!create.Succeeded)
-            {
-                var msg = string.Join("; ", create.Errors.Select(e => e.Description));
-                throw new InvalidOperationException(msg);
-            }
-
-            _db.HouseholdMembers.Add(new HouseholdMember
-            {
-                Id = Guid.NewGuid(),
-                HouseholdId = householdId,
-                UserId = user.Id,
-                Role = MemberRole.Child,
-                JoinedUtc = DateTime.UtcNow
-            });
-            await _db.SaveChangesAsync(cancellationToken);
-
-            return await IssueTokensAsync(user, cancellationToken, true);
-        }
-
-        if (string.IsNullOrWhiteSpace(request.UserName) || string.IsNullOrWhiteSpace(request.Password))
-            throw new InvalidOperationException("Username and password are required for a parent account.");
-
-        if (request.CreateNewHousehold == request.JoinHouseholdIdAsParent.HasValue)
-            throw new InvalidOperationException("Choose either create a new family or join an existing one.");
-
-        if (request.CreateNewHousehold && string.IsNullOrWhiteSpace(request.NewHouseholdName))
-            throw new InvalidOperationException("Family name is required when creating a new family.");
-
-        var parent = new AppUser
-        {
-            Id = Guid.NewGuid(),
-            UserName = request.UserName.Trim(),
-            Email = string.IsNullOrWhiteSpace(request.Email) ? null : request.Email.Trim(),
-            EmailConfirmed = true,
-            DisplayName = nickname
-        };
-
-        var parentResult = await _userManager.CreateAsync(parent, request.Password);
-        if (!parentResult.Succeeded)
-        {
-            var msg = string.Join("; ", parentResult.Errors.Select(e => e.Description));
-            throw new InvalidOperationException(msg);
-        }
-
-        if (request.CreateNewHousehold)
-        {
-            await _households.CreateAsync(parent.Id, new CreateHouseholdRequest(request.NewHouseholdName!.Trim()), cancellationToken);
-        }
-        else
-        {
-            await _households.JoinHouseholdAsParentAsync(parent.Id, request.JoinHouseholdIdAsParent!.Value, cancellationToken);
-        }
-
-        return await IssueTokensAsync(parent, cancellationToken, false);
+        return request.Role == RegistrationRoleDto.Child
+            ? await RegisterWizardAsChildAsync(request, nickname, cancellationToken)
+            : await RegisterWizardAsParentAsync(request, nickname, cancellationToken);
     }
 
     public async Task<AuthResponse> CompleteGuestChildAsync(Guid parentUserId, CompleteGuestChildRequest request, CancellationToken cancellationToken = default)
@@ -197,35 +106,25 @@ public sealed class IdentityAuthService : IAuthService
         child.GuestAccountExpiresUtc = null;
 
         var update = await _userManager.UpdateAsync(child);
-        if (!update.Succeeded)
-        {
-            var msg = string.Join("; ", update.Errors.Select(e => e.Description));
-            throw new InvalidOperationException(msg);
-        }
+        EnsureSucceeded(update);
 
         var resetToken = await _userManager.GeneratePasswordResetTokenAsync(child);
         var pwd = await _userManager.ResetPasswordAsync(child, resetToken, request.Password);
-        if (!pwd.Succeeded)
-        {
-            var msg = string.Join("; ", pwd.Errors.Select(e => e.Description));
-            throw new InvalidOperationException(msg);
-        }
+        EnsureSucceeded(pwd);
 
         var reloaded = await _userManager.FindByIdAsync(child.Id.ToString());
         if (reloaded is null)
             throw new InvalidOperationException("User not found after update.");
 
-        return await IssueTokensAsync(reloaded, cancellationToken, false);
+        return await IssueTokensAsync(reloaded, cancellationToken, isGuestChild: false);
     }
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
     {
         var id = request.LoginIdentifier.Trim();
-        AppUser? user = null;
-        if (id.Contains('@', StringComparison.Ordinal))
-            user = await _userManager.FindByEmailAsync(id);
-        else
-            user = await _userManager.FindByNameAsync(id);
+        AppUser? user = id.Contains('@', StringComparison.Ordinal)
+            ? await _userManager.FindByEmailAsync(id)
+            : await _userManager.FindByNameAsync(id);
 
         if (user is null)
             throw new InvalidOperationException("Invalid credentials.");
@@ -262,6 +161,93 @@ public sealed class IdentityAuthService : IAuthService
         return await IssueTokensAsync(user, cancellationToken, isGuest);
     }
 
+    private async Task<AuthResponse> RegisterWizardAsChildAsync(
+        RegisterWizardRequest request,
+        string nickname,
+        CancellationToken cancellationToken)
+    {
+        if (!request.JoinHouseholdIdAsChild.HasValue)
+            throw new InvalidOperationException("Select a family to join.");
+        if (!string.IsNullOrWhiteSpace(request.UserName) || !string.IsNullOrWhiteSpace(request.Password))
+            throw new InvalidOperationException("Child accounts do not use a password at signup.");
+
+        var householdId = request.JoinHouseholdIdAsChild.Value;
+        var household = await _db.Households.AsNoTracking().FirstOrDefaultAsync(h => h.Id == householdId, cancellationToken);
+        if (household is null)
+            throw new InvalidOperationException("Family not found.");
+        if (!household.AllowChildPickJoin)
+            throw new InvalidOperationException("This family is not open for child join.");
+
+        var guestUserName = await AllocateGuestUserNameAsync(cancellationToken);
+        var password = GenerateInternalPassword();
+        var userId = Guid.NewGuid();
+        var syntheticEmail = $"{userId:N}{GuestAccountConstants.SyntheticEmailDomain}";
+        var user = new AppUser
+        {
+            Id = userId,
+            UserName = guestUserName,
+            NormalizedUserName = _userManager.NormalizeName(guestUserName),
+            Email = syntheticEmail,
+            NormalizedEmail = _userManager.NormalizeEmail(syntheticEmail),
+            DisplayName = nickname,
+            EmailConfirmed = true,
+            GuestAccountExpiresUtc = DateTime.UtcNow.AddDays(GuestAccountConstants.ExpiryDays)
+        };
+
+        var create = await _userManager.CreateAsync(user, password);
+        EnsureSucceeded(create);
+
+        _db.HouseholdMembers.Add(new HouseholdMember
+        {
+            Id = Guid.NewGuid(),
+            HouseholdId = householdId,
+            UserId = user.Id,
+            Role = MemberRole.Child,
+            JoinedUtc = DateTime.UtcNow
+        });
+        await _db.SaveChangesAsync(cancellationToken);
+
+        return await IssueTokensAsync(user, cancellationToken, isGuestChild: true);
+    }
+
+    private async Task<AuthResponse> RegisterWizardAsParentAsync(
+        RegisterWizardRequest request,
+        string nickname,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(request.UserName) || string.IsNullOrWhiteSpace(request.Password))
+            throw new InvalidOperationException("Username and password are required for a parent account.");
+
+        if (request.CreateNewHousehold == request.JoinHouseholdIdAsParent.HasValue)
+            throw new InvalidOperationException("Choose either create a new family or join an existing one.");
+
+        if (request.CreateNewHousehold && string.IsNullOrWhiteSpace(request.NewHouseholdName))
+            throw new InvalidOperationException("Family name is required when creating a new family.");
+
+        var parent = new AppUser
+        {
+            Id = Guid.NewGuid(),
+            UserName = request.UserName.Trim(),
+            Email = string.IsNullOrWhiteSpace(request.Email) ? null : request.Email.Trim(),
+            EmailConfirmed = true,
+            DisplayName = nickname
+        };
+
+        var parentResult = await _userManager.CreateAsync(parent, request.Password);
+        EnsureSucceeded(parentResult);
+
+        if (request.CreateNewHousehold)
+        {
+            await _households.CreateAsync(parent.Id, new CreateHouseholdRequest(request.NewHouseholdName!.Trim()), cancellationToken);
+        }
+        else
+        {
+            await _households.JoinHouseholdAsParentAsync(parent.Id, request.JoinHouseholdIdAsParent!.Value, cancellationToken);
+        }
+
+        return await IssueTokensAsync(parent, cancellationToken, isGuestChild: false);
+    }
+
     private async Task<string> AllocateGuestUserNameAsync(CancellationToken cancellationToken)
     {
         for (var i = 0; i < 12; i++)
@@ -288,16 +274,13 @@ public sealed class IdentityAuthService : IAuthService
 
     private async Task<AuthResponse> IssueTokensAsync(AppUser user, CancellationToken cancellationToken, bool isGuestChild)
     {
-        var publicEmail = isGuestChild || string.IsNullOrEmpty(user.Email)
-            ? null
-            : user.Email!.EndsWith(GuestSyntheticEmailDomain, StringComparison.Ordinal)
-                ? null
-                : user.Email;
+        var publicEmail = ResolvePublicEmail(user, isGuestChild);
         var access = _jwt.CreateToken(
             user.Id,
-            string.IsNullOrEmpty(publicEmail) ? null : publicEmail,
+            publicEmail,
             user.DisplayName,
             isGuestChild);
+
         var rawRefresh = GenerateOpaqueToken();
         var hash = TokenHasher.Hash(rawRefresh);
         var expires = DateTime.UtcNow.AddDays(_jwtOptions.RefreshTokenDays);
@@ -319,6 +302,28 @@ public sealed class IdentityAuthService : IAuthService
             publicEmail ?? string.Empty,
             user.DisplayName,
             isGuestChild);
+    }
+
+    /// <summary>อีเมลที่ส่งให้ client / JWT — ไม่เปิดเผยอีเมลสังเคราะห์ของ guest</summary>
+    private static string? ResolvePublicEmail(AppUser user, bool isGuestChild)
+    {
+        if (isGuestChild)
+            return null;
+
+        var email = user.Email;
+        if (string.IsNullOrEmpty(email))
+            return null;
+
+        return email.EndsWith(GuestAccountConstants.SyntheticEmailDomain, StringComparison.Ordinal)
+            ? null
+            : email;
+    }
+
+    private static void EnsureSucceeded(IdentityResult result)
+    {
+        if (result.Succeeded)
+            return;
+        throw new InvalidOperationException(string.Join("; ", result.Errors.Select(e => e.Description)));
     }
 
     private static string GenerateOpaqueToken()

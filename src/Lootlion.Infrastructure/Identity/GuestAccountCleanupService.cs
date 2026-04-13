@@ -25,6 +25,9 @@ public sealed class GuestAccountCleanupService : IGuestAccountCleanupService
             .Select(u => u.Id)
             .ToListAsync(cancellationToken);
 
+        if (expiredIds.Count == 0)
+            return;
+
         foreach (var userId in expiredIds)
         {
             var user = await _users.FindByIdAsync(userId.ToString());
