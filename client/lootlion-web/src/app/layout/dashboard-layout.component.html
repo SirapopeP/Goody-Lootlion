@@ -5,7 +5,7 @@
       <span class="brand-leaf" aria-hidden="true">🌿</span>
     </a>
 
-    <nav class="top-nav" aria-label="เมนูหลัก">
+    <nav class="top-nav" [attr.aria-label]="'nav.mainAria' | transloco">
       <a
         routerLink="/"
         routerLinkActive="is-active"
@@ -13,31 +13,29 @@
         class="nav-item"
       >
         <span class="diamond" aria-hidden="true">◆</span>
-        Quest board and rank
+        {{ 'nav.questBoard' | transloco }}
       </a>
       <a routerLink="/missions" routerLinkActive="is-active" class="nav-item">
         <span class="diamond" aria-hidden="true">◆</span>
-        Quests management
+        {{ 'nav.questsMgmt' | transloco }}
       </a>
       <a routerLink="/rewards" routerLinkActive="is-active" class="nav-item">
         <span class="diamond" aria-hidden="true">◆</span>
-        Rewards management
+        {{ 'nav.rewardsMgmt' | transloco }}
       </a>
       <a routerLink="/profile" routerLinkActive="is-active" class="nav-item">
         <span class="diamond" aria-hidden="true">◆</span>
-        Setting
+        {{ 'nav.settings' | transloco }}
       </a>
     </nav>
 
     <div class="top-right">
       @if (session.isAuthenticated()) {
-        <button type="button" class="linkish" (click)="logout()">ออกจากระบบ</button>
+        <button type="button" class="linkish" (click)="logout()">{{ 'layout.logout' | transloco }}</button>
       } @else {
-        <a routerLink="/auth/login" class="linkish">เข้าสู่ระบบ</a>
+        <a routerLink="/auth/login" class="linkish">{{ 'layout.login' | transloco }}</a>
       }
-      <span class="lang" aria-label="ภาษา (เร็วๆ นี้)">
-        <span>EN</span><span class="sep">|</span><span>TH</span>
-      </span>
+      <app-language-toggle />
     </div>
   </header>
 
@@ -46,10 +44,10 @@
       <router-outlet />
     </main>
 
-    <aside class="sidebar" aria-label="สรุปผู้ใช้และคลัง">
+    <aside class="sidebar" [attr.aria-label]="'layout.sidebarAria' | transloco">
       <section class="card profile-card">
         <div class="level-row">
-          <span class="level-tag">{{ levelLabel }}</span>
+          <span class="level-tag">{{ 'layout.levelPlaceholder' | transloco }}</span>
           <div class="level-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
             <div class="level-fill"></div>
           </div>
@@ -57,20 +55,20 @@
         <div class="avatar" aria-hidden="true"></div>
         @if (session.isAuthenticated()) {
           <p class="handle">
-            {{ userDisplay().displayName ?? userDisplay().email ?? 'ผู้ใช้' }}
+            {{ userDisplay().displayName ?? userDisplay().email ?? ('layout.userFallback' | transloco) }}
           </p>
           <p class="fullname muted">
             {{ userDisplay().email ?? '—' }}
           </p>
         } @else {
-          <p class="handle muted">ยังไม่ได้เข้าสู่ระบบ</p>
-          <a routerLink="/auth/login" class="sidebar-cta">เข้าสู่ระบบ</a>
+          <p class="handle muted">{{ 'layout.guestLine' | transloco }}</p>
+          <a routerLink="/auth/login" class="sidebar-cta">{{ 'layout.login' | transloco }}</a>
         }
       </section>
 
       <section class="card block">
         <div class="block-head">
-          <span class="block-title">Inventory</span>
+          <span class="block-title">{{ 'layout.inventory' | transloco }}</span>
           <span class="block-count">{{ inventoryUsed }}/{{ inventoryCap }}</span>
         </div>
         <div class="grid grid-inv" role="list">
@@ -82,7 +80,7 @@
 
       <section class="card block">
         <div class="block-head">
-          <span class="block-title">Worker</span>
+          <span class="block-title">{{ 'layout.worker' | transloco }}</span>
           <span class="block-count">{{ workerUsed }}/{{ workerCap }}</span>
         </div>
         <div class="grid grid-worker" role="list">
@@ -93,10 +91,10 @@
       </section>
 
       <section class="card footer-slot muted" aria-hidden="true">
-        <span class="small-label">ครอบครัว · Wishlist</span>
+        <span class="small-label">{{ 'layout.familyWishlist' | transloco }}</span>
         <div class="quick-links">
-          <a routerLink="/households">ครอบครัว</a>
-          <a routerLink="/wishlist">Wishlist</a>
+          <a routerLink="/households">{{ 'layout.households' | transloco }}</a>
+          <a routerLink="/wishlist">{{ 'layout.wishlist' | transloco }}</a>
         </div>
       </section>
     </aside>

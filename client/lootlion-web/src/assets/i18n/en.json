@@ -1,0 +1,49 @@
+{
+  "common": {
+    "language": "Language"
+  },
+  "nav": {
+    "mainAria": "Main navigation",
+    "questBoard": "Quest board and rank",
+    "questsMgmt": "Quests management",
+    "rewardsMgmt": "Rewards management",
+    "settings": "Settings"
+  },
+  "layout": {
+    "sidebarAria": "User summary and inventory",
+    "logout": "Log out",
+    "login": "Log in",
+    "levelPlaceholder": "LV —",
+    "userFallback": "User",
+    "guestLine": "Not signed in",
+    "inventory": "Inventory",
+    "worker": "Worker",
+    "familyWishlist": "Household · Wishlist",
+    "households": "Households",
+    "wishlist": "Wishlist"
+  },
+  "home": {
+    "title": "Quest board and rank",
+    "lead": "Space for the quest board and rankings — connect the API in the next phase via",
+    "placeholder": "No data from the server yet (placeholder)"
+  },
+  "auth": {
+    "tagline": "Mission to the moon",
+    "email": "Email",
+    "password": "Password",
+    "displayName": "Display name",
+    "emailInvalid": "Please enter a valid email",
+    "passwordRequired": "Password is required",
+    "displayNameRequired": "Please enter a name",
+    "passwordMinChars": "Password must be at least {{n}} characters",
+    "passwordPattern": "Must include lower and upper case letters, a number, and a special character, matching server rules",
+    "divider": "or",
+    "login": "Log in",
+    "loginSubmitting": "Signing in…",
+    "register": "Create account",
+    "registerSubmitting": "Creating account…",
+    "loginFailed": "Sign-in failed",
+    "registerFailed": "Registration failed",
+    "noToken": "No token received from the server"
+  }
+}

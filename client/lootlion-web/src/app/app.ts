@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TuiRoot } from '@taiga-ui/core';
+import { LocaleSyncService } from './core/i18n/locale-sync.service';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +10,8 @@ import { TuiRoot } from '@taiga-ui/core';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {}
+export class App {
+  constructor() {
+    inject(LocaleSyncService);
+  }
+}

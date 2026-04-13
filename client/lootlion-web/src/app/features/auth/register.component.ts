@@ -1,16 +1,18 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AuthService } from '../../api/generated/api/auth.service';
 import { readApiErrorMessage } from '../../core/auth/api-error';
 import { AuthSessionService } from '../../core/auth/auth-session.service';
+import { LanguageToggleComponent } from '../../core/i18n/language-toggle.component';
 import { PASSWORD_MIN_LENGTH, PASSWORD_PATTERN } from '../../core/auth/password-policy';
 import { EMPTY, catchError, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe, LanguageToggleComponent],
   templateUrl: './register.component.html',
   styleUrls: ['./auth-shell.css', './auth-forms.css'],
 })
@@ -19,6 +21,7 @@ export class RegisterComponent {
   private readonly authApi = inject(AuthService);
   private readonly session = inject(AuthSessionService);
   private readonly router = inject(Router);
+  private readonly transloco = inject(TranslocoService);
 
   readonly submitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
@@ -50,7 +53,9 @@ export class RegisterComponent {
       })
       .pipe(
         catchError((err) => {
-          this.errorMessage.set(readApiErrorMessage(err, 'สมัครสมาชิกไม่สำเร็จ'));
+          this.errorMessage.set(
+            readApiErrorMessage(err, this.transloco.translate('auth.registerFailed'))
+          );
           return EMPTY;
         }),
         finalize(() => this.submitting.set(false))
@@ -59,7 +64,7 @@ export class RegisterComponent {
         if (this.session.storeFromAuthResponse(res)) {
           void this.router.navigateByUrl('/');
         } else {
-          this.errorMessage.set('ไม่ได้รับ token จากเซิร์ฟเวอร์');
+          this.errorMessage.set(this.transloco.translate('auth.noToken'));
         }
       });
   }

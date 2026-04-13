@@ -1,15 +1,17 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AuthService } from '../../api/generated/api/auth.service';
 import { readApiErrorMessage } from '../../core/auth/api-error';
 import { AuthSessionService } from '../../core/auth/auth-session.service';
+import { LanguageToggleComponent } from '../../core/i18n/language-toggle.component';
 import { EMPTY, catchError, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe, LanguageToggleComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./auth-shell.css', './auth-forms.css'],
 })
@@ -18,6 +20,7 @@ export class LoginComponent {
   private readonly authApi = inject(AuthService);
   private readonly session = inject(AuthSessionService);
   private readonly router = inject(Router);
+  private readonly transloco = inject(TranslocoService);
 
   readonly submitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
@@ -39,7 +42,9 @@ export class LoginComponent {
       .apiAuthLoginPost({ email: email.trim(), password })
       .pipe(
         catchError((err) => {
-          this.errorMessage.set(readApiErrorMessage(err, 'เข้าสู่ระบบไม่สำเร็จ'));
+          this.errorMessage.set(
+            readApiErrorMessage(err, this.transloco.translate('auth.loginFailed'))
+          );
           return EMPTY;
         }),
         finalize(() => this.submitting.set(false))
@@ -48,7 +53,7 @@ export class LoginComponent {
         if (this.session.storeFromAuthResponse(res)) {
           void this.router.navigateByUrl('/');
         } else {
-          this.errorMessage.set('ไม่ได้รับ token จากเซิร์ฟเวอร์');
+          this.errorMessage.set(this.transloco.translate('auth.noToken'));
         }
       });
   }

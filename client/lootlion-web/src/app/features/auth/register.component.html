@@ -1,7 +1,5 @@
 <div class="shell">
-  <div class="lang" aria-label="ภาษา (เร็วๆ นี้)">
-    <span>EN</span><span class="sep">|</span><span>TH</span>
-  </div>
+  <app-language-toggle class="auth-placement" />
 
   <div class="card">
     <div class="logo">
@@ -9,7 +7,7 @@
         <span class="l">L</span><span class="rest">ootlion</span><span class="logo-leaf" aria-hidden="true">🌿</span>
       </span>
     </div>
-    <p class="tagline">Mission to the moon</p>
+    <p class="tagline">{{ 'auth.tagline' | transloco }}</p>
 
     @if (errorMessage(); as err) {
       <p class="error" role="alert">{{ err }}</p>
@@ -17,44 +15,48 @@
 
     <form class="form" [formGroup]="form" (ngSubmit)="submit()">
       <div class="field">
-        <label for="reg-name">ชื่อที่แสดง</label>
+        <label for="reg-name">{{ 'auth.displayName' | transloco }}</label>
         <input id="reg-name" type="text" formControlName="displayName" autocomplete="name" />
         @if (form.controls.displayName.touched && form.controls.displayName.invalid) {
-          <p class="field-error">กรุณากรอกชื่อ</p>
+          <p class="field-error">{{ 'auth.displayNameRequired' | transloco }}</p>
         }
       </div>
 
       <div class="field">
-        <label for="reg-email">อีเมล</label>
+        <label for="reg-email">{{ 'auth.email' | transloco }}</label>
         <input id="reg-email" type="email" formControlName="email" autocomplete="email" placeholder="you@example.com" />
         @if (form.controls.email.touched && form.controls.email.invalid) {
-          <p class="field-error">กรุณากรอกอีเมลให้ถูกต้อง</p>
+          <p class="field-error">{{ 'auth.emailInvalid' | transloco }}</p>
         }
       </div>
 
       <div class="field">
-        <label for="reg-password">รหัสผ่าน</label>
+        <label for="reg-password">{{ 'auth.password' | transloco }}</label>
         <input id="reg-password" type="password" formControlName="password" autocomplete="new-password" />
         @if (form.controls.password.touched && form.controls.password.hasError('required')) {
-          <p class="field-error">กรุณากรอกรหัสผ่าน</p>
+          <p class="field-error">{{ 'auth.passwordRequired' | transloco }}</p>
         }
         @if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
-          <p class="field-error">รหัสผ่านอย่างน้อย {{ passwordMinLength }} ตัวอักษร</p>
+          <p class="field-error">{{ 'auth.passwordMinChars' | transloco: { n: passwordMinLength } }}</p>
         }
         @if (form.controls.password.touched && form.controls.password.hasError('pattern')) {
           <p class="field-error">
-            ต้องมีตัวพิมพ์เล็ก ใหญ่ ตัวเลข และอักขระพิเศษ ตามมาตรฐานเดียวกับเซิร์ฟเวอร์
+            {{ 'auth.passwordPattern' | transloco }}
           </p>
         }
       </div>
 
       <button class="btn-primary" type="submit" [disabled]="submitting()">
-        {{ submitting() ? 'กำลังสมัคร…' : 'สมัครสมาชิก' }}
+        {{
+          submitting()
+            ? ('auth.registerSubmitting' | transloco)
+            : ('auth.register' | transloco)
+        }}
       </button>
 
-      <div class="divider" role="separator">หรือ</div>
+      <div class="divider" role="separator">{{ 'auth.divider' | transloco }}</div>
 
-      <a class="btn-secondary" routerLink="/auth/login">เข้าสู่ระบบ</a>
+      <a class="btn-secondary" routerLink="/auth/login">{{ 'auth.login' | transloco }}</a>
     </form>
   </div>
 </div>

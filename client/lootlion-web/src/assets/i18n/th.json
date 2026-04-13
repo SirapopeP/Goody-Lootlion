@@ -1,0 +1,49 @@
+{
+  "common": {
+    "language": "เลือกภาษา"
+  },
+  "nav": {
+    "mainAria": "เมนูหลัก",
+    "questBoard": "บอร์ดภารกิจและอันดับ",
+    "questsMgmt": "จัดการภารกิจ",
+    "rewardsMgmt": "จัดการรางวัล",
+    "settings": "ตั้งค่า"
+  },
+  "layout": {
+    "sidebarAria": "สรุปผู้ใช้และคลัง",
+    "logout": "ออกจากระบบ",
+    "login": "เข้าสู่ระบบ",
+    "levelPlaceholder": "LV —",
+    "userFallback": "ผู้ใช้",
+    "guestLine": "ยังไม่ได้เข้าสู่ระบบ",
+    "inventory": "คลัง",
+    "worker": "เวิร์กเกอร์",
+    "familyWishlist": "ครอบครัว · Wishlist",
+    "households": "ครอบครัว",
+    "wishlist": "Wishlist"
+  },
+  "home": {
+    "title": "บอร์ดภารกิจและอันดับ",
+    "lead": "พื้นที่แสดงบอร์ดภารกิจและอันดับ — เชื่อม API ตามเฟสถัดไปได้จาก",
+    "placeholder": "ยังไม่มีข้อมูลจากเซิร์ฟเวอร์ (placeholder)"
+  },
+  "auth": {
+    "tagline": "Mission to the moon",
+    "email": "อีเมล",
+    "password": "รหัสผ่าน",
+    "displayName": "ชื่อที่แสดง",
+    "emailInvalid": "กรุณากรอกอีเมลให้ถูกต้อง",
+    "passwordRequired": "กรุณากรอกรหัสผ่าน",
+    "displayNameRequired": "กรุณากรอกชื่อ",
+    "passwordMinChars": "รหัสผ่านอย่างน้อย {{n}} ตัวอักษร",
+    "passwordPattern": "ต้องมีตัวพิมพ์เล็ก ใหญ่ ตัวเลข และอักขระพิเศษ ตามมาตรฐานเดียวกับเซิร์ฟเวอร์",
+    "divider": "หรือ",
+    "login": "เข้าสู่ระบบ",
+    "loginSubmitting": "กำลังเข้าสู่ระบบ…",
+    "register": "สมัครสมาชิก",
+    "registerSubmitting": "กำลังสมัคร…",
+    "loginFailed": "เข้าสู่ระบบไม่สำเร็จ",
+    "registerFailed": "สมัครสมาชิกไม่สำเร็จ",
+    "noToken": "ไม่ได้รับ token จากเซิร์ฟเวอร์"
+  }
+}

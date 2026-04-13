@@ -1,7 +1,5 @@
 <div class="shell">
-  <div class="lang" aria-label="ภาษา (เร็วๆ นี้)">
-    <span>EN</span><span class="sep">|</span><span>TH</span>
-  </div>
+  <app-language-toggle class="auth-placement" />
 
   <div class="card">
     <div class="logo">
@@ -9,7 +7,7 @@
         <span class="l">L</span><span class="rest">ootlion</span><span class="logo-leaf" aria-hidden="true">🌿</span>
       </span>
     </div>
-    <p class="tagline">Mission to the moon</p>
+    <p class="tagline">{{ 'auth.tagline' | transloco }}</p>
 
     @if (errorMessage(); as err) {
       <p class="error" role="alert">{{ err }}</p>
@@ -17,7 +15,7 @@
 
     <form class="form" [formGroup]="form" (ngSubmit)="submit()">
       <div class="field">
-        <label for="login-email">อีเมล</label>
+        <label for="login-email">{{ 'auth.email' | transloco }}</label>
         <input
           id="login-email"
           type="email"
@@ -26,12 +24,12 @@
           placeholder="you@example.com"
         />
         @if (form.controls.email.touched && form.controls.email.invalid) {
-          <p class="field-error">กรุณากรอกอีเมลให้ถูกต้อง</p>
+          <p class="field-error">{{ 'auth.emailInvalid' | transloco }}</p>
         }
       </div>
 
       <div class="field">
-        <label for="login-password">รหัสผ่าน</label>
+        <label for="login-password">{{ 'auth.password' | transloco }}</label>
         <input
           id="login-password"
           type="password"
@@ -39,17 +37,21 @@
           autocomplete="current-password"
         />
         @if (form.controls.password.touched && form.controls.password.invalid) {
-          <p class="field-error">กรุณากรอกรหัสผ่าน</p>
+          <p class="field-error">{{ 'auth.passwordRequired' | transloco }}</p>
         }
       </div>
 
       <button class="btn-primary" type="submit" [disabled]="submitting()">
-        {{ submitting() ? 'กำลังเข้าสู่ระบบ…' : 'เข้าสู่ระบบ' }}
+        {{
+          submitting()
+            ? ('auth.loginSubmitting' | transloco)
+            : ('auth.login' | transloco)
+        }}
       </button>
 
-      <div class="divider" role="separator">หรือ</div>
+      <div class="divider" role="separator">{{ 'auth.divider' | transloco }}</div>
 
-      <a class="btn-secondary" routerLink="/auth/register">สมัครสมาชิก</a>
+      <a class="btn-secondary" routerLink="/auth/register">{{ 'auth.register' | transloco }}</a>
     </form>
   </div>
 </div>
