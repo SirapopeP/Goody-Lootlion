@@ -15,5 +15,6 @@ export interface AuthResponse {
     userId?: string;
     email?: string | null;
     displayName?: string | null;
+    isGuestChild?: boolean;
 }
 

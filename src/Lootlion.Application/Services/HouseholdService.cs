@@ -24,7 +24,8 @@ public sealed class HouseholdService : IHouseholdService
         {
             Id = Guid.NewGuid(),
             Name = request.Name.Trim(),
-            CreatedUtc = now
+            CreatedUtc = now,
+            AllowChildPickJoin = true
         };
         _db.Households.Add(household);
         _db.HouseholdMembers.Add(new HouseholdMember
@@ -37,6 +38,39 @@ public sealed class HouseholdService : IHouseholdService
         });
         await _db.SaveChangesAsync(cancellationToken);
         return new HouseholdDto(household.Id, household.Name, household.CreatedUtc);
+    }
+
+    public async Task<IReadOnlyList<HouseholdDto>> ListOpenForChildJoinAsync(CancellationToken cancellationToken = default)
+    {
+        var list = await _db.Households
+            .AsNoTracking()
+            .Where(h => h.AllowChildPickJoin)
+            .OrderBy(h => h.Name)
+            .Select(h => new HouseholdDto(h.Id, h.Name, h.CreatedUtc))
+            .ToListAsync(cancellationToken);
+        return list;
+    }
+
+    public async Task JoinHouseholdAsParentAsync(Guid userId, Guid householdId, CancellationToken cancellationToken = default)
+    {
+        var exists = await _db.Households.AsNoTracking().AnyAsync(h => h.Id == householdId, cancellationToken);
+        if (!exists)
+            throw new InvalidOperationException("Household not found.");
+
+        var already = await _db.HouseholdMembers
+            .AnyAsync(m => m.HouseholdId == householdId && m.UserId == userId, cancellationToken);
+        if (already)
+            return;
+
+        _db.HouseholdMembers.Add(new HouseholdMember
+        {
+            Id = Guid.NewGuid(),
+            HouseholdId = householdId,
+            UserId = userId,
+            Role = MemberRole.Parent,
+            JoinedUtc = DateTime.UtcNow
+        });
+        await _db.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<IReadOnlyList<HouseholdDto>> ListMineAsync(Guid userId, CancellationToken cancellationToken = default)

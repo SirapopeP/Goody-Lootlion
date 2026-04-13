@@ -296,4 +296,13 @@ export class HouseholdsService extends BaseService {
         );
     }
 
+    /** GET /api/Households/for-child-registration (AllowAnonymous) */
+    public apiHouseholdsForChildRegistrationGet(): Observable<Array<HouseholdDto>> {
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.get<Array<HouseholdDto>>(`${basePath}/api/Households/for-child-registration`, {
+            headers: this.defaultHeaders,
+            ...(withCredentials ? { withCredentials } : {}),
+        });
+    }
+
 }

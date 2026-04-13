@@ -1,8 +1,8 @@
+using Lootlion.Api.Http;
 using Lootlion.Application.Abstractions;
 using Lootlion.Application.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 namespace Lootlion.Api.Controllers;
 
 [ApiController]
@@ -22,6 +22,25 @@ public sealed class AuthController : ControllerBase
     public Task<AuthResponse> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
         return _auth.RegisterAsync(request, cancellationToken);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("register-wizard")]
+    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+    public Task<AuthResponse> RegisterWizard([FromBody] RegisterWizardRequest request, CancellationToken cancellationToken)
+    {
+        return _auth.RegisterWizardAsync(request, cancellationToken);
+    }
+
+    [Authorize]
+    [HttpPost("complete-guest-child")]
+    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+    public Task<AuthResponse> CompleteGuestChild(
+        [FromBody] CompleteGuestChildRequest request,
+        CancellationToken cancellationToken)
+    {
+        var parentId = User.GetUserId();
+        return _auth.CompleteGuestChildAsync(parentId, request, cancellationToken);
     }
 
     [AllowAnonymous]

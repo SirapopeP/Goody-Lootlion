@@ -1,7 +1,9 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using Lootlion.Api;
 using Lootlion.Infrastructure;
 using Lootlion.Infrastructure.Security;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
@@ -29,6 +31,7 @@ try
     });
 
     builder.Services.AddLootlionInfrastructure(builder.Configuration);
+builder.Services.AddHostedService<GuestAccountCleanupHostedService>();
 
     var jwt = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
         ?? throw new InvalidOperationException("Jwt configuration is missing.");
@@ -146,8 +149,9 @@ try
 
     app.Run();
 }
-catch (Exception ex)
+catch (Exception ex) when (ex is not HostAbortedException)
 {
+    // HostAbortedException: เกิดเมื่อเครื่องมือ EF (`dotnet ef ...`) หยุด host ระหว่าง design-time — ไม่ใช่ crash ของแอป
     Log.Fatal(ex, "Application terminated unexpectedly");
 }
 finally

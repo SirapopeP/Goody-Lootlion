@@ -39,6 +39,7 @@ public static class DependencyInjection
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IUserProfileReader, UserProfileReader>();
         services.AddScoped<IAuthService, IdentityAuthService>();
+        services.AddScoped<IGuestAccountCleanupService, GuestAccountCleanupService>();
 
         services.AddScoped<IHouseholdService, HouseholdService>();
         services.AddScoped<IMissionService, MissionService>();

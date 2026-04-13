@@ -49,19 +49,52 @@ dotnet tool install --global dotnet-ef
 
 ### 2) สร้าง / อัปเดต schema ฐานข้อมูล
 
-รันจาก **root ของ repo** (`Goody-Lootlion`):
+รันคำสั่ง `dotnet ef` จาก **root ของ repo** (`Goody-Lootlion`) และหยุดโปรเซส API ก่อนถ้า build แล้วไฟล์ถูกล็อก
 
-```powershell
-dotnet ef migrations add Initial --project src/Lootlion.Infrastructure --startup-project src/Lootlion.Api
-```
+#### กรณีปกติหลัง clone (มีโฟลเดอร์ `Migrations` ใน repo อยู่แล้ว)
 
-ถ้ามี migration อยู่แล้ว ให้ข้ามคำสั่ง `migrations add` แล้วใช้แค่:
+**ไม่ต้อง** รัน `migrations add Initial` — คำสั่งนั้นมีไว้สร้าง migration **ชุดแรกชื่อ `Initial` เท่านั้น** ถ้ารันซ้ำมัก error หรือได้ migration ซ้ำซ้อน
+
+ให้ใช้แค่การอัปเดตฐานข้อมูลให้ตรงกับ migration ที่มีใน repo:
 
 ```powershell
 dotnet ef database update --project src/Lootlion.Infrastructure --startup-project src/Lootlion.Api
 ```
 
-คำสั่งนี้สร้างตาราง (รวม Identity + ตารางโดเมน) ในฐานข้อมูลที่ connection string ชี้ไป
+คำสั่งนี้สร้าง/ปรับตาราง (รวม Identity + ตารางโดเมน) ในฐานข้อมูลที่ connection string ชี้ไป
+
+#### เมื่อแก้ Entity / `DbContext` / configuration (schema เปลี่ยน)
+
+1. แก้โค้ดโมเดลให้ครบ
+2. สร้าง **migration ใหม่** ตั้งชื่อให้สื่อความหมาย (ไม่ใช้ชื่อ `Initial` ซ้ำ):
+   ```powershell
+   dotnet ef migrations add <ชื่ออธิบายการเปลี่ยนแปลง> --project src/Lootlion.Infrastructure --startup-project src/Lootlion.Api
+   ```
+3. นำ migration ไปใช้กับฐานข้อมูล:
+   ```powershell
+   dotnet ef database update --project src/Lootlion.Infrastructure --startup-project src/Lootlion.Api
+   ```
+
+**สรุป:** `migrations add Initial` **ไม่เพียงพอ** สำหรับทุกสถานการณ์ และหลังโปรเจกต์มี migration แล้วมัก **ใช้ไม่ได้** — เวลา entity เปลี่ยนต้องมี **`migrations add <ชื่อใหม่>` + `database update`** (หรืออย่างน้อย `database update` หลัง `git pull` ถ้ามีคนอื่นเพิ่ม migration ให้แล้ว)
+
+#### รีสตาร์ท PostgreSQL (Docker) หรือเริ่ม DB ใหม่
+
+| สิ่งที่ต้องการ | คำสั่ง / หมายเหตุ |
+|----------------|-------------------|
+| รีสตาร์ทคอนเทนเนอร์ แต่ **เก็บข้อมูลเดิม** | `docker compose restart postgres` |
+| หยุดแล้วขึ้นใหม่ (ข้อมูลยังอยู่ถ้าไม่ลบ volume) | `docker compose down` แล้ว `docker compose up -d postgres` |
+| **ลบข้อมูลใน volume แล้วเริ่ม DB ว่าง** (ใช้ใน dev เท่านั้น) | `docker compose down -v` แล้ว `docker compose up -d postgres` จากนั้นรัน `dotnet ef database update ...` อีกครั้ง |
+
+การรีสตาร์ท Postgres **ไม่ได้แทน** การรัน migration — ถ้า schema เปลี่ยนต้องทำตามหัวข้อ “เมื่อแก้ Entity …” ด้านบน
+
+#### กรณีโปรเจกต์ยังไม่มี migration เลย (สร้างชุดแรกเอง)
+
+ใช้ชื่อที่ไม่ชนกับของเดิม (เช่น `Initial`) **ครั้งเดียว** แล้วตามด้วย `database update`:
+
+```powershell
+dotnet ef migrations add Initial --project src/Lootlion.Infrastructure --startup-project src/Lootlion.Api
+dotnet ef database update --project src/Lootlion.Infrastructure --startup-project src/Lootlion.Api
+```
 
 ### 3) รันหลังบ้าน (API)
 
@@ -127,6 +160,9 @@ npm run generate:api
 
 - **API ขึ้น error เรื่อง connection string / PostgreSQL**  
   ตรวจว่า Postgres รันอยู่, user/password/database ตรงกับ `appsettings.json`, และพอร์ต (ค่าเริ่มต้น `5432`)
+
+- **แก้ entity แล้วรัน API แต่ตารางไม่ตรง / คอลัมน์ไม่มี**  
+  รัน `dotnet ef database update ...` หรือถ้าเป็นคุณที่เพิ่ม migration ใหม่ ให้แน่ใจว่า commit ไฟล์ใน `Migrations/` แล้วทีมอื่น `pull` ก่อน `database update`
 
 - **พอร์ต 5088 หรือ 4200 ถูกใช้แล้ว**  
   ปิดโปรเซสเดิม หรือเปลี่ยนพอร์ตใน `launchSettings.json` / สั่ง `ng serve --port 4300` เป็นต้น (ถ้าเปลี่ยนพอร์ต Angular ต้องอัปเดต CORS ใน API ให้ตรงกัน)

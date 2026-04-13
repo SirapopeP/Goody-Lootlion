@@ -15,16 +15,16 @@
 
     <form class="form" [formGroup]="form" (ngSubmit)="submit()">
       <div class="field">
-        <label for="login-email">{{ 'auth.email' | transloco }}</label>
+        <label for="login-id">{{ 'auth.loginIdentifier' | transloco }}</label>
         <input
-          id="login-email"
-          type="email"
-          formControlName="email"
-          autocomplete="email"
+          id="login-id"
+          type="text"
+          formControlName="loginIdentifier"
+          autocomplete="username"
           placeholder="you@example.com"
         />
-        @if (form.controls.email.touched && form.controls.email.invalid) {
-          <p class="field-error">{{ 'auth.emailInvalid' | transloco }}</p>
+        @if (form.controls.loginIdentifier.touched && form.controls.loginIdentifier.invalid) {
+          <p class="field-error">{{ 'auth.loginIdentifierRequired' | transloco }}</p>
         }
       </div>
 

@@ -16,7 +16,7 @@ public sealed class JwtTokenService : IJwtTokenService
         _options = options.Value;
     }
 
-    public string CreateToken(Guid userId, string email, string displayName)
+    public string CreateToken(Guid userId, string? email, string displayName, bool isGuestChild)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SigningKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -24,9 +24,12 @@ public sealed class JwtTokenService : IJwtTokenService
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, userId.ToString()),
-            new(ClaimTypes.Email, email),
             new("display_name", displayName)
         };
+        if (!string.IsNullOrEmpty(email))
+            claims.Add(new Claim(ClaimTypes.Email, email));
+        if (isGuestChild)
+            claims.Add(new Claim("guest_account", "true"));
 
         var token = new JwtSecurityToken(
             issuer: _options.Issuer,

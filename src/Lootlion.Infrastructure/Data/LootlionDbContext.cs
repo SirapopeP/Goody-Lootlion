@@ -27,10 +27,16 @@ public sealed class LootlionDbContext : IdentityDbContext<AppUser, IdentityRole<
     {
         base.OnModelCreating(builder);
 
+        builder.Entity<AppUser>(e =>
+        {
+            e.HasIndex(x => x.GuestAccountExpiresUtc);
+        });
+
         builder.Entity<Household>(e =>
         {
             e.HasKey(x => x.Id);
             e.Property(x => x.Name).HasMaxLength(256);
+            e.Property(x => x.AllowChildPickJoin).HasDefaultValue(true);
             e.HasIndex(x => x.CreatedUtc);
         });
 

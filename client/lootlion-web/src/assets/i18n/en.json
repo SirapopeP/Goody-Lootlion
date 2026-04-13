@@ -1,6 +1,9 @@
 {
   "common": {
-    "language": "Language"
+    "language": "Language",
+    "next": "Next",
+    "back": "Back",
+    "cancel": "Cancel"
   },
   "nav": {
     "mainAria": "Main navigation",
@@ -44,6 +47,30 @@
     "registerSubmitting": "Creating account…",
     "loginFailed": "Sign-in failed",
     "registerFailed": "Registration failed",
-    "noToken": "No token received from the server"
+    "noToken": "No token received from the server",
+    "loginIdentifier": "Email or username",
+    "loginIdentifierRequired": "Please enter your email or username",
+    "wizard": {
+      "nickname": "Nickname",
+      "pickRole": "Are you a parent or a child in the family?",
+      "roleParent": "Parent",
+      "roleChild": "Child (join as guest)",
+      "childPickFamily": "Choose a household to join",
+      "childGuestNotice": "You will sign in as a guest — a parent must complete username and password later, or the account will be removed after 7 days.",
+      "loadingFamilies": "Loading households…",
+      "noFamilies": "No households are open for picking yet — ask a parent to create one first.",
+      "parentModePrompt": "Create a new household or join an existing one?",
+      "createFamily": "Create new household",
+      "joinFamily": "Join existing household",
+      "newFamilyName": "Household name",
+      "parentPickFamily": "Choose a household to join",
+      "username": "Username",
+      "usernameRequired": "Please enter a username",
+      "emailOptional": "Email (optional)",
+      "finishRegister": "Register and sign in",
+      "haveAccount": "Already have an account? Sign in",
+      "familyNameRequired": "Please enter a household name",
+      "pickFamily": "Please select a household"
+    }
   }
 }

@@ -19,6 +19,12 @@ public sealed class HouseholdsController : ControllerBase
         _households = households;
     }
 
+    [AllowAnonymous]
+    [HttpGet("for-child-registration")]
+    [ProducesResponseType(typeof(IReadOnlyList<HouseholdDto>), StatusCodes.Status200OK)]
+    public Task<IReadOnlyList<HouseholdDto>> ListForChildRegistration(CancellationToken cancellationToken) =>
+        _households.ListOpenForChildJoinAsync(cancellationToken);
+
     [HttpPost]
     [ProducesResponseType(typeof(HouseholdDto), StatusCodes.Status200OK)]
     public Task<HouseholdDto> Create([FromBody] CreateHouseholdRequest request, CancellationToken cancellationToken) =>

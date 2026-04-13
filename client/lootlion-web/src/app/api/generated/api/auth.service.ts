@@ -24,6 +24,10 @@ import { LoginRequest } from '../model/loginRequest';
 import { RegisterRequest } from '../model/registerRequest';
 // @ts-ignore
 import { RefreshRequest } from '../model/refreshRequest';
+// @ts-ignore
+import { RegisterWizardRequest } from '../model/registerWizardRequest';
+// @ts-ignore
+import { CompleteGuestChildRequest } from '../model/completeGuestChildRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -239,6 +243,64 @@ export class AuthService extends BaseService {
                 reportProgress: reportProgress
             }
         );
+    }
+
+    /** POST /api/Auth/register-wizard */
+    public apiAuthRegisterWizardPost(
+        body?: RegisterWizardRequest,
+        observe: any = 'body',
+        reportProgress: boolean = false,
+        options?: { httpHeaderAccept?: string; context?: HttpContext; transferCache?: boolean }
+    ): Observable<AuthResponse> {
+        let localVarHeaders = this.defaultHeaders;
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected =
+            options?.httpHeaderAccept ??
+            this.configuration.selectHeaderAccept(['application/json', 'text/json']);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const consumes = ['application/json', 'text/json', 'application/*+json'];
+        const httpContentTypeSelected = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.post<AuthResponse>(`${basePath}/api/Auth/register-wizard`, body, {
+            headers: localVarHeaders,
+            observe: observe as 'body',
+            reportProgress,
+            ...(withCredentials ? { withCredentials } : {}),
+        });
+    }
+
+    /** POST /api/Auth/complete-guest-child (ต้องมี Bearer) */
+    public apiAuthCompleteGuestChildPost(
+        body?: CompleteGuestChildRequest,
+        observe: any = 'body',
+        reportProgress: boolean = false,
+        options?: { httpHeaderAccept?: string; context?: HttpContext; transferCache?: boolean }
+    ): Observable<AuthResponse> {
+        let localVarHeaders = this.defaultHeaders;
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+        const localVarHttpHeaderAcceptSelected =
+            options?.httpHeaderAccept ??
+            this.configuration.selectHeaderAccept(['application/json', 'text/json']);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+        const consumes = ['application/json', 'text/json', 'application/*+json'];
+        const httpContentTypeSelected = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.post<AuthResponse>(`${basePath}/api/Auth/complete-guest-child`, body, {
+            headers: localVarHeaders,
+            observe: observe as 'body',
+            reportProgress,
+            ...(withCredentials ? { withCredentials } : {}),
+        });
     }
 
 }

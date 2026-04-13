@@ -10,7 +10,7 @@
 
 
 export interface LoginRequest { 
-    email?: string | null;
+    loginIdentifier?: string | null;
     password?: string | null;
 }
 

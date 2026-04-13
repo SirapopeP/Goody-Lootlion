@@ -27,7 +27,7 @@ export class LoginComponent {
   readonly errorMessage = signal<string | null>(null);
 
   readonly form = this.fb.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
+    loginIdentifier: ['', Validators.required],
     password: ['', Validators.required],
   });
 
@@ -37,10 +37,10 @@ export class LoginComponent {
       this.form.markAllAsTouched();
       return;
     }
-    const { email, password } = this.form.getRawValue();
+    const { loginIdentifier, password } = this.form.getRawValue();
     this.submitting.set(true);
     this.authApi
-      .apiAuthLoginPost({ email: email.trim(), password })
+      .apiAuthLoginPost({ loginIdentifier: loginIdentifier.trim(), password })
       .pipe(
         catchError((err) => {
           this.errorMessage.set(
