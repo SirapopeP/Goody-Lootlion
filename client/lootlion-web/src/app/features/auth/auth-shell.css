@@ -1,0 +1,80 @@
+.shell {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem 3rem;
+  box-sizing: border-box;
+  background: var(--lootlion-bg);
+}
+
+.lang {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: var(--lootlion-text-muted);
+}
+
+.lang span {
+  color: var(--lootlion-text);
+  cursor: default;
+}
+
+.lang .sep {
+  margin: 0 0.35rem;
+  color: var(--lootlion-border);
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem 1.75rem 2.25rem;
+  background: var(--lootlion-bg-elevated);
+  border: 1px solid var(--lootlion-border);
+  border-radius: var(--lootlion-radius);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 0.35rem;
+}
+
+.logo-text {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.logo-text .l {
+  color: var(--lootlion-text);
+}
+
+.logo-text .rest {
+  background: linear-gradient(90deg, #5ec4d0 0%, #29adc9 55%, #6ec9d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.logo-leaf {
+  display: inline-block;
+  margin-left: 0.15rem;
+  font-size: 0.95rem;
+  vertical-align: middle;
+}
+
+.tagline {
+  text-align: center;
+  font-size: 0.65rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--lootlion-tagline);
+  margin-bottom: 1.75rem;
+  opacity: 0.95;
+}

@@ -1,0 +1,104 @@
+<div class="dashboard">
+  <header class="top">
+    <a routerLink="/" class="brand">
+      <span class="brand-mark">L</span><span class="brand-rest">ootlion</span>
+      <span class="brand-leaf" aria-hidden="true">🌿</span>
+    </a>
+
+    <nav class="top-nav" aria-label="เมนูหลัก">
+      <a
+        routerLink="/"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-item"
+      >
+        <span class="diamond" aria-hidden="true">◆</span>
+        Quest board and rank
+      </a>
+      <a routerLink="/missions" routerLinkActive="is-active" class="nav-item">
+        <span class="diamond" aria-hidden="true">◆</span>
+        Quests management
+      </a>
+      <a routerLink="/rewards" routerLinkActive="is-active" class="nav-item">
+        <span class="diamond" aria-hidden="true">◆</span>
+        Rewards management
+      </a>
+      <a routerLink="/profile" routerLinkActive="is-active" class="nav-item">
+        <span class="diamond" aria-hidden="true">◆</span>
+        Setting
+      </a>
+    </nav>
+
+    <div class="top-right">
+      @if (session.isAuthenticated()) {
+        <button type="button" class="linkish" (click)="logout()">ออกจากระบบ</button>
+      } @else {
+        <a routerLink="/auth/login" class="linkish">เข้าสู่ระบบ</a>
+      }
+      <span class="lang" aria-label="ภาษา (เร็วๆ นี้)">
+        <span>EN</span><span class="sep">|</span><span>TH</span>
+      </span>
+    </div>
+  </header>
+
+  <div class="body">
+    <main class="main-pane">
+      <router-outlet />
+    </main>
+
+    <aside class="sidebar" aria-label="สรุปผู้ใช้และคลัง">
+      <section class="card profile-card">
+        <div class="level-row">
+          <span class="level-tag">{{ levelLabel }}</span>
+          <div class="level-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div class="level-fill"></div>
+          </div>
+        </div>
+        <div class="avatar" aria-hidden="true"></div>
+        @if (session.isAuthenticated()) {
+          <p class="handle">
+            {{ userDisplay().displayName ?? userDisplay().email ?? 'ผู้ใช้' }}
+          </p>
+          <p class="fullname muted">
+            {{ userDisplay().email ?? '—' }}
+          </p>
+        } @else {
+          <p class="handle muted">ยังไม่ได้เข้าสู่ระบบ</p>
+          <a routerLink="/auth/login" class="sidebar-cta">เข้าสู่ระบบ</a>
+        }
+      </section>
+
+      <section class="card block">
+        <div class="block-head">
+          <span class="block-title">Inventory</span>
+          <span class="block-count">{{ inventoryUsed }}/{{ inventoryCap }}</span>
+        </div>
+        <div class="grid grid-inv" role="list">
+          @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track i) {
+            <div class="slot" role="listitem"></div>
+          }
+        </div>
+      </section>
+
+      <section class="card block">
+        <div class="block-head">
+          <span class="block-title">Worker</span>
+          <span class="block-count">{{ workerUsed }}/{{ workerCap }}</span>
+        </div>
+        <div class="grid grid-worker" role="list">
+          @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i) {
+            <div class="slot" role="listitem"></div>
+          }
+        </div>
+      </section>
+
+      <section class="card footer-slot muted" aria-hidden="true">
+        <span class="small-label">ครอบครัว · Wishlist</span>
+        <div class="quick-links">
+          <a routerLink="/households">ครอบครัว</a>
+          <a routerLink="/wishlist">Wishlist</a>
+        </div>
+      </section>
+    </aside>
+  </div>
+</div>

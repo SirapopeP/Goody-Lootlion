@@ -1,7 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { TuiButton } from '@taiga-ui/core';
 import { AuthService } from '../../api/generated/api/auth.service';
 import { readApiErrorMessage } from '../../core/auth/api-error';
 import { AuthSessionService } from '../../core/auth/auth-session.service';
@@ -11,9 +10,9 @@ import { EMPTY, catchError, finalize } from 'rxjs';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, TuiButton],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './register.component.html',
-  styleUrl: './auth-forms.css',
+  styleUrls: ['./auth-shell.css', './auth-forms.css'],
 })
 export class RegisterComponent {
   private readonly fb = inject(FormBuilder);

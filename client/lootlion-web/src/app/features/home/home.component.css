@@ -1,0 +1,44 @@
+.panel {
+  min-height: 280px;
+  padding: 1.25rem 1.35rem 1.5rem;
+  background: var(--lootlion-bg-elevated);
+  border: 1px solid var(--lootlion-border);
+  border-radius: var(--lootlion-radius);
+  box-sizing: border-box;
+}
+
+.panel-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--lootlion-text);
+}
+
+.panel-lead {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--lootlion-text-muted);
+}
+
+.panel-lead code {
+  font-size: 0.82em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--lootlion-tagline);
+}
+
+.panel-body {
+  padding: 2rem 1rem;
+  text-align: center;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px dashed var(--lootlion-border);
+  font-size: 0.9rem;
+}
+
+.muted {
+  color: var(--lootlion-text-muted);
+}
