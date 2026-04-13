@@ -37,7 +37,7 @@
 
     <div class="top-right">
       @if (session.isAuthenticated()) {
-        <button type="button" class="linkish" (click)="logout()">{{ 'layout.logout' | transloco }}</button>
+        <button type="button" class="btn-logout" (click)="logout()">{{ 'layout.logout' | transloco }}</button>
       } @else {
         <a routerLink="/auth/login" class="linkish">{{ 'layout.login' | transloco }}</a>
       }
@@ -96,11 +96,40 @@
         </div>
       </section>
 
-      <section class="card footer-slot muted" aria-hidden="true">
-        <span class="small-label">{{ 'layout.familyWishlist' | transloco }}</span>
-        <div class="quick-links">
+      <section class="card family-card" [attr.aria-label]="'layout.familySection' | transloco">
+        <div class="family-head">
+          <span class="diamond" aria-hidden="true">◆</span>
+          <span class="family-title">
+            {{ 'layout.familyNamePrefix' | transloco }}
+            @if (familyHouseholdName(); as name) {
+              <span class="family-name">: {{ name }}</span>
+            }
+          </span>
+        </div>
+
+        @if (!session.isAuthenticated()) {
+          <p class="family-hint muted">{{ 'layout.familySignInHint' | transloco }}</p>
+        } @else if (familyLoading()) {
+          <p class="family-hint muted">{{ 'layout.familyLoading' | transloco }}</p>
+        } @else if (!familyHouseholdName()) {
+          <p class="family-hint muted">{{ 'layout.familyEmpty' | transloco }}</p>
+          <a routerLink="/households" class="family-link">{{ 'layout.households' | transloco }}</a>
+        } @else {
+          <ul class="family-list" role="list">
+            @for (m of familyMembers(); track m.userId) {
+              <li class="family-row" role="listitem">
+                <span class="family-lv">{{ 'layout.levelPlaceholder' | transloco }}</span>
+                <span class="family-id">{{ m.displayName ?? m.email ?? '—' }}</span>
+                <span class="family-role">({{ memberRoleLabel(m.role) }})</span>
+              </li>
+            }
+          </ul>
+        }
+
+        <div class="family-footer-links">
           <a routerLink="/households">{{ 'layout.households' | transloco }}</a>
-          <a routerLink="/wishlist">{{ 'layout.wishlist' | transloco }}</a>
+          <span class="family-footer-sep" aria-hidden="true">·</span>
+          <a routerLink="/wishlist">{{ 'layout.wishlistShort' | transloco }}</a>
         </div>
       </section>
     </aside>
