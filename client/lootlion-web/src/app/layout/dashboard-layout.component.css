@@ -28,28 +28,15 @@
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.15rem;
   text-decoration: none;
-  font-weight: 800;
-  font-size: 1.05rem;
-  letter-spacing: 0.04em;
   white-space: nowrap;
+  line-height: 0;
 }
 
-.brand-mark {
-  color: var(--lootlion-text);
-}
-
-.brand-rest {
-  background: linear-gradient(90deg, #5ec4d0 0%, #29adc9 60%, #6ec9d4 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.brand-leaf {
-  font-size: 0.95rem;
-  margin-left: 0.1rem;
+.brand-logo {
+  display: block;
+  width: clamp(132px, 13vw, 164px);
+  height: auto;
 }
 
 .top-nav {
@@ -57,30 +44,42 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem 1.25rem;
+  gap: 0.2rem;
+  padding: 0.28rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(41, 173, 201, 0.12);
 }
 
 .nav-item {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
   color: var(--lootlion-text-muted);
-  padding: 0.35rem 0;
-  border-bottom: 2px solid transparent;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .nav-item:hover {
   color: var(--lootlion-text);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .nav-item.is-active {
-  color: var(--lootlion-text);
-  border-bottom-color: var(--lootlion-accent-teal);
+  color: #eaf8f4;
+  background: linear-gradient(145deg, rgba(76, 167, 113, 0.35) 0%, rgba(41, 173, 201, 0.22) 100%);
+  border-color: rgba(76, 167, 113, 0.45);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset;
 }
 
 .diamond {
@@ -142,8 +141,8 @@
 .body {
   flex: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 300px);
+  gap: 1rem 1.25rem;
   padding: 1rem 1.25rem 1.5rem;
   max-width: 1440px;
   margin: 0 auto;
@@ -173,11 +172,19 @@
   text-align: center;
 }
 
+.coin-line {
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--lootlion-tagline, #6ec9d4);
+}
+
 .level-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.65rem;
+  margin: 0.65rem 0 0.5rem;
 }
 
 .level-tag {
@@ -205,7 +212,7 @@
 .avatar {
   width: 72px;
   height: 72px;
-  margin: 0 auto 0.65rem;
+  margin: 0 auto;
   border-radius: 50%;
   background: linear-gradient(145deg, #2a4545, #1a2c2c);
   border: 2px solid var(--lootlion-border);
@@ -343,9 +350,9 @@
 }
 
 .family-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr) auto;
+  align-items: center;
   gap: 0.35rem 0.5rem;
   font-size: 0.78rem;
   line-height: 1.3;
@@ -355,20 +362,24 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--lootlion-text-muted);
-  min-width: 2.5rem;
+  text-align: left;
 }
 
 .family-id {
   font-weight: 600;
   color: var(--lootlion-text);
   word-break: break-word;
+  min-width: 0;
 }
 
 .family-role {
+  justify-self: end;
+  text-align: right;
   color: var(--lootlion-text-muted);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 .family-footer-links {

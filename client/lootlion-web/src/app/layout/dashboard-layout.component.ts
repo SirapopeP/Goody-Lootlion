@@ -38,6 +38,9 @@ export class DashboardLayoutComponent {
   readonly workerCap = 10;
   readonly workerUsed = 0;
 
+  /** Placeholder until wallet balance is exposed by API */
+  readonly walletCoinPlaceholder = 250;
+
   readonly familyHouseholdName = signal<string | null>(null);
   readonly familyMembers = signal<HouseholdMemberDto[]>([]);
   readonly familyLoading = signal(false);

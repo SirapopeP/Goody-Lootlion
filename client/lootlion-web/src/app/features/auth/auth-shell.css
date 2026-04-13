@@ -33,6 +33,13 @@
   margin-bottom: 0.35rem;
 }
 
+.logo-img {
+  display: block;
+  width: clamp(128px, 42%, 174px);
+  height: auto;
+  margin: 0 auto;
+}
+
 .logo-text {
   font-size: 1.75rem;
   font-weight: 800;

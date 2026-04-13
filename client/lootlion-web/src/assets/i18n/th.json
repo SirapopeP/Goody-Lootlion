@@ -31,12 +31,21 @@
     "memberRoleChild": "เด็ก",
     "wishlistShort": "Wishlist",
     "households": "ครอบครัว",
-    "wishlist": "Wishlist"
+    "wishlist": "Wishlist",
+    "coinLine": "▲ : {{n}} COIN"
   },
   "home": {
     "title": "บอร์ดภารกิจและอันดับ",
     "lead": "พื้นที่แสดงบอร์ดภารกิจและอันดับ — เชื่อม API ตามเฟสถัดไปได้จาก",
-    "placeholder": "ยังไม่มีข้อมูลจากเซิร์ฟเวอร์ (placeholder)"
+    "placeholder": "ยังไม่มีข้อมูลจากเซิร์ฟเวอร์ (placeholder)",
+    "missionColumn": "ภารกิจ / รางวัล",
+    "missionColumnPlaceholder": "รายการภารกิจจะโหลดจาก API",
+    "tabMyMissions": "ภารกิจของฉัน",
+    "tabPending": "รอรับ",
+    "tabSuccess": "ภารกิจสำเร็จ",
+    "ongoingLine1": "ภารกิจที่กำลังทำ",
+    "ongoingRatio": "{{current}} / {{max}}",
+    "detailPlaceholder": "รายละเอียดภารกิจและปุ่ม Done / Denied จะเชื่อม API ภายหลัง"
   },
   "auth": {
     "tagline": "Mission to the moon",

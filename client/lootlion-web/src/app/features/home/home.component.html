@@ -1,10 +1,40 @@
-<section class="panel" aria-labelledby="quest-title">
-  <h1 id="quest-title" class="panel-title">{{ 'home.title' | transloco }}</h1>
-  <p class="panel-lead">
-    {{ 'home.lead' | transloco }}
-    <code>docs/PHASES_CHECKLIST.md</code>
-  </p>
-  <div class="panel-body muted" role="status">
-    {{ 'home.placeholder' | transloco }}
+<div class="quest-page">
+  <header class="quest-page-head">
+    <h1 class="quest-page-title">{{ 'home.title' | transloco }}</h1>
+  </header>
+
+  <div class="quest-grid">
+    <aside class="quest-panel quest-panel-side" [attr.aria-label]="'home.missionColumn' | transloco">
+      <div class="quest-panel-toolbar">
+        <span class="quest-panel-label">{{ 'home.missionColumn' | transloco }}</span>
+        <button type="button" class="quest-add-btn" disabled title="+">+</button>
+      </div>
+      <div class="quest-panel-body muted">
+        {{ 'home.missionColumnPlaceholder' | transloco }}
+      </div>
+    </aside>
+
+    <section class="quest-panel quest-panel-center" aria-labelledby="quest-center-title">
+      <h2 id="quest-center-title" class="sr-only">{{ 'home.tabMyMissions' | transloco }}</h2>
+
+      <div class="quest-tabs" role="tablist">
+        <span class="quest-tab is-active" role="tab" aria-selected="true">{{ 'home.tabMyMissions' | transloco }}</span>
+        <span class="quest-tab" role="tab" aria-selected="false">{{ 'home.tabPending' | transloco }}</span>
+        <span class="quest-tab" role="tab" aria-selected="false">{{ 'home.tabSuccess' | transloco }}</span>
+      </div>
+
+      <div class="quest-center-toolbar">
+        <div class="ongoing-badge" aria-live="polite">
+          <span class="ongoing-badge-line">{{ 'home.ongoingLine1' | transloco }}</span>
+          <span class="ongoing-badge-num">{{ 'home.ongoingRatio' | transloco: { current: 2, max: 5 } }}</span>
+        </div>
+      </div>
+
+      <div class="quest-detail-placeholder muted">
+        <p class="quest-lead">{{ 'home.lead' | transloco }} <code>docs/PHASES_CHECKLIST.md</code></p>
+        <p>{{ 'home.detailPlaceholder' | transloco }}</p>
+        <p class="quest-muted-box">{{ 'home.placeholder' | transloco }}</p>
+      </div>
+    </section>
   </div>
-</section>
+</div>

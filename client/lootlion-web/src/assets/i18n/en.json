@@ -31,12 +31,21 @@
     "memberRoleChild": "Child",
     "wishlistShort": "Wishlist",
     "households": "Households",
-    "wishlist": "Wishlist"
+    "wishlist": "Wishlist",
+    "coinLine": "▲ : {{n}} COIN"
   },
   "home": {
     "title": "Quest board and rank",
     "lead": "Space for the quest board and rankings — connect the API in the next phase via",
-    "placeholder": "No data from the server yet (placeholder)"
+    "placeholder": "No data from the server yet (placeholder)",
+    "missionColumn": "Mission / rewards",
+    "missionColumnPlaceholder": "Mission list will load from the API.",
+    "tabMyMissions": "My missions",
+    "tabPending": "Pending accept",
+    "tabSuccess": "Success mission",
+    "ongoingLine1": "On going missions",
+    "ongoingRatio": "{{current}} / {{max}}",
+    "detailPlaceholder": "Mission detail and actions (Done / Denied) will connect to the API."
   },
   "auth": {
     "tagline": "Mission to the moon",
