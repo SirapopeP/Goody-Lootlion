@@ -124,7 +124,7 @@ class Particle {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './particles-background.component.html',
-  styleUrl: './particles-background.component.css',
+  styleUrl: './particles-background.component.scss',
 })
 export class ParticlesBackgroundComponent implements AfterViewInit, OnDestroy {
   @ViewChild('particleCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;

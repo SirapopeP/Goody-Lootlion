@@ -6,7 +6,7 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
   standalone: true,
   imports: [TranslocoPipe],
   templateUrl: './language-toggle.component.html',
-  styleUrl: './language-toggle.component.css',
+  styleUrl: './language-toggle.component.scss',
 })
 export class LanguageToggleComponent {
   private readonly transloco = inject(TranslocoService);

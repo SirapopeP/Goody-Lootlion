@@ -22,7 +22,7 @@ import { ParticlesBackgroundComponent } from '../shared/ui/particles-background/
     ParticlesBackgroundComponent,
   ],
   templateUrl: './dashboard-layout.component.html',
-  styleUrl: './dashboard-layout.component.css',
+  styleUrl: './dashboard-layout.component.scss',
 })
 export class DashboardLayoutComponent {
   readonly session = inject(AuthSessionService);
