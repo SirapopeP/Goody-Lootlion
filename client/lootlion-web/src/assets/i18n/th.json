@@ -10,7 +10,11 @@
     "questBoard": "บอร์ดภารกิจและอันดับ",
     "questsMgmt": "จัดการภารกิจ",
     "rewardsMgmt": "จัดการรางวัล",
+    "wishlist": "Wishlist",
     "settings": "ตั้งค่า"
+  },
+  "household": {
+    "childReadOnlyHint": "โหมดอ่านอย่างเดียว: การจัดการสมาชิกในครอบครัวให้ผู้ปกครองเป็นผู้ดำเนินการ"
   },
   "layout": {
     "sidebarAria": "สรุปผู้ใช้และคลัง",

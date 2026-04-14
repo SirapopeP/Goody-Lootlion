@@ -24,10 +24,18 @@
         <span class="diamond" aria-hidden="true">◆</span>
         {{ 'nav.questsMgmt' | transloco }}
       </a>
-      <a routerLink="/rewards" routerLinkActive="is-active" class="nav-item">
-        <span class="diamond" aria-hidden="true">◆</span>
-        {{ 'nav.rewardsMgmt' | transloco }}
-      </a>
+      @if (menu.canShowRewards()) {
+        <a routerLink="/rewards" routerLinkActive="is-active" class="nav-item">
+          <span class="diamond" aria-hidden="true">◆</span>
+          {{ 'nav.rewardsMgmt' | transloco }}
+        </a>
+      }
+      @if (menu.canShowWishlist()) {
+        <a routerLink="/wishlist" routerLinkActive="is-active" class="nav-item">
+          <span class="diamond" aria-hidden="true">◆</span>
+          {{ 'nav.wishlist' | transloco }}
+        </a>
+      }
       <a routerLink="/profile" routerLinkActive="is-active" class="nav-item">
         <span class="diamond" aria-hidden="true">◆</span>
         {{ 'nav.settings' | transloco }}
@@ -128,8 +136,14 @@
 
         <div class="family-footer-links">
           <a routerLink="/households">{{ 'layout.households' | transloco }}</a>
-          <span class="family-footer-sep" aria-hidden="true">·</span>
-          <a routerLink="/wishlist">{{ 'layout.wishlistShort' | transloco }}</a>
+          @if (menu.canShowRewards()) {
+            <span class="family-footer-sep" aria-hidden="true">·</span>
+            <a routerLink="/rewards">{{ 'nav.rewardsMgmt' | transloco }}</a>
+          }
+          @if (menu.canShowWishlist()) {
+            <span class="family-footer-sep" aria-hidden="true">·</span>
+            <a routerLink="/wishlist">{{ 'layout.wishlistShort' | transloco }}</a>
+          }
         </div>
       </section>
     </aside>

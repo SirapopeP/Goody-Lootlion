@@ -190,3 +190,4 @@ npm run generate:api
 
 - [PHASES_CHECKLIST.md](./PHASES_CHECKLIST.md) — แบ่งงานเป็นฟีเจอร์/เฟส
 - [CLIENT_DECISION.md](./CLIENT_DECISION.md) — ทำไมเริ่มจาก PWA ก่อน Capacitor
+- [DOCKER_DB_RESET_GUIDE.md](./DOCKER_DB_RESET_GUIDE.md) — วิธีล้าง Docker (`container`/`volume`/`image`) และเริ่มฐานข้อมูลใหม่แบบละเอียด

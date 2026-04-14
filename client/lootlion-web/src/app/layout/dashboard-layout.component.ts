@@ -7,6 +7,7 @@ import { HouseholdsService } from '../api/generated/api/households.service';
 import { HouseholdMemberDto } from '../api/generated/model/householdMemberDto';
 import { parseJwtUserDisplay } from '../core/auth/jwt-payload';
 import { AuthSessionService } from '../core/auth/auth-session.service';
+import { MenuAccessService } from '../core/auth/menu-access.service';
 import { LanguageToggleComponent } from '../core/i18n/language-toggle.component';
 import { ParticlesBackgroundComponent } from '../shared/ui/particles-background/particles-background.component';
 
@@ -26,6 +27,7 @@ import { ParticlesBackgroundComponent } from '../shared/ui/particles-background/
 })
 export class DashboardLayoutComponent {
   readonly session = inject(AuthSessionService);
+  readonly menu = inject(MenuAccessService);
   private readonly router = inject(Router);
   private readonly householdsApi = inject(HouseholdsService);
   private readonly transloco = inject(TranslocoService);

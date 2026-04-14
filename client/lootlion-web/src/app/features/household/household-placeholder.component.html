@@ -1,3 +1,6 @@
 <div class="ll-feature-placeholder">
+  @if (menu.canShowWishlist()) {
+    <p class="ll-text-muted">{{ 'household.childReadOnlyHint' | transloco }}</p>
+  }
   <p>โมดูลครอบครัว — <code>GET /api/households/mine</code>, <code>POST /api/households</code></p>
 </div>

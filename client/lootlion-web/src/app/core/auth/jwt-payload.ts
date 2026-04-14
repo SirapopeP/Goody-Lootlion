@@ -1,9 +1,13 @@
 /** อ่านค่า claim จาก JWT ฝั่ง client เพื่อแสดง UI เท่านั้น (ไม่ใช้ยืนยันตัวตน) */
 
+export type HouseholdRoleClaim = 'parent' | 'child';
+
 export interface JwtUserDisplay {
   userId: string | null;
   email: string | null;
   displayName: string | null;
+  /** จาก claim `household_role` (เมื่อล็อกอินและ token มี claim) */
+  householdRole: HouseholdRoleClaim | null;
 }
 
 function base64UrlToUtf8(segment: string): string {
@@ -38,13 +42,30 @@ function pickString(p: Record<string, unknown>, keys: string[]): string | null {
 }
 
 /** Map claim จากเซิร์ฟเวอร์ .NET / มาตรฐาน JWT */
+function parseHouseholdRoleClaim(raw: string | null): HouseholdRoleClaim | null {
+  if (!raw) {
+    return null;
+  }
+  const n = raw.trim().toLowerCase();
+  if (n === 'parent' || n === 'child') {
+    return n;
+  }
+  return null;
+}
+
 export function parseJwtUserDisplay(token: string | null): JwtUserDisplay {
+  const empty: JwtUserDisplay = {
+    userId: null,
+    email: null,
+    displayName: null,
+    householdRole: null,
+  };
   if (!token) {
-    return { userId: null, email: null, displayName: null };
+    return empty;
   }
   const p = decodeJwtPayload(token);
   if (!p) {
-    return { userId: null, email: null, displayName: null };
+    return empty;
   }
   const userId = pickString(p, [
     'sub',
@@ -61,5 +82,6 @@ export function parseJwtUserDisplay(token: string | null): JwtUserDisplay {
     'unique_name',
     'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name',
   ]);
-  return { userId, email, displayName };
+  const householdRole = parseHouseholdRoleClaim(pickString(p, ['household_role']));
+  return { userId, email, displayName, householdRole };
 }

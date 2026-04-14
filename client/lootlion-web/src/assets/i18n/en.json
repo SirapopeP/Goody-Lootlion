@@ -10,7 +10,11 @@
     "questBoard": "Quest board and rank",
     "questsMgmt": "Quests management",
     "rewardsMgmt": "Rewards management",
+    "wishlist": "Wishlist",
     "settings": "Settings"
+  },
+  "household": {
+    "childReadOnlyHint": "Read-only: only a parent can manage household members."
   },
   "layout": {
     "sidebarAria": "User summary and inventory",

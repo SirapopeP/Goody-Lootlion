@@ -275,11 +275,13 @@ public sealed class IdentityAuthService : IAuthService
     private async Task<AuthResponse> IssueTokensAsync(AppUser user, CancellationToken cancellationToken, bool isGuestChild)
     {
         var publicEmail = ResolvePublicEmail(user, isGuestChild);
+        var householdRole = await ResolveHouseholdMemberRoleAsync(user.Id, cancellationToken);
         var access = _jwt.CreateToken(
             user.Id,
             publicEmail,
             user.DisplayName,
-            isGuestChild);
+            isGuestChild,
+            householdRole);
 
         var rawRefresh = GenerateOpaqueToken();
         var hash = TokenHasher.Hash(rawRefresh);
@@ -305,6 +307,20 @@ public sealed class IdentityAuthService : IAuthService
     }
 
     /// <summary>อีเมลที่ส่งให้ client / JWT — ไม่เปิดเผยอีเมลสังเคราะห์ของ guest</summary>
+    private async Task<MemberRole?> ResolveHouseholdMemberRoleAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        var roles = await _db.HouseholdMembers
+            .AsNoTracking()
+            .Where(m => m.UserId == userId)
+            .Select(m => m.Role)
+            .ToListAsync(cancellationToken);
+
+        if (roles.Count == 0)
+            return null;
+
+        return roles.Any(r => r == MemberRole.Parent) ? MemberRole.Parent : MemberRole.Child;
+    }
+
     private static string? ResolvePublicEmail(AppUser user, bool isGuestChild)
     {
         if (isGuestChild)

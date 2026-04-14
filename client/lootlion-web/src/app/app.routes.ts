@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { rewardsParentCanMatch, wishlistChildCanMatch } from './core/auth/household-route.guard';
 
 export const routes: Routes = [
   {
@@ -24,10 +25,12 @@ export const routes: Routes = [
       },
       {
         path: 'rewards',
+        canMatch: [rewardsParentCanMatch],
         loadChildren: () => import('./features/rewards/rewards.routes').then((m) => m.REWARDS_ROUTES),
       },
       {
         path: 'wishlist',
+        canMatch: [wishlistChildCanMatch],
         loadChildren: () => import('./features/wishlist/wishlist.routes').then((m) => m.WISHLIST_ROUTES),
       },
       {
