@@ -21,7 +21,7 @@ import { EMPTY, catchError, finalize } from 'rxjs';
     ParticlesBackgroundComponent,
   ],
   templateUrl: './login.component.html',
-  styleUrls: ['./auth-shell.scss', './auth-forms.scss'],
+  styleUrl: './auth-shared.scss',
 })
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);

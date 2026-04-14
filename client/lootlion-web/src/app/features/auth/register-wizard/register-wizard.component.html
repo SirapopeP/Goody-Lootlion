@@ -9,9 +9,7 @@
 
   <div class="card wizard-card">
     <div class="logo">
-      <span class="logo-text">
-        <span class="l">L</span><span class="rest">ootlion</span><span class="logo-leaf" aria-hidden="true">🌿</span>
-      </span>
+      <img class="logo-img" src="assets/lootlion-logo-dark.svg" alt="Lootlion" />
     </div>
     <p class="tagline">{{ 'auth.tagline' | transloco }}</p>
 
@@ -49,9 +47,9 @@
         <p class="wizard-hint">{{ 'auth.wizard.childPickFamily' | transloco }}</p>
         <p class="guest-notice">{{ 'auth.wizard.childGuestNotice' | transloco }}</p>
         @if (loadingHouseholds()) {
-          <p class="muted">{{ 'auth.wizard.loadingFamilies' | transloco }}</p>
+          <p class="ll-text-muted wizard-hint-text">{{ 'auth.wizard.loadingFamilies' | transloco }}</p>
         } @else if (households().length === 0) {
-          <p class="muted">{{ 'auth.wizard.noFamilies' | transloco }}</p>
+          <p class="ll-text-muted wizard-hint-text">{{ 'auth.wizard.noFamilies' | transloco }}</p>
         } @else {
           <ul class="household-list" role="list">
             @for (h of households(); track h.id ?? $index) {
@@ -100,9 +98,9 @@
         } @else {
           <p class="wizard-hint">{{ 'auth.wizard.parentPickFamily' | transloco }}</p>
           @if (loadingHouseholds()) {
-            <p class="muted">{{ 'auth.wizard.loadingFamilies' | transloco }}</p>
+            <p class="ll-text-muted wizard-hint-text">{{ 'auth.wizard.loadingFamilies' | transloco }}</p>
           } @else if (households().length === 0) {
-            <p class="muted">{{ 'auth.wizard.noFamilies' | transloco }}</p>
+            <p class="ll-text-muted wizard-hint-text">{{ 'auth.wizard.noFamilies' | transloco }}</p>
           } @else {
             <ul class="household-list" role="list">
               @for (h of households(); track h.id ?? $index) {

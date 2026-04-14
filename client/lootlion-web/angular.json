@@ -26,6 +26,9 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "stylePreprocessorOptions": {
+              "includePaths": ["src"]
+            },
             "assets": [
               {
                 "glob": "**/*",
@@ -39,7 +42,6 @@
             ],
             "styles": [
               "node_modules/@taiga-ui/styles/taiga-ui-theme.less",
-              "node_modules/@taiga-ui/styles/taiga-ui-fonts.less",
               "src/styles.scss"
             ]
           },

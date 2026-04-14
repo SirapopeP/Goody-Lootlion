@@ -1,0 +1,93 @@
+// สไตล์ร่วมหน้า auth (shell + ฟอร์ม) — รวมเป็นไฟล์เดียวเพื่อให้ Angular inject สไตล์ชุดเดียว (ลดปัญหา encapsulation / ลำดับเมื่อใช้หลาย styleUrl)
+
+@use '../../../styles/mixins' as m;
+
+.shell {
+  @include m.auth-shell-root;
+}
+
+.shell > .card,
+.shell > .wizard-card {
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  @include m.auth-shell-card;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 0.35rem;
+}
+
+.logo-img {
+  @include m.auth-shell-logo-img;
+}
+
+.tagline {
+  text-align: center;
+  font-size: 0.65rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--lootlion-tagline);
+  margin-bottom: 1.75rem;
+  opacity: 0.95;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field label {
+  @include m.auth-form-field-label;
+}
+
+.field input {
+  @include m.auth-form-field-input;
+}
+
+.btn-primary {
+  @include m.auth-btn-primary;
+}
+
+.divider {
+  @include m.auth-divider;
+}
+
+.btn-secondary {
+  @include m.auth-btn-secondary;
+}
+
+.error {
+  @include m.auth-error-box;
+}
+
+.hint {
+  font-size: 0.75rem;
+  color: var(--lootlion-text-muted);
+  margin-top: -0.25rem;
+}
+
+.hint a {
+  color: var(--lootlion-accent-teal);
+  text-decoration: none;
+}
+
+.hint a:hover {
+  text-decoration: underline;
+}
+
+.field-error {
+  font-size: 0.75rem;
+  color: #e8a0a0;
+  margin: -0.5rem 0 0;
+}

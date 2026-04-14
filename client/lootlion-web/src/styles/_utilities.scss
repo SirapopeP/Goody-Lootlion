@@ -1,0 +1,50 @@
+// Class สำหรับใช้ซ้ำทั้งแอป — รวมผ่าน styles.scss หลัง :root
+
+@mixin _inline-code {
+  font-size: 0.82em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--lootlion-tagline);
+}
+
+@mixin emit {
+  .ll-text-muted {
+    color: var(--lootlion-text-muted);
+  }
+
+  .ll-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .ll-inline-code {
+    @include _inline-code;
+  }
+
+  .ll-feature-placeholder {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--lootlion-text);
+
+    p {
+      margin: 0 0 0.65rem;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    code {
+      @include _inline-code;
+    }
+  }
+}

@@ -15,7 +15,7 @@ import { EMPTY, catchError, finalize } from 'rxjs';
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink, TranslocoPipe, LanguageToggleComponent],
   templateUrl: './register.component.html',
-  styleUrls: ['./auth-shell.scss', './auth-forms.scss'],
+  styleUrl: './auth-shared.scss',
 })
 export class RegisterComponent {
   private readonly fb = inject(FormBuilder);

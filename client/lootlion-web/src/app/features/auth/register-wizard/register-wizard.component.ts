@@ -49,7 +49,7 @@ const emptyDraft = (): Draft => ({
     ParticlesBackgroundComponent,
   ],
   templateUrl: './register-wizard.component.html',
-  styleUrls: ['../auth-shell.scss', '../auth-forms.scss', './register-wizard.component.scss'],
+  styleUrls: ['../auth-shared.scss', './register-wizard.component.scss'],
 })
 export class RegisterWizardComponent implements OnInit {
   private readonly fb = inject(FormBuilder);

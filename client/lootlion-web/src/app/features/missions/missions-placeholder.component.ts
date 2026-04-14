@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-missions-placeholder',
   standalone: true,
-  template: `<p>โมดูลภารกิจ — สร้าง / ส่ง / อนุมัติ ตาม <code>/api/missions</code></p>`
+  templateUrl: './missions-placeholder.component.html',
+  styleUrl: './missions-placeholder.component.scss',
 })
 export class MissionsPlaceholderComponent {}

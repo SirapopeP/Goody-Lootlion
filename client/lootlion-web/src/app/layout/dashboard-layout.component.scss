@@ -113,18 +113,23 @@
 
 .btn-logout {
   padding: 0.42rem 1rem;
-  border: none;
+  border: 1px solid rgba(41, 173, 201, 0.35);
   border-radius: var(--lootlion-radius-sm);
   cursor: pointer;
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 0.78rem;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #1e1a0f;
-  background: linear-gradient(180deg, #f4e4a8 0%, #d4a82a 45%, #9a7209 100%);
+  color: #eaf8f4;
+  background: linear-gradient(
+    180deg,
+    var(--lootlion-accent-teal-hover) 0%,
+    var(--lootlion-accent-teal) 42%,
+    #1a6d7c 100%
+  );
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.35) inset,
-    0 2px 8px rgba(0, 0, 0, 0.35);
+    0 1px 0 rgba(255, 255, 255, 0.18) inset,
+    0 2px 6px rgba(0, 0, 0, 0.28);
   transition:
     filter 0.15s ease,
     transform 0.1s ease;
@@ -174,9 +179,9 @@
 
 .coin-line {
   margin: 0.35rem 0 0;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
   color: var(--lootlion-tagline, #6ec9d4);
 }
 
@@ -188,9 +193,9 @@
 }
 
 .level-tag {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
   color: var(--lootlion-text-muted);
 }
 
@@ -220,18 +225,14 @@
 
 .handle {
   margin: 0;
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-weight: 400;
+  font-size: 1.1rem;
   word-break: break-word;
 }
 
 .fullname {
   margin: 0.2rem 0 0;
   font-size: 0.8rem;
-}
-
-.muted {
-  color: var(--lootlion-text-muted);
 }
 
 .sidebar-cta {
@@ -241,8 +242,8 @@
   border-radius: var(--lootlion-radius-sm);
   background: var(--lootlion-accent-teal);
   color: #fff;
-  font-weight: 600;
-  font-size: 0.85rem;
+  font-weight: 500;
+  font-size: 0.92rem;
   text-decoration: none;
 }
 
@@ -258,9 +259,9 @@
 }
 
 .block-title {
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  font-weight: 500;
   text-transform: uppercase;
   color: var(--lootlion-text);
 }
@@ -308,15 +309,15 @@
 }
 
 .family-title {
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  font-weight: 500;
   text-transform: uppercase;
   color: var(--lootlion-text);
 }
 
 .family-name {
-  font-weight: 700;
+  font-weight: 500;
   color: var(--lootlion-accent-teal);
   letter-spacing: 0.04em;
 }
@@ -330,8 +331,8 @@
 .family-link {
   display: inline-block;
   margin-top: 0.25rem;
-  font-size: 0.82rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 500;
   color: var(--lootlion-accent-teal);
   text-decoration: none;
 }
@@ -359,14 +360,14 @@
 }
 
 .family-lv {
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--lootlion-text-muted);
   text-align: left;
 }
 
 .family-id {
-  font-weight: 600;
+  font-weight: 400;
   color: var(--lootlion-text);
   word-break: break-word;
   min-width: 0;
@@ -396,7 +397,7 @@
 .family-footer-links a {
   color: var(--lootlion-accent-teal);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .family-footer-links a:hover {

@@ -63,11 +63,11 @@
             {{ userDisplay().displayName ?? userDisplay().email ?? ('layout.userFallback' | transloco) }}
           </p>
           <p class="coin-line">{{ 'layout.coinLine' | transloco: { n: walletCoinPlaceholder } }}</p>
-          <p class="fullname muted">
+          <p class="fullname ll-text-muted">
             {{ userDisplay().email ?? '—' }}
           </p>
         } @else {
-          <p class="handle muted">{{ 'layout.guestLine' | transloco }}</p>
+          <p class="handle ll-text-muted">{{ 'layout.guestLine' | transloco }}</p>
           <a routerLink="/auth/login" class="sidebar-cta">{{ 'layout.login' | transloco }}</a>
         }
       </section>
@@ -108,11 +108,11 @@
         </div>
 
         @if (!session.isAuthenticated()) {
-          <p class="family-hint muted">{{ 'layout.familySignInHint' | transloco }}</p>
+          <p class="family-hint ll-text-muted">{{ 'layout.familySignInHint' | transloco }}</p>
         } @else if (familyLoading()) {
-          <p class="family-hint muted">{{ 'layout.familyLoading' | transloco }}</p>
+          <p class="family-hint ll-text-muted">{{ 'layout.familyLoading' | transloco }}</p>
         } @else if (!familyHouseholdName()) {
-          <p class="family-hint muted">{{ 'layout.familyEmpty' | transloco }}</p>
+          <p class="family-hint ll-text-muted">{{ 'layout.familyEmpty' | transloco }}</p>
           <a routerLink="/households" class="family-link">{{ 'layout.households' | transloco }}</a>
         } @else {
           <ul class="family-list" role="list">

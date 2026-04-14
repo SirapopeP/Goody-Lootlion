@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-rewards-placeholder',
   standalone: true,
-  template: `<p>โมดูลรางวัล — catalog และแลก coin ตาม <code>/api/rewards</code></p>`
+  templateUrl: './rewards-placeholder.component.html',
+  styleUrl: './rewards-placeholder.component.scss',
 })
 export class RewardsPlaceholderComponent {}

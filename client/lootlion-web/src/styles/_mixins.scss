@@ -1,0 +1,133 @@
+// Pattern สำหรับฟอร์ม auth — ใช้ร่วมกับ auth-shared.scss
+
+@mixin auth-form-field-label {
+  font-size: 0.8rem;
+  color: var(--lootlion-text-muted);
+}
+
+@mixin auth-form-field-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid var(--lootlion-border);
+  background: var(--lootlion-bg-input);
+  color: var(--lootlion-text);
+  font-size: 0.95rem;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &::placeholder {
+    color: var(--lootlion-text-muted);
+    opacity: 0.7;
+  }
+
+  &:focus {
+    border-color: var(--lootlion-accent-teal);
+    box-shadow: 0 0 0 2px rgba(41, 173, 201, 0.25);
+  }
+}
+
+@mixin auth-btn-primary {
+  margin-top: 0.25rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: var(--lootlion-radius-sm);
+  background: var(--lootlion-accent-green);
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--lootlion-accent-green-hover);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+@mixin auth-btn-secondary {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: var(--lootlion-radius-sm);
+  background: var(--lootlion-accent-teal);
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  box-sizing: border-box;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: var(--lootlion-accent-teal-hover);
+  }
+}
+
+@mixin auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.25rem 0;
+  color: var(--lootlion-text-muted);
+  font-size: 0.8rem;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--lootlion-border);
+  }
+}
+
+@mixin auth-error-box {
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--lootlion-radius-sm);
+  background: rgba(180, 60, 60, 0.2);
+  border: 1px solid rgba(220, 100, 100, 0.45);
+  color: #f5c4c4;
+  font-size: 0.85rem;
+}
+
+// Auth layout (login / register / wizard)
+
+@mixin auth-shell-root {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem 3rem;
+  box-sizing: border-box;
+  background: var(--lootlion-bg);
+  isolation: isolate;
+  overflow-x: hidden;
+}
+
+@mixin auth-shell-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem 1.75rem 2.25rem;
+  background: var(--lootlion-bg-elevated);
+  border: 1px solid var(--lootlion-border);
+  border-radius: var(--lootlion-radius);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+@mixin auth-shell-logo-img {
+  display: block;
+  width: clamp(128px, 42%, 174px);
+  height: auto;
+  margin: 0 auto;
+}
