@@ -1,0 +1,116 @@
+.ll-edit-profile-dialog {
+  padding: 0;
+  border: none;
+  max-width: calc(100vw - 2rem);
+  width: min(400px, 100%);
+  background: transparent;
+  color: var(--lootlion-text);
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.55);
+  }
+}
+
+.ll-edit-profile-dialog__panel {
+  background: var(--lootlion-bg-elevated);
+  border: 1px solid var(--lootlion-border);
+  border-radius: var(--lootlion-radius);
+  padding: 1.25rem 1.35rem 1.15rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.ll-edit-profile-dialog__title {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.ll-edit-profile-dialog__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.ll-edit-profile-dialog__label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-align: left;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lootlion-text-muted);
+}
+
+.ll-edit-profile-dialog__input {
+  border: 1px solid var(--lootlion-border);
+  border-radius: var(--lootlion-radius-sm);
+  padding: 0.5rem 0.65rem;
+  font-size: 0.95rem;
+  color: var(--lootlion-text);
+  background: rgba(0, 0, 0, 0.2);
+
+  &--readonly {
+    opacity: 0.85;
+    cursor: default;
+  }
+
+  &:focus:not(&--readonly) {
+    outline: 2px solid rgba(41, 173, 201, 0.45);
+    outline-offset: 1px;
+  }
+}
+
+.ll-edit-profile-dialog__err {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #e88;
+}
+
+.ll-edit-profile-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+  padding-top: 0.5rem;
+}
+
+.ll-edit-profile-dialog__btn {
+  padding: 0.45rem 1rem;
+  border-radius: var(--lootlion-radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+
+  &--ghost {
+    background: transparent;
+    border-color: var(--lootlion-border);
+    color: var(--lootlion-text-muted);
+
+    &:hover {
+      color: var(--lootlion-text);
+    }
+  }
+
+  &--primary {
+    border-color: rgba(41, 173, 201, 0.45);
+    color: #eaf8f4;
+    background: linear-gradient(
+      180deg,
+      var(--lootlion-accent-teal-hover) 0%,
+      var(--lootlion-accent-teal) 42%,
+      #1a6d7c 100%
+    );
+
+    &:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
+      filter: brightness(1.06);
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AuthService } from '../../api/generated/api/auth.service';
 import { applyAuthResult } from '../../core/auth/apply-auth-result';
@@ -28,6 +28,7 @@ export class LoginComponent {
   private readonly authApi = inject(AuthService);
   private readonly session = inject(AuthSessionService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly transloco = inject(TranslocoService);
 
   readonly submitting = signal(false);
@@ -58,7 +59,8 @@ export class LoginComponent {
         finalize(() => this.submitting.set(false))
       )
       .subscribe((res) => {
-        applyAuthResult(this.session, this.router, this.transloco, this.errorMessage, res);
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        applyAuthResult(this.session, this.router, this.transloco, this.errorMessage, res, returnUrl);
       });
   }
 }

@@ -38,6 +38,16 @@
     "wishlist": "Wishlist",
     "coinLine": "▲ : {{n}} COIN"
   },
+  "profileEdit": {
+    "title": "Edit profile",
+    "displayName": "Display name",
+    "displayNameRequired": "Display name is required",
+    "emailReadonly": "Email",
+    "save": "Save",
+    "cancel": "Cancel",
+    "openAria": "Edit profile",
+    "saveFailed": "Could not save changes"
+  },
   "home": {
     "title": "Quest board and rank",
     "lead": "Space for the quest board and rankings — connect the API in the next phase via",

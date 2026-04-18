@@ -1,4 +1,4 @@
-import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -10,6 +10,7 @@ import { AuthSessionService } from '../core/auth/auth-session.service';
 import { MenuAccessService } from '../core/auth/menu-access.service';
 import { LanguageToggleComponent } from '../core/i18n/language-toggle.component';
 import { ParticlesBackgroundComponent } from '../shared/ui/particles-background/particles-background.component';
+import { EditProfileDialogComponent } from './edit-profile-dialog.component';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -21,11 +22,14 @@ import { ParticlesBackgroundComponent } from '../shared/ui/particles-background/
     TranslocoPipe,
     LanguageToggleComponent,
     ParticlesBackgroundComponent,
+    EditProfileDialogComponent,
   ],
   templateUrl: './dashboard-layout.component.html',
   styleUrl: './dashboard-layout.component.scss',
 })
 export class DashboardLayoutComponent {
+  private readonly editProfileDialog = viewChild(EditProfileDialogComponent);
+
   readonly session = inject(AuthSessionService);
   readonly menu = inject(MenuAccessService);
   private readonly router = inject(Router);
@@ -98,5 +102,12 @@ export class DashboardLayoutComponent {
   logout(): void {
     this.session.clear();
     void this.router.navigateByUrl('/auth/login');
+  }
+
+  openEditProfile(): void {
+    if (!this.session.isAuthenticated()) {
+      return;
+    }
+    this.editProfileDialog()?.open();
   }
 }

@@ -31,6 +31,26 @@ export function decodeJwtPayload(token: string): Record<string, unknown> | null 
   }
 }
 
+/**
+ * ตรวจว่า access JWT หมดอายุตาม claim `exp` หรือไม่ (วินาที UTC)
+ * - ไม่มี `exp` ใน payload: ถือว่ายังไม่หมดอายุฝั่ง client (ให้ API/interceptor เป็นตัวตัดสิน)
+ * - token แปลกปลอม: ถือว่าหมดอายุ → ให้ guard ไปลอง refresh
+ *
+ * @param clockSkewSec รีเฟรชก่อนหมดอายุจริงเล็กน้อย (กันคล็อกเครื่องเพี้ยน)
+ */
+export function isJwtAccessExpired(token: string, clockSkewSec = 60): boolean {
+  const p = decodeJwtPayload(token);
+  if (!p) {
+    return true;
+  }
+  const exp = p['exp'];
+  if (typeof exp !== 'number') {
+    return false;
+  }
+  const nowSec = Date.now() / 1000;
+  return nowSec >= exp - clockSkewSec;
+}
+
 function pickString(p: Record<string, unknown>, keys: string[]): string | null {
   for (const k of keys) {
     const v = p[k];

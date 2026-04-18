@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authCanMatch } from './core/auth/auth.guard';
 import { rewardsParentCanMatch, wishlistChildCanMatch } from './core/auth/household-route.guard';
 
 export const routes: Routes = [
@@ -8,6 +9,7 @@ export const routes: Routes = [
   },
   {
     path: '',
+    canMatch: [authCanMatch],
     loadComponent: () =>
       import('./layout/dashboard-layout.component').then((m) => m.DashboardLayoutComponent),
     children: [

@@ -137,6 +137,33 @@ public sealed class IdentityAuthService : IAuthService
         return await IssueTokensAsync(user, cancellationToken, isGuest);
     }
 
+    public async Task<AuthResponse> UpdateProfileAsync(
+        Guid userId,
+        UpdateProfileRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var name = request.DisplayName.Trim();
+        if (string.IsNullOrEmpty(name))
+            throw new InvalidOperationException("Display name is required.");
+        if (name.Length > 200)
+            throw new InvalidOperationException("Display name is too long.");
+
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user is null)
+            throw new InvalidOperationException("User not found.");
+
+        user.DisplayName = name;
+        var update = await _userManager.UpdateAsync(user);
+        EnsureSucceeded(update);
+
+        var reloaded = await _userManager.FindByIdAsync(userId.ToString());
+        if (reloaded is null)
+            throw new InvalidOperationException("User not found after update.");
+
+        var isGuest = reloaded.GuestAccountExpiresUtc is not null;
+        return await IssueTokensAsync(reloaded, cancellationToken, isGuest);
+    }
+
     public async Task<AuthResponse> RefreshAsync(RefreshRequest request, CancellationToken cancellationToken = default)
     {
         var raw = request.RefreshToken?.Trim();

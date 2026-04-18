@@ -1,0 +1,50 @@
+<dialog #dialogEl class="ll-edit-profile-dialog" (click)="onBackdropClick($event)">
+  <div class="ll-edit-profile-dialog__panel" (click)="$event.stopPropagation()">
+    <h2 class="ll-edit-profile-dialog__title">{{ 'profileEdit.title' | transloco }}</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="ll-edit-profile-dialog__form">
+      <label class="ll-edit-profile-dialog__label">
+        <span>{{ 'profileEdit.emailReadonly' | transloco }}</span>
+        <input
+          type="text"
+          class="ll-edit-profile-dialog__input ll-edit-profile-dialog__input--readonly"
+          [value]="emailPreview()"
+          readonly
+          tabindex="-1"
+        />
+      </label>
+
+      <label class="ll-edit-profile-dialog__label">
+        <span>{{ 'profileEdit.displayName' | transloco }}</span>
+        <input
+          type="text"
+          class="ll-edit-profile-dialog__input"
+          formControlName="displayName"
+          autocomplete="nickname"
+          maxlength="200"
+        />
+      </label>
+
+      @if (form.controls.displayName.touched && form.controls.displayName.errors?.['required']) {
+        <p class="ll-edit-profile-dialog__err">{{ 'profileEdit.displayNameRequired' | transloco }}</p>
+      }
+
+      @if (errorMessage(); as err) {
+        <p class="ll-edit-profile-dialog__err">{{ err }}</p>
+      }
+
+      <div class="ll-edit-profile-dialog__actions">
+        <button type="button" class="ll-edit-profile-dialog__btn ll-edit-profile-dialog__btn--ghost" (click)="close()">
+          {{ 'profileEdit.cancel' | transloco }}
+        </button>
+        <button
+          type="submit"
+          class="ll-edit-profile-dialog__btn ll-edit-profile-dialog__btn--primary"
+          [disabled]="submitting()"
+        >
+          {{ 'profileEdit.save' | transloco }}
+        </button>
+      </div>
+    </form>
+  </div>
+</dialog>

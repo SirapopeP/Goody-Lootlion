@@ -58,7 +58,18 @@
     </main>
 
     <aside class="sidebar" [attr.aria-label]="'layout.sidebarAria' | transloco">
-      <section class="card profile-card">
+      <app-edit-profile-dialog />
+
+      <section
+        class="card profile-card"
+        [class.profile-card--clickable]="session.isAuthenticated()"
+        [attr.role]="session.isAuthenticated() ? 'button' : null"
+        [attr.tabindex]="session.isAuthenticated() ? 0 : null"
+        [attr.aria-label]="session.isAuthenticated() ? ('profileEdit.openAria' | transloco) : null"
+        (click)="openEditProfile()"
+        (keydown.enter)="openEditProfile()"
+        (keydown.space)="$event.preventDefault(); openEditProfile()"
+      >
         <div class="avatar" aria-hidden="true"></div>
         <div class="level-row">
           <span class="level-tag">{{ 'layout.levelPlaceholder' | transloco }}</span>

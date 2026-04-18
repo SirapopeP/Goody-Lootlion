@@ -38,6 +38,16 @@
     "wishlist": "Wishlist",
     "coinLine": "▲ : {{n}} COIN"
   },
+  "profileEdit": {
+    "title": "แก้ไขโปรไฟล์",
+    "displayName": "ชื่อที่แสดง",
+    "displayNameRequired": "กรุณากรอกชื่อที่แสดง",
+    "emailReadonly": "อีเมล",
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "openAria": "แก้ไขโปรไฟล์",
+    "saveFailed": "บันทึกไม่สำเร็จ"
+  },
   "home": {
     "title": "บอร์ดภารกิจและอันดับ",
     "lead": "พื้นที่แสดงบอร์ดภารกิจและอันดับ — เชื่อม API ตามเฟสถัดไปได้จาก",
