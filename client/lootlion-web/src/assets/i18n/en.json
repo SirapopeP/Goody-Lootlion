@@ -5,6 +5,13 @@
     "back": "Back",
     "cancel": "Cancel"
   },
+  "toast": {
+    "regionAria": "Notifications",
+    "dismissAria": "Dismiss notification",
+    "fallbackMessage": "Notification",
+    "saveSuccess": "Saved successfully",
+    "genericError": "Something went wrong. Please try again."
+  },
   "nav": {
     "mainAria": "Main navigation",
     "questBoard": "Quest board and rank",

@@ -5,6 +5,13 @@
     "back": "ย้อนกลับ",
     "cancel": "ยกเลิก"
   },
+  "toast": {
+    "regionAria": "การแจ้งเตือน",
+    "dismissAria": "ปิดการแจ้งเตือน",
+    "fallbackMessage": "มีการแจ้งเตือน",
+    "saveSuccess": "บันทึกสำเร็จ",
+    "genericError": "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง"
+  },
   "nav": {
     "mainAria": "เมนูหลัก",
     "questBoard": "บอร์ดภารกิจและอันดับ",

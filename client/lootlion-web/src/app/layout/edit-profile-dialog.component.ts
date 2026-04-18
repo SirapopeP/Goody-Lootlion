@@ -2,10 +2,10 @@ import { Component, computed, ElementRef, inject, signal, viewChild } from '@ang
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { EMPTY, catchError, finalize } from 'rxjs';
-import { readApiErrorMessage } from '../core/auth/api-error';
 import { AuthSessionService } from '../core/auth/auth-session.service';
 import { parseJwtUserDisplay } from '../core/auth/jwt-payload';
 import { ProfileApiService } from '../core/profile/profile-api.service';
+import { ToastService } from '../core/toast/toast.service';
 
 @Component({
   selector: 'app-edit-profile-dialog',
@@ -19,6 +19,7 @@ export class EditProfileDialogComponent {
   private readonly session = inject(AuthSessionService);
   private readonly profileApi = inject(ProfileApiService);
   private readonly transloco = inject(TranslocoService);
+  private readonly toast = inject(ToastService);
 
   private readonly dialogEl = viewChild.required<ElementRef<HTMLDialogElement>>('dialogEl');
 
@@ -26,7 +27,6 @@ export class EditProfileDialogComponent {
   readonly emailPreview = computed(() => parseJwtUserDisplay(this.session.token()).email ?? '—');
 
   readonly submitting = signal(false);
-  readonly errorMessage = signal<string | null>(null);
 
   readonly form = this.fb.nonNullable.group({
     displayName: ['', [Validators.required, Validators.maxLength(200)]],
@@ -34,7 +34,6 @@ export class EditProfileDialogComponent {
 
   /** เปิด modal — ดึงชื่อจาก JWT ปัจจุบัน */
   open(): void {
-    this.errorMessage.set(null);
     const d = parseJwtUserDisplay(this.session.getAccessToken());
     this.form.patchValue({
       displayName: (d.displayName ?? '').trim() || '',
@@ -55,7 +54,6 @@ export class EditProfileDialogComponent {
   }
 
   submit(): void {
-    this.errorMessage.set(null);
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -66,18 +64,17 @@ export class EditProfileDialogComponent {
       .updateMe({ displayName })
       .pipe(
         catchError((err) => {
-          this.errorMessage.set(
-            readApiErrorMessage(err, this.transloco.translate('profileEdit.saveFailed'))
-          );
+          this.toast.fromApiError(err, 'profileEdit.saveFailed');
           return EMPTY;
         }),
         finalize(() => this.submitting.set(false))
       )
       .subscribe((res) => {
         if (this.session.storeFromAuthResponse(res)) {
+          this.toast.success(this.transloco.translate('toast.saveSuccess'));
           this.close();
         } else {
-          this.errorMessage.set(this.transloco.translate('auth.noToken'));
+          this.toast.error(this.transloco.translate('auth.noToken'));
         }
       });
   }

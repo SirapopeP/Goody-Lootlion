@@ -1,0 +1,116 @@
+.ll-toast-host {
+  position: fixed;
+  z-index: 100000;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.55rem;
+  padding: 1rem 1rem max(1rem, env(safe-area-inset-bottom));
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.ll-toast {
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 0.5rem 0.65rem;
+  max-width: min(420px, calc(100vw - 2rem));
+  padding: 0.65rem 0.75rem 0.65rem 0.85rem;
+  border-radius: var(--lootlion-radius);
+  border: 1px solid var(--lootlion-border);
+  background: var(--lootlion-bg-elevated);
+  color: var(--lootlion-text);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  animation: ll-toast-in 0.22s ease-out;
+}
+
+@keyframes ll-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ll-toast__icon {
+  font-size: 0.95rem;
+  line-height: 1.2;
+  font-weight: 700;
+  margin-top: 0.1rem;
+}
+
+.ll-toast--success .ll-toast__icon {
+  color: #7dcea0;
+}
+
+.ll-toast--error .ll-toast__icon {
+  color: #f1948a;
+}
+
+.ll-toast--info .ll-toast__icon {
+  color: var(--lootlion-accent-teal, #29adc9);
+}
+
+.ll-toast--warning .ll-toast__icon {
+  color: #f5b041;
+}
+
+.ll-toast__msg {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.ll-toast__close {
+  margin: -0.15rem -0.1rem 0 0;
+  padding: 0.15rem 0.35rem;
+  border: none;
+  background: transparent;
+  color: var(--lootlion-text-muted);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: var(--lootlion-radius-sm);
+
+  &:hover {
+    color: var(--lootlion-text);
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.ll-toast--success {
+  border-color: rgba(76, 167, 113, 0.4);
+}
+
+.ll-toast--error {
+  border-color: rgba(241, 148, 138, 0.45);
+}
+
+.ll-toast--info {
+  border-color: rgba(41, 173, 201, 0.35);
+}
+
+.ll-toast--warning {
+  border-color: rgba(245, 176, 65, 0.45);
+}
+
+@media (max-width: 480px) {
+  .ll-toast-host {
+    align-items: stretch;
+  }
+
+  .ll-toast {
+    max-width: none;
+  }
+}

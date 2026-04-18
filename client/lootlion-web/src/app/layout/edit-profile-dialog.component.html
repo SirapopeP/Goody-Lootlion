@@ -29,10 +29,6 @@
         <p class="ll-edit-profile-dialog__err">{{ 'profileEdit.displayNameRequired' | transloco }}</p>
       }
 
-      @if (errorMessage(); as err) {
-        <p class="ll-edit-profile-dialog__err">{{ err }}</p>
-      }
-
       <div class="ll-edit-profile-dialog__actions">
         <button type="button" class="ll-edit-profile-dialog__btn ll-edit-profile-dialog__btn--ghost" (click)="close()">
           {{ 'profileEdit.cancel' | transloco }}

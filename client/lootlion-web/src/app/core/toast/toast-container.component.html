@@ -1,0 +1,39 @@
+<div class="ll-toast-host" role="region" [attr.aria-label]="'toast.regionAria' | transloco">
+  @for (item of toast.items(); track trackById($index, item)) {
+    <div
+      class="ll-toast"
+      [class.ll-toast--success]="item.kind === 'success'"
+      [class.ll-toast--error]="item.kind === 'error'"
+      [class.ll-toast--info]="item.kind === 'info'"
+      [class.ll-toast--warning]="item.kind === 'warning'"
+      [attr.role]="liveRole(item)"
+      [attr.aria-live]="livePoliteness(item)"
+    >
+      <span class="ll-toast__icon" aria-hidden="true">
+        @switch (item.kind) {
+          @case ('success') {
+            ✓
+          }
+          @case ('error') {
+            !
+          }
+          @case ('warning') {
+            ⚠
+          }
+          @default {
+            ℹ
+          }
+        }
+      </span>
+      <p class="ll-toast__msg">{{ item.message }}</p>
+      <button
+        type="button"
+        class="ll-toast__close"
+        (click)="toast.dismiss(item.id)"
+        [attr.aria-label]="'toast.dismissAria' | transloco"
+      >
+        ×
+      </button>
+    </div>
+  }
+</div>
