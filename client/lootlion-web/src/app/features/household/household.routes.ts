@@ -4,6 +4,6 @@ export const HOUSEHOLD_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./household-placeholder.component').then((m) => m.HouseholdPlaceholderComponent)
-  }
+      import('./households-page.component').then((m) => m.HouseholdsPageComponent),
+  },
 ];

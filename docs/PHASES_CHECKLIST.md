@@ -73,11 +73,11 @@
 ## เฟส 3 — ครอบครัว (Family) + มุมมอง “หน้าหลัก” ระดับครอบครัว
 
 - [x] Backend: ครอบครัวและสมาชิก (`POST /api/Households`, `GET /api/Households/mine`, `GET/POST .../members`, รวมรายการเปิดให้เด็กสมัคร ฯลฯ — ดู `HouseholdsController`)
-- [ ] หน้า `/households` — **ยังเป็น placeholder** (`HouseholdPlaceholderComponent`); ยังไม่มี UI จัดการรายการ/สร้างครอบครัวเพิ่มหลังล็อกอินแบบเต็มรูปแบบ (การสร้าง/เลือกบ้านทำหลัก ๆ ตอนลงทะเบียนแล้ว)
-- [ ] เชิญสมาชิกด้วย `MemberUserId` บน UI (ฝั่ง API มี `POST .../members` แล้ว; หรือเพิ่ม endpoint ค้นหาจากอีเมลภายหลัง)
+- [x] หน้า `/households` — `HouseholdsPageComponent`: เลือกบ้านที่ใช้เป็นบริบท (เก็บใน `sessionStorage` ผ่าน `ActiveHouseholdService`), รายการจาก `GET mine`, สร้างบ้านใหม่ (`POST`), ดูสมาชิก, ผู้ปกครองเชิญด้วย UUID (`POST .../members`)
+- [x] เชิญสมาชิกด้วย `MemberUserId` บน UI (ฟอร์ม UUID + เลือกบทบาท Parent/Child) — ค้นหาจากอีเมลเป็นงานเสริมภายหลังได้
 - [x] แยกสิทธิ์บางส่วนตามบทบาท (**Parent / Child**): claim ใน JWT + `MenuAccessService` + `canMatch` บน `/rewards` (ผู้ปกครอง) และ `/wishlist` (เด็ก) — ฟีเจอร์ “จัดการ” อื่นในแผนงานยังผูกเฟสถัดไป
-- [ ] **Dashboard ภาพรวม** หน้าแรก: `DashboardLayout` แสดงชื่อครอบครัว + สมาชิกใน sidebar แล้ว — แต่ `HomeComponent` ยังเป็น placeholder ภารกิจ/เหรียญ (รอข้อมูลเฟส 4)
-- [ ] (ถ้าต้องการ) ปรับข้อความ/ empty state ให้ใช้คีย์ Transloco ครบ
+- [x] **Dashboard ภาพรวม** หน้าแรก: sidebar ใช้บ้านที่เลือก (ไม่ใช้แค่ `households[0]` อีกต่อไป) + `HomeComponent` มีบล็อกภาพรวมครอบครัว (ชื่อ + จำนวนสมาชิก); โซนภารกิจ/เหรียญยังเป็น placeholder จนกว่าเฟส 4
+- [x] ข้อความหลักของหน้าครอบครัว/ภาพรวมหน้าแรกใช้คีย์ Transloco (th/en)
 
 หมายเหตุ: รายการ “จัดการ User ระดบระบบทั้งโปรเจกต์” ถ้าไม่ได้ออกแบบให้มีแอดมินกลาง — ให้ตีความเป็น **จัดการสมาชิกในครอบครัว** (ผู้ปกครองจัดการเด็กในบ้าน)
 

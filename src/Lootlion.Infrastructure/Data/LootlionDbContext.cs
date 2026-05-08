@@ -1,5 +1,6 @@
 using Lootlion.Application.Abstractions;
 using Lootlion.Domain.Entities;
+using Lootlion.Domain.Enums;
 using Lootlion.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -43,6 +44,7 @@ public sealed class LootlionDbContext : IdentityDbContext<AppUser, IdentityRole<
         builder.Entity<HouseholdMember>(e =>
         {
             e.HasKey(x => x.Id);
+            e.Property(x => x.Status).HasConversion<int>().HasDefaultValue(HouseholdMembershipStatus.Active);
             e.HasIndex(x => new { x.HouseholdId, x.UserId }).IsUnique();
             e.HasOne(x => x.Household)
                 .WithMany(x => x.Members)

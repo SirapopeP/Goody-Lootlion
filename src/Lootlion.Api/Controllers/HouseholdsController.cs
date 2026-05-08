@@ -31,8 +31,8 @@ public sealed class HouseholdsController : ControllerBase
         _households.CreateAsync(this.GetCurrentUserId(), request, cancellationToken);
 
     [HttpGet("mine")]
-    [ProducesResponseType(typeof(IReadOnlyList<HouseholdDto>), StatusCodes.Status200OK)]
-    public Task<IReadOnlyList<HouseholdDto>> ListMine(CancellationToken cancellationToken) =>
+    [ProducesResponseType(typeof(IReadOnlyList<HouseholdMineDto>), StatusCodes.Status200OK)]
+    public Task<IReadOnlyList<HouseholdMineDto>> ListMine(CancellationToken cancellationToken) =>
         _households.ListMineAsync(this.GetCurrentUserId(), cancellationToken);
 
     [HttpGet("{householdId:guid}/members")]
@@ -47,6 +47,40 @@ public sealed class HouseholdsController : ControllerBase
     public async Task<IActionResult> AddMember(Guid householdId, [FromBody] AddMemberBody body, CancellationToken cancellationToken)
     {
         await _households.AddMemberAsync(this.GetCurrentUserId(), householdId, body.MemberUserId, body.Role, cancellationToken);
+        return NoContent();
+    }
+
+    [HttpPost("{householdId:guid}/members/{memberUserId:guid}/approve")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> ApproveMember(Guid householdId, Guid memberUserId, CancellationToken cancellationToken)
+    {
+        await _households.ApproveMemberAsync(this.GetCurrentUserId(), householdId, memberUserId, cancellationToken);
+        return NoContent();
+    }
+
+    [HttpPost("{householdId:guid}/members/{memberUserId:guid}/reject")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> RejectMember(Guid householdId, Guid memberUserId, CancellationToken cancellationToken)
+    {
+        await _households.RejectMemberAsync(this.GetCurrentUserId(), householdId, memberUserId, cancellationToken);
+        return NoContent();
+    }
+
+    [HttpGet("{householdId:guid}/invite-candidates")]
+    [ProducesResponseType(typeof(IReadOnlyList<UserSearchHitDto>), StatusCodes.Status200OK)]
+    public Task<IReadOnlyList<UserSearchHitDto>> SearchInviteCandidates(
+        Guid householdId,
+        [FromQuery] string? q,
+        CancellationToken cancellationToken) =>
+        _households.SearchInviteCandidatesAsync(this.GetCurrentUserId(), householdId, q ?? string.Empty, cancellationToken);
+
+    public sealed record DeleteHouseholdBody(string ConfirmationName);
+
+    [HttpPost("{householdId:guid}/delete")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> DeleteHousehold(Guid householdId, [FromBody] DeleteHouseholdBody body, CancellationToken cancellationToken)
+    {
+        await _households.DeleteHouseholdAsync(this.GetCurrentUserId(), householdId, body.ConfirmationName, cancellationToken);
         return NoContent();
     }
 }

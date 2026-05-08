@@ -130,6 +130,8 @@
           <p class="family-hint ll-text-muted">{{ 'layout.familySignInHint' | transloco }}</p>
         } @else if (familyLoading()) {
           <p class="family-hint ll-text-muted">{{ 'layout.familyLoading' | transloco }}</p>
+        } @else if (familyMembershipPending()) {
+          <p class="family-hint">{{ 'layout.familyPendingApproval' | transloco }}</p>
         } @else if (!familyHouseholdName()) {
           <p class="family-hint ll-text-muted">{{ 'layout.familyEmpty' | transloco }}</p>
           <a routerLink="/households" class="family-link">{{ 'layout.households' | transloco }}</a>

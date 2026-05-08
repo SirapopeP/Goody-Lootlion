@@ -2,12 +2,13 @@ import { Component, DestroyRef, computed, inject, signal, viewChild } from '@ang
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { catchError, finalize, of, switchMap } from 'rxjs';
+import { catchError, finalize, merge, of, switchMap } from 'rxjs';
 import { HouseholdsService } from '../api/generated/api/households.service';
 import { HouseholdMemberDto } from '../api/generated/model/householdMemberDto';
 import { parseJwtUserDisplay } from '../core/auth/jwt-payload';
 import { AuthSessionService } from '../core/auth/auth-session.service';
 import { MenuAccessService } from '../core/auth/menu-access.service';
+import { ActiveHouseholdService } from '../core/household/active-household.service';
 import { LanguageToggleComponent } from '../core/i18n/language-toggle.component';
 import { ParticlesBackgroundComponent } from '../shared/ui/particles-background/particles-background.component';
 import { EditProfileDialogComponent } from './edit-profile-dialog.component';
@@ -34,6 +35,7 @@ export class DashboardLayoutComponent {
   readonly menu = inject(MenuAccessService);
   private readonly router = inject(Router);
   private readonly householdsApi = inject(HouseholdsService);
+  private readonly activeHousehold = inject(ActiveHouseholdService);
   private readonly transloco = inject(TranslocoService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -48,11 +50,15 @@ export class DashboardLayoutComponent {
   readonly walletCoinPlaceholder = 250;
 
   readonly familyHouseholdName = signal<string | null>(null);
+  /** สมาชิกในบ้านที่เลือก — ว่างถ้ายัง Pending (ยังไม่ได้รับอนุมัติ) */
+  readonly familyMembershipPending = signal(false);
   readonly familyMembers = signal<HouseholdMemberDto[]>([]);
   readonly familyLoading = signal(false);
 
   constructor() {
-    this.loadFamily();
+    merge(of(undefined), this.activeHousehold.sidebarRefresh$)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadFamily());
   }
 
   private loadFamily(): void {
@@ -64,21 +70,25 @@ export class DashboardLayoutComponent {
     this.householdsApi
       .apiHouseholdsMineGet()
       .pipe(
-        takeUntilDestroyed(this.destroyRef),
         switchMap((households) => {
           if (!households?.length) {
             this.familyHouseholdName.set(null);
+            this.familyMembershipPending.set(false);
+            this.activeHousehold.pickHousehold([]);
             return of([] as HouseholdMemberDto[]);
           }
-          const h = households[0];
-          this.familyHouseholdName.set(h.name ?? null);
-          if (!h.id) {
+          const picked = this.activeHousehold.pickHousehold(households);
+          this.familyHouseholdName.set(picked?.name ?? null);
+          const pending = (picked?.membershipStatus ?? '').toLowerCase() === 'pending';
+          this.familyMembershipPending.set(pending);
+          if (!picked?.id || pending) {
             return of([] as HouseholdMemberDto[]);
           }
-          return this.householdsApi.apiHouseholdsHouseholdIdMembersGet(h.id);
+          return this.householdsApi.apiHouseholdsHouseholdIdMembersGet(picked.id);
         }),
         catchError(() => {
           this.familyHouseholdName.set(null);
+          this.familyMembershipPending.set(false);
           return of([] as HouseholdMemberDto[]);
         }),
         finalize(() => this.familyLoading.set(false))
@@ -101,6 +111,7 @@ export class DashboardLayoutComponent {
 
   logout(): void {
     this.session.clear();
+    this.activeHousehold.clear();
     void this.router.navigateByUrl('/auth/login');
   }
 

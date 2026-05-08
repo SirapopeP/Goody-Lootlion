@@ -1,0 +1,271 @@
+<div class="hh-page">
+  <header class="hh-head">
+    <h1 class="hh-title">{{ 'household.pageTitle' | transloco }}</h1>
+    <p class="hh-lead ll-text-muted">{{ 'household.pageLead' | transloco }}</p>
+  </header>
+
+  @if (!isParentUi()) {
+    <p class="hh-hint">{{ 'household.childReadOnlyHint' | transloco }}</p>
+  }
+
+  @if (listLoading()) {
+    <p class="ll-text-muted">{{ 'household.loadingList' | transloco }}</p>
+  } @else if (!households().length) {
+    <div class="hh-empty">
+      <p>{{ 'household.emptyList' | transloco }}</p>
+      @if (isParentUi()) {
+        <p class="ll-text-muted">{{ 'household.emptyListParentHint' | transloco }}</p>
+      }
+    </div>
+  } @else {
+    <section class="hh-card" [attr.aria-label]="'household.sectionPick' | transloco">
+      <h2 class="hh-section-title">{{ 'household.sectionPick' | transloco }}</h2>
+      <ul class="hh-house-list" role="list">
+        @for (h of households(); track h.id) {
+          <li class="hh-house-row" role="listitem">
+            <label class="hh-radio">
+              <input
+                type="radio"
+                name="activeHousehold"
+                [value]="h.id"
+                [checked]="selectedHouseholdId() === h.id"
+                (change)="h.id && selectHousehold(h.id)"
+              />
+              <span class="hh-house-name">{{ h.name ?? '—' }}</span>
+              @if (h.membershipStatus) {
+                <span class="hh-house-badge" [class.hh-house-badge--pending]="h.membershipStatus === 'Pending'">
+                  {{ memberStatusLabel(h.membershipStatus) }}
+                </span>
+              }
+            </label>
+            @if (isParentUi() && h.id) {
+              <button
+                type="button"
+                class="hh-btn-delete"
+                (click)="openDeleteDialog(h)"
+                [attr.aria-label]="'household.deleteHousehold' | transloco"
+              >
+                {{ 'household.deleteHousehold' | transloco }}
+              </button>
+            }
+          </li>
+        }
+      </ul>
+      <p class="hh-muted ll-text-muted">{{ 'household.activeContextHint' | transloco }}</p>
+    </section>
+  }
+
+  @if (selectedMembershipPending()) {
+    <div class="hh-pending-banner">
+      <p>{{ 'household.pendingMembershipBanner' | transloco: { name: selectedHouseholdName() } }}</p>
+    </div>
+  }
+
+  @if (isParentUi() && households().length) {
+    <section class="hh-card" [attr.aria-label]="'household.sectionCreate' | transloco">
+      <h2 class="hh-section-title">{{ 'household.sectionCreate' | transloco }}</h2>
+      <form class="hh-form" [formGroup]="createForm" (ngSubmit)="submitCreate()">
+        <label class="hh-label" for="hh-new-name">{{ 'household.newHouseholdName' | transloco }}</label>
+        <div class="hh-inline">
+          <input
+            id="hh-new-name"
+            type="text"
+            class="hh-input"
+            formControlName="name"
+            [attr.aria-invalid]="createForm.controls.name.invalid && createForm.controls.name.touched"
+            autocomplete="off"
+          />
+          <button type="submit" class="hh-btn" [disabled]="createSubmitting()">
+            {{ createSubmitting() ? ('household.creating' | transloco) : ('household.createSubmit' | transloco) }}
+          </button>
+        </div>
+        @if (createForm.controls.name.touched && createForm.controls.name.errors?.['required']) {
+          <p class="hh-error">{{ 'auth.wizard.familyNameRequired' | transloco }}</p>
+        }
+      </form>
+    </section>
+  }
+
+  @if (selectedHouseholdId()) {
+    <section class="hh-card" [attr.aria-label]="'household.sectionMembers' | transloco">
+      <h2 class="hh-section-title">{{ 'household.sectionMembers' | transloco }}</h2>
+      @if (selectedMembershipPending()) {
+        <p class="hh-pending-inline">{{ 'household.pendingCannotViewMembers' | transloco }}</p>
+      } @else if (membersLoading()) {
+        <p class="ll-text-muted">{{ 'household.loadingMembers' | transloco }}</p>
+      } @else if (!members().length) {
+        <p class="ll-text-muted">{{ 'household.noMembers' | transloco }}</p>
+      } @else {
+        <table class="hh-table">
+          <thead>
+            <tr>
+              <th scope="col">{{ 'household.colMember' | transloco }}</th>
+              <th scope="col">{{ 'household.colRole' | transloco }}</th>
+              <th scope="col">{{ 'household.colMembershipStatus' | transloco }}</th>
+              @if (isParentUi()) {
+                <th scope="col">{{ 'household.colActions' | transloco }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (m of members(); track m.userId) {
+              <tr>
+                <td>{{ m.displayName || m.email || m.userId || '—' }}</td>
+                <td>{{ memberRoleLabel(m.role) }}</td>
+                <td>{{ memberStatusLabel(m.membershipStatus) }}</td>
+                @if (isParentUi()) {
+                  <td class="hh-actions">
+                    @if (showApproveReject(m)) {
+                      <button
+                        type="button"
+                        class="hh-btn hh-btn-small hh-btn-approve"
+                        [disabled]="memberActionUserId() === m.userId"
+                        (click)="approveMember(m.userId)"
+                      >
+                        {{ 'household.approveMember' | transloco }}
+                      </button>
+                      <button
+                        type="button"
+                        class="hh-btn hh-btn-small hh-btn-reject"
+                        [disabled]="memberActionUserId() === m.userId"
+                        (click)="rejectMember(m.userId)"
+                      >
+                        {{ 'household.rejectMember' | transloco }}
+                      </button>
+                    } @else {
+                      —
+                    }
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
+  }
+
+  @if (isParentUi() && selectedHouseholdId() && !selectedMembershipPending()) {
+    <section class="hh-card" [attr.aria-label]="'household.sectionInvite' | transloco">
+      <h2 class="hh-section-title">{{ 'household.sectionInvite' | transloco }}</h2>
+      <p class="hh-muted ll-text-muted">{{ 'household.inviteSearchLead' | transloco }}</p>
+      <div class="hh-form" [formGroup]="inviteRoleForm">
+        <label class="hh-label" for="hh-role">{{ 'household.inviteRole' | transloco }}</label>
+        <select id="hh-role" class="hh-select" formControlName="role">
+          <option [value]="MemberRole.Parent">{{ 'layout.memberRoleParent' | transloco }}</option>
+          <option [value]="MemberRole.Child">{{ 'layout.memberRoleChild' | transloco }}</option>
+        </select>
+      </div>
+      <label class="hh-label" for="hh-search">{{ 'household.searchLabel' | transloco }}</label>
+      <input
+        id="hh-search"
+        type="search"
+        class="hh-input hh-input-block"
+        [value]="searchDraft()"
+        (input)="onSearchInput($any($event.target).value)"
+        [attr.placeholder]="'household.searchPlaceholder' | transloco"
+        autocomplete="off"
+      />
+      @if (searchLoading()) {
+        <p class="hh-muted ll-text-muted">{{ 'household.searchLoading' | transloco }}</p>
+      } @else if (searchDraft().trim().length > 0 && searchDraft().trim().length < 2) {
+        <p class="hh-muted ll-text-muted">{{ 'household.searchMinChars' | transloco }}</p>
+      } @else if (!searchLoading() && searchDraft().trim().length >= 2 && !searchResults().length) {
+        <p class="hh-muted ll-text-muted">{{ 'household.searchNoResults' | transloco }}</p>
+      }
+      @if (searchResults().length) {
+        <ul class="hh-search-results" role="list">
+          @for (hit of searchResults(); track hit.userId) {
+            <li class="hh-search-row" role="listitem">
+              <div class="hh-search-meta">
+                <span class="hh-search-name">{{ hit.displayName || '—' }}</span>
+                @if (hit.email) {
+                  <span class="hh-search-email ll-text-muted">{{ hit.email }}</span>
+                }
+              </div>
+              <button type="button" class="hh-btn hh-btn-small" (click)="openInviteConfirm(hit)">
+                {{ 'household.pickToInvite' | transloco }}
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  }
+
+  <p class="hh-back">
+    <a routerLink="/">{{ 'household.backHome' | transloco }}</a>
+  </p>
+</div>
+
+@if (pendingInvite(); as invite) {
+  <div
+    class="hh-dialog-backdrop"
+    role="presentation"
+    (click)="cancelInviteConfirm()"
+  >
+    <div
+      class="hh-dialog"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="'hh-invite-title'"
+      (click)="$event.stopPropagation()"
+    >
+      <h3 id="hh-invite-title" class="hh-dialog-title">{{ 'household.inviteConfirmTitle' | transloco }}</h3>
+      <p class="hh-dialog-body">
+        {{
+          'household.inviteConfirmMessage'
+            | transloco
+              : {
+                  name: invite.displayName || '—',
+                  email: invite.email || '—',
+                  household: selectedHouseholdName(),
+                  role: inviteRoleLabel(),
+                }
+        }}
+      </p>
+      <div class="hh-dialog-actions">
+        <button type="button" class="hh-btn" (click)="cancelInviteConfirm()">
+          {{ 'household.inviteConfirmNo' | transloco }}
+        </button>
+        <button type="button" class="hh-btn hh-btn-primary" [disabled]="inviteSubmitting()" (click)="confirmInvite()">
+          {{ inviteSubmitting() ? ('household.inviting' | transloco) : ('household.inviteConfirmYes' | transloco) }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (deleteTarget(); as del) {
+  <div class="hh-dialog-backdrop" role="presentation" (click)="cancelDelete()">
+    <div
+      class="hh-dialog"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="'hh-del-title'"
+      (click)="$event.stopPropagation()"
+    >
+      <h3 id="hh-del-title" class="hh-dialog-title">{{ 'household.deleteConfirmTitle' | transloco }}</h3>
+      <p class="hh-dialog-body ll-text-muted">{{ 'household.deleteConfirmLead' | transloco }}</p>
+      <p class="hh-dialog-highlight">{{ del.name }}</p>
+      <label class="hh-label" for="hh-del-confirm">{{ 'household.deleteConfirmLabel' | transloco }}</label>
+      <input
+        id="hh-del-confirm"
+        type="text"
+        class="hh-input hh-input-block"
+        [value]="deleteConfirmDraft()"
+        (input)="onDeleteConfirmInput($any($event.target).value)"
+        [attr.placeholder]="'household.deleteConfirmPlaceholder' | transloco"
+        autocomplete="off"
+      />
+      <div class="hh-dialog-actions">
+        <button type="button" class="hh-btn" (click)="cancelDelete()" [disabled]="deleteSubmitting()">
+          {{ 'common.cancel' | transloco }}
+        </button>
+        <button type="button" class="hh-btn hh-btn-danger" [disabled]="deleteSubmitting()" (click)="submitDelete()">
+          {{ deleteSubmitting() ? ('household.deleting' | transloco) : ('household.deleteSubmit' | transloco) }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

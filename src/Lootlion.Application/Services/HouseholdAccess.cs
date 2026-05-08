@@ -15,7 +15,9 @@ internal static class HouseholdAccess
     {
         var ok = await db.HouseholdMembers
             .AsNoTracking()
-            .AnyAsync(m => m.HouseholdId == householdId && m.UserId == userId, cancellationToken);
+            .AnyAsync(
+                m => m.HouseholdId == householdId && m.UserId == userId && m.Status == HouseholdMembershipStatus.Active,
+                cancellationToken);
         if (!ok)
             throw new InvalidOperationException("Household not found or access denied.");
     }
@@ -28,7 +30,9 @@ internal static class HouseholdAccess
     {
         var row = await db.HouseholdMembers
             .AsNoTracking()
-            .FirstOrDefaultAsync(m => m.HouseholdId == householdId && m.UserId == userId, cancellationToken);
+            .FirstOrDefaultAsync(
+                m => m.HouseholdId == householdId && m.UserId == userId && m.Status == HouseholdMembershipStatus.Active,
+                cancellationToken);
         if (row is null || row.Role != MemberRole.Parent)
             throw new InvalidOperationException("Only a parent can perform this action.");
     }

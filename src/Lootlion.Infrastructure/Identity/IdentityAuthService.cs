@@ -84,7 +84,7 @@ public sealed class IdentityAuthService : IAuthService
             .ToListAsync(cancellationToken);
 
         var parentOk = await _db.HouseholdMembers.AnyAsync(
-            m => childHouseholdIds.Contains(m.HouseholdId) && m.UserId == parentUserId && m.Role == MemberRole.Parent,
+            m => childHouseholdIds.Contains(m.HouseholdId) && m.UserId == parentUserId && m.Role == MemberRole.Parent && m.Status == HouseholdMembershipStatus.Active,
             cancellationToken);
         if (!parentOk)
             throw new InvalidOperationException("Only a parent in the same family can complete this account.");
@@ -230,6 +230,7 @@ public sealed class IdentityAuthService : IAuthService
             HouseholdId = householdId,
             UserId = user.Id,
             Role = MemberRole.Child,
+            Status = HouseholdMembershipStatus.Pending,
             JoinedUtc = DateTime.UtcNow
         });
         await _db.SaveChangesAsync(cancellationToken);
@@ -338,7 +339,7 @@ public sealed class IdentityAuthService : IAuthService
     {
         var roles = await _db.HouseholdMembers
             .AsNoTracking()
-            .Where(m => m.UserId == userId)
+            .Where(m => m.UserId == userId && m.Status == HouseholdMembershipStatus.Active)
             .Select(m => m.Role)
             .ToListAsync(cancellationToken);
 

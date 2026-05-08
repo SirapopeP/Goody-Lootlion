@@ -3,6 +3,31 @@
     <h1 class="quest-page-title">{{ 'home.title' | transloco }}</h1>
   </header>
 
+  <section class="home-overview" [attr.aria-label]="'home.overviewSection' | transloco">
+    @if (overviewLoading()) {
+      <p class="home-overview-line ll-text-muted">{{ 'home.overviewLoading' | transloco }}</p>
+    } @else if (!session.isAuthenticated()) {
+      <p class="home-overview-line ll-text-muted">{{ 'home.overviewGuest' | transloco }}</p>
+    } @else if (!overviewName()) {
+      <p class="home-overview-line">{{ 'home.overviewNoHousehold' | transloco }}</p>
+      <a routerLink="/households" class="home-overview-link">{{ 'home.manageHouseholdsLink' | transloco }}</a>
+    } @else if (overviewMembershipPending()) {
+      <p class="home-overview-line">{{ 'home.overviewPendingMembership' | transloco: { name: overviewName() } }}</p>
+      <p class="home-overview-lead ll-text-muted">{{ 'home.overviewPendingLead' | transloco }}</p>
+      <a routerLink="/households" class="home-overview-link">{{ 'home.manageHouseholdsLink' | transloco }}</a>
+    } @else {
+      <p class="home-overview-line">
+        {{ 'home.overviewFamily' | transloco: { name: overviewName() } }}
+        @if (overviewMemberCount() !== null) {
+          <span class="home-overview-sep" aria-hidden="true">·</span>
+          {{ 'home.overviewMembers' | transloco: { n: overviewMemberCount() } }}
+        }
+      </p>
+      <p class="home-overview-lead ll-text-muted">{{ 'home.overviewLead' | transloco }}</p>
+      <a routerLink="/households" class="home-overview-link">{{ 'home.manageHouseholdsLink' | transloco }}</a>
+    }
+  </section>
+
   <div class="quest-grid">
     <aside class="quest-panel quest-panel-side" [attr.aria-label]="'home.missionColumn' | transloco">
       <div class="quest-panel-toolbar">

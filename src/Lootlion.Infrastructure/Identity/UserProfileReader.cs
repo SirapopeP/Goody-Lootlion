@@ -1,4 +1,5 @@
 using Lootlion.Application.Abstractions;
+using Lootlion.Application.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,33 @@ public sealed class UserProfileReader : IUserProfileReader
     public UserProfileReader(UserManager<AppUser> users)
     {
         _users = users;
+    }
+
+    public async Task<IReadOnlyList<UserSearchHitDto>> SearchByDisplayNameOrEmailAsync(string query, int take, CancellationToken cancellationToken = default)
+    {
+        var term = query.Trim();
+        if (term.Length < 2)
+            return Array.Empty<UserSearchHitDto>();
+
+        take = Math.Clamp(take, 1, 40);
+        var pattern = "%" + EscapeLike(term) + "%";
+
+        var rows = await _users.Users.AsNoTracking()
+            .Where(u =>
+                EF.Functions.ILike(u.DisplayName, pattern) ||
+                (u.Email != null && EF.Functions.ILike(u.Email, pattern)))
+            .OrderBy(u => u.DisplayName)
+            .ThenBy(u => u.Email)
+            .Take(take)
+            .Select(u => new UserSearchHitDto(u.Id, u.DisplayName, u.Email ?? string.Empty))
+            .ToListAsync(cancellationToken);
+
+        return rows;
+    }
+
+    private static string EscapeLike(string value)
+    {
+        return value.Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_");
     }
 
     public async Task<UserProfile?> GetAsync(Guid userId, CancellationToken cancellationToken = default)
