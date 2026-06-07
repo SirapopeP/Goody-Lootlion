@@ -24,6 +24,9 @@ export class MenuAccessService {
     return this.display().householdRole === 'parent';
   });
 
+  /** ผู้ปกครองจัดการภารกิจ / รางวัล */
+  readonly canManageMissions = computed(() => this.canShowRewards());
+
   readonly canShowWishlist = computed(() => {
     if (!this.session.isAuthenticated()) {
       return false;

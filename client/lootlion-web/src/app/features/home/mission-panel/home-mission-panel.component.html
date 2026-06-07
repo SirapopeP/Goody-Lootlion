@@ -1,0 +1,188 @@
+<div class="mission-panel">
+  <div class="mission-panel-toolbar">
+    <span class="mission-panel-label">{{ 'home.missionColumn' | transloco }}</span>
+    @if (canManage()) {
+      <button
+        type="button"
+        class="mission-add-btn"
+        [class.is-open]="createOpen()"
+        (click)="toggleCreate()"
+        [attr.aria-expanded]="createOpen()"
+        [attr.aria-label]="'home.mission.addAria' | transloco"
+      >
+        +
+      </button>
+    }
+  </div>
+
+  @if (createOpen() && canManage()) {
+    <form class="mission-create-form" [formGroup]="createForm" (ngSubmit)="submitCreate()">
+      <label class="mission-label" for="mp-title">{{ 'home.mission.fieldTitle' | transloco }}</label>
+      <input id="mp-title" type="text" class="mission-input" formControlName="title" autocomplete="off" />
+      @if (createForm.controls.title.touched && createForm.controls.title.errors?.['required']) {
+        <p class="mission-error">{{ 'home.mission.titleRequired' | transloco }}</p>
+      }
+
+      <label class="mission-label" for="mp-desc">{{ 'home.mission.fieldDescription' | transloco }}</label>
+      <textarea id="mp-desc" class="mission-input mission-textarea" formControlName="description" rows="2"></textarea>
+
+      <span class="mission-label">{{ 'home.mission.fieldAssignmentMode' | transloco }}</span>
+      <div class="mission-radio-row">
+        <label class="mission-radio">
+          <input
+            type="radio"
+            formControlName="assignmentMode"
+            [value]="MissionAssignmentMode.BoardClaim"
+            (change)="onAssignmentModeChange()"
+          />
+          {{ 'home.mission.assignmentMode.boardclaim' | transloco }}
+        </label>
+        <label class="mission-radio">
+          <input
+            type="radio"
+            formControlName="assignmentMode"
+            [value]="MissionAssignmentMode.DirectAssign"
+            (change)="onAssignmentModeChange()"
+          />
+          {{ 'home.mission.assignmentMode.directassign' | transloco }}
+        </label>
+      </div>
+
+      @if (isDirectAssign()) {
+        <label class="mission-label" for="mp-assignee">{{ 'home.mission.fieldAssignee' | transloco }}</label>
+        <select id="mp-assignee" class="mission-input" formControlName="assignedToUserId">
+          <option value="">{{ 'home.mission.selectAssignee' | transloco }}</option>
+          @for (m of members(); track m.userId) {
+            <option [value]="m.userId">{{ memberLabel(m.userId) }}</option>
+          }
+        </select>
+        @if (createForm.controls.assignedToUserId.touched && createForm.controls.assignedToUserId.errors?.['required']) {
+          <p class="mission-error">{{ 'home.mission.assigneeRequired' | transloco }}</p>
+        }
+      }
+
+      <label class="mission-label" for="mp-recurrence">{{ 'home.mission.fieldRecurrence' | transloco }}</label>
+      <select id="mp-recurrence" class="mission-input" formControlName="recurrenceKind">
+        <option [value]="MissionRecurrenceKind.None">{{ 'home.mission.recurrence.none' | transloco }}</option>
+        <option [value]="MissionRecurrenceKind.Daily">{{ 'home.mission.recurrence.daily' | transloco }}</option>
+        <option [value]="MissionRecurrenceKind.Weekly">{{ 'home.mission.recurrence.weekly' | transloco }}</option>
+        <option [value]="MissionRecurrenceKind.Monthly">{{ 'home.mission.recurrence.monthly' | transloco }}</option>
+        <option [value]="MissionRecurrenceKind.IntervalDays">{{ 'home.mission.recurrence.intervaldays' | transloco }}</option>
+      </select>
+
+      @if (recurrenceKind() === MissionRecurrenceKind.Weekly) {
+        <label class="mission-label" for="mp-dow">{{ 'home.mission.fieldDayOfWeek' | transloco }}</label>
+        <select id="mp-dow" class="mission-input" formControlName="recurrenceDayOfWeek">
+          @for (d of ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']; track d) {
+            <option [value]="d">{{ 'home.mission.weekday.' + d.toLowerCase() | transloco }}</option>
+          }
+        </select>
+      }
+      @if (recurrenceKind() === MissionRecurrenceKind.Monthly) {
+        <label class="mission-label" for="mp-dom">{{ 'home.mission.fieldDayOfMonth' | transloco }}</label>
+        <input id="mp-dom" type="number" class="mission-input" formControlName="recurrenceDayOfMonth" min="1" max="28" />
+      }
+      @if (recurrenceKind() === MissionRecurrenceKind.IntervalDays) {
+        <label class="mission-label" for="mp-interval">{{ 'home.mission.fieldIntervalDays' | transloco }}</label>
+        <input id="mp-interval" type="number" class="mission-input" formControlName="recurrenceIntervalDays" min="1" />
+      }
+
+      <div class="mission-reward-row">
+        <div>
+          <label class="mission-label" for="mp-coin">{{ 'home.mission.fieldCoin' | transloco }}</label>
+          <input id="mp-coin" type="number" class="mission-input" formControlName="rewardCoin" min="0" />
+        </div>
+        <div>
+          <label class="mission-label" for="mp-exp">{{ 'home.mission.fieldExp' | transloco }}</label>
+          <input id="mp-exp" type="number" class="mission-input" formControlName="rewardExp" min="0" />
+        </div>
+      </div>
+
+      <label class="mission-check">
+        <input type="checkbox" formControlName="requiresApproval" />
+        {{ 'home.mission.fieldRequiresApproval' | transloco }}
+      </label>
+
+      @if (!canSubmitCreate()) {
+        <p class="mission-error mission-form-blocked">
+          {{ (membershipPending() ? 'home.mission.pendingMembershipHint' : 'home.mission.noHouseholdCreateBlocked') | transloco }}
+        </p>
+      }
+
+      <div class="mission-form-actions">
+        <button type="button" class="mission-btn mission-btn--ghost" (click)="toggleCreate()">
+          {{ 'home.mission.cancelForm' | transloco }}
+        </button>
+        <button type="submit" class="mission-btn" [disabled]="createSubmitting() || !canSubmitCreate()">
+          {{ createSubmitting() ? ('home.mission.creating' | transloco) : ('home.mission.createSubmit' | transloco) }}
+        </button>
+      </div>
+    </form>
+  }
+
+  <div class="mission-panel-body">
+    @if (!session.isAuthenticated()) {
+      <p class="ll-text-muted">{{ 'home.mission.signInHint' | transloco }}</p>
+    } @else if (membershipPending()) {
+      <p class="ll-text-muted">{{ 'home.mission.pendingMembershipHint' | transloco }}</p>
+    } @else if (!activeHousehold.activeHouseholdId()) {
+      <p class="ll-text-muted">{{ 'home.mission.noHouseholdHint' | transloco }}</p>
+    } @else if (listLoading()) {
+      <p class="ll-text-muted">{{ 'home.mission.loading' | transloco }}</p>
+    } @else if (!templates().length) {
+      <p class="ll-text-muted">{{ 'home.mission.empty' | transloco }}</p>
+    } @else {
+      <ul class="mission-list" role="list">
+        @for (t of templates(); track t.id) {
+          <li class="mission-row" role="listitem">
+            <div class="mission-row-main">
+              <span class="mission-row-title">{{ t.title ?? '—' }}</span>
+              <span class="mission-row-meta">
+                {{ assignmentModeLabel(t.assignmentMode) }}
+                · {{ t.rewardCoin ?? 0 }} {{ 'home.mission.coinShort' | transloco }}
+                · {{ recurrenceLabel(t.recurrenceKind) }}
+              </span>
+            </div>
+            <div class="mission-row-actions">
+              @if (canManage() && t.canSpawnNextRound && t.id) {
+                <button
+                  type="button"
+                  class="mission-spawn-btn"
+                  [disabled]="spawnSubmittingId() === t.id"
+                  (click)="spawnNextRound(t)"
+                >
+                  {{ 'home.mission.spawnRound' | transloco }}
+                </button>
+              }
+              @if (canManage() && t.id) {
+                <button
+                  type="button"
+                  class="mission-delete-btn"
+                  (click)="openCancelConfirm(t)"
+                  [attr.aria-label]="'home.mission.deleteAria' | transloco"
+                >
+                  ×
+                </button>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>
+
+@if (cancelTargetId()) {
+  <div class="mission-dialog-backdrop" role="presentation" (click)="dismissCancelConfirm()"></div>
+  <div class="mission-dialog" role="alertdialog" [attr.aria-label]="'home.mission.deleteConfirmTitle' | transloco">
+    <p class="mission-dialog-text">{{ 'home.mission.deleteConfirmText' | transloco }}</p>
+    <div class="mission-form-actions">
+      <button type="button" class="mission-btn mission-btn--ghost" (click)="dismissCancelConfirm()">
+        {{ 'home.mission.deleteDismiss' | transloco }}
+      </button>
+      <button type="button" class="mission-btn mission-btn--danger" [disabled]="cancelSubmitting()" (click)="confirmCancel()">
+        {{ cancelSubmitting() ? ('home.mission.deleting' | transloco) : ('home.mission.deleteConfirm' | transloco) }}
+      </button>
+    </div>
+  </div>
+}

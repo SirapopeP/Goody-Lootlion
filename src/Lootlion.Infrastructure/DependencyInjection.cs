@@ -42,7 +42,10 @@ public static class DependencyInjection
         services.AddScoped<IGuestAccountCleanupService, GuestAccountCleanupService>();
 
         services.AddScoped<IHouseholdService, HouseholdService>();
-        services.AddScoped<IMissionService, MissionService>();
+        services.AddScoped<IMissionRecurrenceService, MissionRecurrenceService>();
+        services.AddScoped<IMissionSpawnService, MissionSpawnService>();
+        services.AddScoped<IMissionTemplateService, MissionTemplateService>();
+        services.AddScoped<IMissionInstanceService, MissionInstanceService>();
         services.AddScoped<IWalletService, WalletService>();
         services.AddScoped<IRewardService, RewardService>();
         services.AddScoped<IWishlistService, WishlistService>();

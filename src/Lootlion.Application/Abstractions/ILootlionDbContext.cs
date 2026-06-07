@@ -7,7 +7,8 @@ public interface ILootlionDbContext
 {
     DbSet<Household> Households { get; }
     DbSet<HouseholdMember> HouseholdMembers { get; }
-    DbSet<Mission> Missions { get; }
+    DbSet<MissionTemplate> MissionTemplates { get; }
+    DbSet<MissionInstance> MissionInstances { get; }
     DbSet<LedgerEntry> LedgerEntries { get; }
     DbSet<RewardCatalogItem> RewardCatalogItems { get; }
     DbSet<WishlistItem> WishlistItems { get; }

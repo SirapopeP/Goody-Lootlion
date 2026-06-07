@@ -147,6 +147,11 @@ builder.Services.AddHostedService<GuestAccountCleanupHostedService>();
     app.MapMetrics();
     app.MapControllers();
 
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
+    }
+
     app.Run();
 }
 catch (Exception ex) when (ex is not HostAbortedException)

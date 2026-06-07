@@ -9,8 +9,12 @@
 | เฟส | สถานะ |
 |-----|--------|
 | 0, 0b, 1, 2 | **ครบ** |
-| 3 | **กำลังทำ** — API + onboarding สมัคร + shell (sidebar ครอบครัว) + แยกสิทธิ์บางส่วนทำแล้ว; หน้า `/households` ยัง placeholder, ยังไม่มี UI เชิญสมาชิก, หน้าแรกยังไม่สรุปภารกิจ/เหรียญจริง |
-| 4 เป็นต้นไป | ยังไม่เริ่มตาม checklist |
+| 3 | **ครบ** — ครอบครัว API + UI (`/households`), onboarding, sidebar, แยกสิทธิ์ parent/child บางเมนู |
+| 4c-1 | **ครบ** — Refactor `MissionTemplate` + `MissionInstance`, migration, API ใหม่ |
+| 4c-2 | **ครบ** — Parent template panel (`HomeMissionPanelComponent`) — BoardClaim / DirectAssign |
+| 4c-3 | **ครบ** — Panel กลาง board/claim/submit/approve (`HomeMissionCenterComponent`) |
+| 4c-4 | **ครบ** — Recurrence (Daily/Weekly/Monthly/Interval) + spawn หลัง approve / manual หลัง reject |
+| 4b ถัดไป | กระเป๋า, Rank, child bottom nav — ดู [UI_NAVIGATION_PLAN.md](./UI_NAVIGATION_PLAN.md) |
 
 ---
 
@@ -18,13 +22,17 @@
 
 | บล็อกในแผนงาน | ความหมายสั้น ๆ | เฟสใน checklist |
 |----------------|----------------|-------------------|
-| หน้าหลัก — สร้าง Family, จัดการ User/ภารกิจ/รางวัล, Dashboard, Commission | ศูนย์กลับ + มุมมองผู้ดูแลครอบครัว / ภาพรวม | เฟส 3 (ครอบครัว + สมาชิก) + เฟส 4–5 (จัดการภารกิจ/รางวัล) + รายการถัดไปด้านล่าง |
-| สมัครสมาชิก — สร้าง user + สร้าง/เลือก join family | ลงทะเบียน + onboarding ครอบครัว | เฟส 2 (user) + เฟส 3 (สร้าง/เข้าร่วมครอบครัว) |
-| เมนูจัดการภารกิจ — สร้าง-แก้ไข, ได้ exp/coin | CRUD ภารกิจ + รางวัลเมื่อทำ | เฟส 4 |
-| เมนูจัดการภารกิจ (ความถี่) — รายวัน/เดือน/ปี/กำหนดเอง | ภารกิจซ้ำตามรอบ | เฟส 4 (ขยาย — ถ้า domain รองรับ) |
-| รายงานภารกิจ / กระดาน Rank — อนุมัติ, ลีดเดอร์บอร์ด | รายงาน + workflow อนุมัติ + อันดับ | เฟส 4 |
-| เมนูแลกรับรางวัล | ใช้ coin แลกของใน catalog | เฟส 5 |
-| โปรไฟล์ของฉัน — Level, EXP, ปรับแต่งตัวละคร | สถานะผู้เล่น + (ถ้าทำ) คอสเมติก | เฟส 4 (เลเวล/EXP/กระเป๋า) + แบ็กล็อก UI |
+| Quest Board — panel ซ้าย MISSION/REWARDS (+) | Parent จัดการ **Template** เพิ่ม/ลบ/เปิดรอบ | **เฟส 4c-2** |
+| หน้าหลัก — สร้าง Family, Dashboard, Commission | ศูนย์กลางผู้ปกครอง / ภาพรวม | เฟส 3 (ครบ) + เฟส 4b + 5b |
+| สมัครสมาชิก — สร้าง user + สร้าง/เลือก join family | ลงทะเบียน + onboarding ครอบครัว | เฟส 2 + 3 (ครบ) |
+| Child — แท็บ MISSION (SUBMIT, สถิติ POINT) | เด็กทำภารกิจ — เมนูแยกจาก parent | **เฟส 4c** |
+| Child — แท็บ REWARD (REDEEM) | เด็กแลกรางวัล | **เฟส 5** |
+| Child — แท็บ FAMILY / SETTING | ภาพรวมครอบครัว + ตั้งค่า | เฟส 4c + profile |
+| เมนูจัดการภารกิจ — แก้ไข, ได้ exp/coin | CRUD เต็ม + รางวัลเมื่อทำ | เฟส 4b ขึ้นไป |
+| เมนูจัดการภารกิจ (ความถี่) — รายวัน/เดือน/ปี/กำหนดเอง | ภารกิจซ้ำตามรอบ | **เฟส 4c-4** (ครบ) |
+| รายงานภารกิจ / กระดาน Rank — อนุมัติ, ลีดเดอร์บอร์ด | workflow อนุมัติใน panel กลาง + Rank ภายหลัง | **4c-3** (อนุมัติครบ) + **4b** (Rank) |
+| เมนูแลกรับรางวัล (Parent catalog) | จัดการ catalog + แลกของ | เฟส 5 |
+| โปรไฟล์ของฉัน — Level, EXP, ปรับแต่งตัวละคร | สถานะผู้เล่น + คอสเมติก | เฟส 4b + แบ็กล็อก |
 
 **สิ่งที่แผนงามีแต่เช็คลิสเดิมยังไม่ได้แตกชัด:** ความถี่ของภารกิจ, กระดาน Rank, โปรไฟล์/เลเวล/ตัวละคร, **การตั้งค่า commission** — ได้เติมเป็นรายการย่อยด้านล่างแล้ว
 
@@ -85,12 +93,57 @@
 
 ## เฟส 4 — ภารกิจ + กระเป๋า + รายงาน / Rank
 
-- [ ] UI สร้าง / แก้ไขภารกิจ, มอบหมายหรือส่งคำขอทำ, ได้ **exp / coin** เมื่อสำเร็จ (สอดคล้อง API)
-- [ ] Workflow **อนุมัติ / ปฏิเสธ** ภารกิจ (ฝั่งผู้ปกครองตามแผนงาน)
-- [ ] **รายงานภารกิจ** + **กระดาน Rank / อันดับ** (แทนที่ placeholder “Quest board” เมื่อมีข้อมูล)
-- [ ] **ความถี่ภารกิจ** (รายวัน / รายเดือน / รายปี / กำหนดเอง) — ขึ้นกับว่าโมเดล `Mission` รองรับ recurrence หรือไม่; ถ้ายังไม่รองรับ ให้แยกเป็นงานย่อย backend ก่อน UI
-- [ ] แสดงยอด **coin / exp / level** และ **ledger**
-- [ ] หน้า **โปรไฟล์ของฉัน**: แสดง Level, EXP, ข้อมูลบัญชี (ส่วน **ปรับแต่งตัวละคร** = แบ็กล็อกถ้าต้องการเกมมิ่งเต็มรูปแบบ)
+แผน UI แยก Parent / Child: [UI_NAVIGATION_PLAN.md](./UI_NAVIGATION_PLAN.md)
+
+### เฟส 4c-1 — Domain + Migration + API (ครบ)
+
+- [x] `MissionTemplate` + `MissionInstance` + enums (`AssignmentMode`, `RecurrenceKind`, `InstanceStatus`)
+- [x] `Household.TimeZoneId` (default `Asia/Bangkok`)
+- [x] Migration `MissionTemplateAndInstance` + ย้ายข้อมูลจาก `Missions` เดิม
+- [x] Services: `MissionTemplateService`, `MissionInstanceService`, `MissionRecurrenceService`, `MissionSpawnService`
+- [x] API ใหม่ภายใต้ `/api/Missions/templates|board|mine|pending|instances/...`
+
+### เฟส 4c-2 — Parent: Template panel (ครบ)
+
+`HomeMissionPanelComponent` — โหลด `GET templates/household`, สร้าง `POST templates`, ลบ `POST templates/{id}/cancel`
+
+- [x] โหมด **BoardClaim** (ไม่บังคับ assign) / **DirectAssign**
+- [x] ปุ่ม **เปิดรอบใหม่** เมื่อ `canSpawnNextRound` (หลัง reject recurring)
+- [x] `MissionApiService` ฝั่ง Angular (แทน generated client ชั่วคราว)
+
+### เฟส 4c-3 — Panel กลาง: Board + Workflow (ครบ)
+
+`HomeMissionCenterComponent` — แท็บ Board / Mine / Pending / Done
+
+- [x] Child: **claim** จากบอร์ด, **submit** ภารกิจของตัวเอง
+- [x] Parent: **approve / reject** รายการ pending
+- [ ] Child bottom nav แยก (ยังใช้ layout เดิมบน desktop)
+
+### เฟส 4c-4 — Recurrence (ครบ)
+
+- [x] สร้าง template พร้อม Daily / Weekly / Monthly / IntervalDays
+- [x] Spawn รอบถัดไปอัตโนมัติหลัง **approve** เท่านั้น
+- [x] หลัง **reject** — หยุดจน Parent กด **เปิดรอบใหม่** (`POST templates/{id}/spawn`)
+
+### เฟส 4b — กระเป๋า + Rank (ถัดไป)
+
+- [ ] แสดงยอด **coin / exp** จริงใน sidebar (`WalletService`)
+- [ ] **รายงานภารกิจ** + **กระดาน Rank / อันดับ**
+- [ ] หน้า `/missions` — รายงานหรือจัดการขั้นสูง (หรือรวมเข้าหน้าแรก)
+
+### เฟส 4c-child — Child: มุมมองและเมนูแยก (backlog)
+
+อ้างอิง mockup mobile — แท็บล่าง **MISSION | REWARD | FAMILY | SETTING** (ไม่ใช้เมนูชุดเดียวกับ parent)
+
+- [ ] Layout หรือ navigation แยกตาม role (bottom nav สำหรับ child)
+- [ ] แท็บ **MISSION** — รายการภารกิจของตัวเอง + สถิติ MISSIONS/PENDING/DONE + ปุ่ม **SUBMIT**
+- [ ] แท็บ **FAMILY** — ภาพรวมครอบครัว (สมาชิก, สถิติ, mapping) ตาม mockup
+- [ ] แท็บ **SETTING** — รายการตั้งค่า (family management, permission ฯลฯ)
+
+### เฟส 4 — ขยาย (หลัง 4c)
+
+- [ ] UI **แก้ไข** template (ต้องมี API)
+- [ ] หน้า **โปรไฟล์ของฉัน**: Level, EXP, ข้อมูลบัญชี (ส่วน **ปรับแต่งตัวละคร** = แบ็กล็อก)
 
 ---
 
@@ -123,10 +176,11 @@
 
 | ลำดับ | โฟกัส | เหตุผลสั้น ๆ |
 |--------|--------|----------------|
-| 1 | **เฟส 3 — ครอบครัว** | ฐานสิทธิ์และข้อมูลสำหรับภารกิจ/กระเป๋า/รางวัลที่ผูก `HouseholdId` |
-| 2 | **เฟส 4 — ภารกิจ + กระเป๋า + รายงาน/Rank** | ใจกลางเกมมิชันตามแผนงาน |
-| 3 | **เฟส 5 — แลกรางวัล + Wishlist** | ใช้ coin หลังมีภารกิจและยอดคงที่ |
-| 4 | **เฟส 5b — Commission** | หลังมีกติกาเรื่อง coin/exp ชัด |
-| 5 | **เฟส 6 — ทดสอบ + deploy + observability บน K8s** | หลังฟีเจอร์หลักคงที่ |
+| 1 | **เฟส 4b — กระเป๋า + Rank** | coin/exp จริง + leaderboard |
+| 2 | **เฟส 4c-child — Child bottom nav** | mockup mobile แยกจาก parent |
+| 4 | **เฟส 5 — แลกรางวัล + Wishlist** | Child แท็บ REWARD + Parent catalog |
+| 5 | **เฟส 5b — Commission** | หลังมีกติกาเรื่อง coin/exp ชัด |
+| 6 | **เฟส 6 — ทดสอบ + deploy + observability บน K8s** | หลังฟีเจอร์หลักคงที่ |
 
-รายละเอียดรันท้องถิ่น: `docs/LOCAL_DEVELOPMENT.md`
+รายละเอียด navigation Parent/Child: [UI_NAVIGATION_PLAN.md](./UI_NAVIGATION_PLAN.md)  
+รายละเอียดรันท้องถิ่น: [LOCAL_DEVELOPMENT.md](./LOCAL_DEVELOPMENT.md)

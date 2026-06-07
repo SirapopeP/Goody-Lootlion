@@ -13,6 +13,7 @@
 | [client/lootlion-web](client/lootlion-web) | Angular 19 standalone + PWA shell |
 | [docs/LOCAL_DEVELOPMENT.md](docs/LOCAL_DEVELOPMENT.md) | รันและทดสอบ API + Angular ในเครื่อง |
 | [docs/PHASES_CHECKLIST.md](docs/PHASES_CHECKLIST.md) | เช็คลิสงานแบ่งเฟสสำหรับสั่งงานต่อ |
+| [docs/UI_NAVIGATION_PLAN.md](docs/UI_NAVIGATION_PLAN.md) | แผนเมนูและมุมมอง Parent vs Child (mockup Figma) |
 | [docs/CLIENT_DECISION.md](docs/CLIENT_DECISION.md) | การตัดสินใจ PWA ก่อน Capacitor |
 
 ## ความต้องการของระบบ

@@ -1,0 +1,158 @@
+.mission-center {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.mission-center-hint {
+  padding: 0.75rem 0.25rem;
+  font-size: 0.85rem;
+}
+
+.quest-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--lootlion-border);
+}
+
+.quest-tab {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--lootlion-text-muted);
+  padding: 0.25rem 0;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.quest-tab.is-active {
+  color: var(--lootlion-text);
+  border-bottom-color: rgba(76, 167, 113, 0.85);
+}
+
+.quest-center-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
+}
+
+.ongoing-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 5.5rem;
+  min-height: 5.5rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #2a4545, #121f1f 70%);
+  border: 2px solid rgba(41, 173, 201, 0.45);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  text-align: center;
+}
+
+.ongoing-badge-line {
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--lootlion-text-muted);
+  line-height: 1.2;
+  max-width: 5rem;
+}
+
+.ongoing-badge-num {
+  margin-top: 0.25rem;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--lootlion-accent-teal);
+  letter-spacing: 0.04em;
+}
+
+.center-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.center-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.55rem 0.6rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid var(--lootlion-border);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.center-row-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.center-row-title {
+  display: block;
+  font-weight: 500;
+  font-size: 0.86rem;
+}
+
+.center-row-meta {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  color: var(--lootlion-text-muted);
+}
+
+.center-row-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.center-action-btn {
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(76, 167, 113, 0.45);
+  background: rgba(76, 167, 113, 0.22);
+  color: var(--lootlion-text);
+  font: inherit;
+  font-size: 0.72rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.center-action-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.center-action-btn--approve {
+  border-color: rgba(76, 167, 113, 0.55);
+}
+
+.center-action-btn--reject {
+  border-color: rgba(200, 80, 80, 0.45);
+  background: rgba(200, 80, 80, 0.18);
+}
+
+@media (max-width: 900px) {
+  .ongoing-badge {
+    min-height: 0;
+    min-width: 0;
+    border-radius: var(--lootlion-radius);
+    flex-direction: row;
+    gap: 0.5rem;
+    padding: 0.5rem 0.85rem;
+  }
+}

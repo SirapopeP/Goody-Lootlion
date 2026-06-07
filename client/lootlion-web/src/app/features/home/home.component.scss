@@ -80,43 +80,6 @@
   overflow: hidden;
 }
 
-.quest-panel-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.55rem 0.75rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid var(--lootlion-border);
-}
-
-.quest-panel-label {
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  font-weight: 500;
-  text-transform: uppercase;
-  color: var(--lootlion-text-muted);
-}
-
-.quest-add-btn {
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: var(--lootlion-radius-sm);
-  border: 1px solid var(--lootlion-border);
-  background: rgba(76, 167, 113, 0.2);
-  color: var(--lootlion-text);
-  font-size: 1.1rem;
-  line-height: 1;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.quest-panel-body {
-  padding: 1rem 0.85rem;
-  font-size: 0.82rem;
-  line-height: 1.45;
-  flex: 1;
-}
-
 .quest-panel-center {
   padding: 0.65rem 0.85rem 1rem;
   position: relative;

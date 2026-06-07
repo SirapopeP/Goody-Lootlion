@@ -1,8 +1,8 @@
 namespace Lootlion.Domain.Enums;
 
-public enum MissionStatus
+public enum MissionInstanceStatus
 {
-    Draft = 0,
+    Available = 0,
     Active = 1,
     Submitted = 2,
     Approved = 3,

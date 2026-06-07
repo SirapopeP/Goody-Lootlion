@@ -1,0 +1,177 @@
+<div class="mission-center">
+  <div class="quest-tabs" role="tablist">
+    @if (isChild()) {
+      <button
+        type="button"
+        class="quest-tab"
+        [class.is-active]="activeTab() === 'board'"
+        role="tab"
+        [attr.aria-selected]="activeTab() === 'board'"
+        (click)="setTab('board')"
+      >
+        {{ 'home.center.tabBoard' | transloco }}
+      </button>
+    }
+    <button
+      type="button"
+      class="quest-tab"
+      [class.is-active]="activeTab() === 'mine'"
+      role="tab"
+      [attr.aria-selected]="activeTab() === 'mine'"
+      (click)="setTab('mine')"
+    >
+      {{ 'home.tabMyMissions' | transloco }}
+    </button>
+    @if (isParent()) {
+      <button
+        type="button"
+        class="quest-tab"
+        [class.is-active]="activeTab() === 'pending'"
+        role="tab"
+        [attr.aria-selected]="activeTab() === 'pending'"
+        (click)="setTab('pending')"
+      >
+        {{ 'home.tabPending' | transloco }}
+      </button>
+    }
+    <button
+      type="button"
+      class="quest-tab"
+      [class.is-active]="activeTab() === 'done'"
+      role="tab"
+      [attr.aria-selected]="activeTab() === 'done'"
+      (click)="setTab('done')"
+    >
+      {{ 'home.tabSuccess' | transloco }}
+    </button>
+  </div>
+
+  <div class="quest-center-toolbar">
+    <div class="ongoing-badge" aria-live="polite">
+      <span class="ongoing-badge-line">{{ 'home.ongoingLine1' | transloco }}</span>
+      <span class="ongoing-badge-num">{{ 'home.ongoingRatio' | transloco: { current: ongoingCurrent(), max: ongoingMax() } }}</span>
+    </div>
+  </div>
+
+  @if (!session.isAuthenticated()) {
+    <p class="ll-text-muted mission-center-hint">{{ 'home.mission.signInHint' | transloco }}</p>
+  } @else if (membershipPending()) {
+    <p class="ll-text-muted mission-center-hint">{{ 'home.mission.pendingMembershipHint' | transloco }}</p>
+  } @else if (!activeHousehold.activeHouseholdId()) {
+    <p class="ll-text-muted mission-center-hint">{{ 'home.mission.noHouseholdHint' | transloco }}</p>
+  } @else if (listLoading()) {
+    <p class="ll-text-muted mission-center-hint">{{ 'home.mission.loading' | transloco }}</p>
+  } @else {
+    @switch (activeTab()) {
+      @case ('board') {
+        @if (!board().length) {
+          <p class="ll-text-muted mission-center-hint">{{ 'home.center.boardEmpty' | transloco }}</p>
+        } @else {
+          <ul class="center-list" role="list">
+            @for (m of board(); track m.id) {
+              <li class="center-row" role="listitem">
+                <div class="center-row-main">
+                  <span class="center-row-title">{{ m.title ?? '—' }}</span>
+                  <span class="center-row-meta">
+                    {{ m.rewardCoin ?? 0 }} {{ 'home.mission.coinShort' | transloco }}
+                    · {{ statusLabel(m.status) }}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  class="center-action-btn"
+                  [disabled]="actionInstanceId() === m.id"
+                  (click)="claim(m)"
+                >
+                  {{ 'home.center.claim' | transloco }}
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      }
+      @case ('mine') {
+        @if (!mine().length) {
+          <p class="ll-text-muted mission-center-hint">{{ 'home.center.mineEmpty' | transloco }}</p>
+        } @else {
+          <ul class="center-list" role="list">
+            @for (m of mine(); track m.id) {
+              <li class="center-row" role="listitem">
+                <div class="center-row-main">
+                  <span class="center-row-title">{{ m.title ?? '—' }}</span>
+                  <span class="center-row-meta">
+                    {{ m.rewardCoin ?? 0 }} {{ 'home.mission.coinShort' | transloco }}
+                    · {{ statusLabel(m.status) }}
+                  </span>
+                </div>
+                @if (m.status === MissionInstanceStatus.Active && m.id) {
+                  <button
+                    type="button"
+                    class="center-action-btn"
+                    [disabled]="actionInstanceId() === m.id"
+                    (click)="submit(m)"
+                  >
+                    {{ 'home.center.submit' | transloco }}
+                  </button>
+                }
+              </li>
+            }
+          </ul>
+        }
+      }
+      @case ('pending') {
+        @if (!pending().length) {
+          <p class="ll-text-muted mission-center-hint">{{ 'home.center.pendingEmpty' | transloco }}</p>
+        } @else {
+          <ul class="center-list" role="list">
+            @for (m of pending(); track m.id) {
+              <li class="center-row" role="listitem">
+                <div class="center-row-main">
+                  <span class="center-row-title">{{ m.title ?? '—' }}</span>
+                  <span class="center-row-meta">{{ m.rewardCoin ?? 0 }} {{ 'home.mission.coinShort' | transloco }}</span>
+                </div>
+                <div class="center-row-actions">
+                  <button
+                    type="button"
+                    class="center-action-btn center-action-btn--approve"
+                    [disabled]="actionInstanceId() === m.id"
+                    (click)="approve(m)"
+                  >
+                    {{ 'home.center.approve' | transloco }}
+                  </button>
+                  <button
+                    type="button"
+                    class="center-action-btn center-action-btn--reject"
+                    [disabled]="actionInstanceId() === m.id"
+                    (click)="reject(m)"
+                  >
+                    {{ 'home.center.reject' | transloco }}
+                  </button>
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      }
+      @case ('done') {
+        @if (!done().length) {
+          <p class="ll-text-muted mission-center-hint">{{ 'home.center.doneEmpty' | transloco }}</p>
+        } @else {
+          <ul class="center-list" role="list">
+            @for (m of done(); track m.id) {
+              <li class="center-row" role="listitem">
+                <div class="center-row-main">
+                  <span class="center-row-title">{{ m.title ?? '—' }}</span>
+                  <span class="center-row-meta">
+                    {{ m.rewardCoin ?? 0 }} {{ 'home.mission.coinShort' | transloco }}
+                    · {{ statusLabel(m.status) }}
+                  </span>
+                </div>
+              </li>
+            }
+          </ul>
+        }
+      }
+    }
+  }
+</div>

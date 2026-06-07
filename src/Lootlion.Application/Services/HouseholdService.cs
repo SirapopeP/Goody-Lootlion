@@ -77,19 +77,16 @@ public sealed class HouseholdService : IHouseholdService
 
     public async Task<IReadOnlyList<HouseholdMineDto>> ListMineAsync(Guid userId, CancellationToken cancellationToken = default)
     {
-        var rows = await _db.HouseholdMembers
-            .AsNoTracking()
-            .Where(m => m.UserId == userId)
-            .Join(
-                _db.Households.AsNoTracking(),
-                m => m.HouseholdId,
-                h => h.Id,
-                (m, h) => new HouseholdMineDto(
-                    h.Id,
-                    h.Name,
-                    h.CreatedUtc,
-                    m.Status == HouseholdMembershipStatus.Active ? "Active" : "Pending"))
-            .OrderBy(x => x.Name)
+        var rows = await (
+            from m in _db.HouseholdMembers.AsNoTracking()
+            where m.UserId == userId
+            join h in _db.Households.AsNoTracking() on m.HouseholdId equals h.Id
+            orderby h.Name
+            select new HouseholdMineDto(
+                h.Id,
+                h.Name,
+                h.CreatedUtc,
+                m.Status == HouseholdMembershipStatus.Active ? "Active" : "Pending"))
             .ToListAsync(cancellationToken);
 
         return rows;

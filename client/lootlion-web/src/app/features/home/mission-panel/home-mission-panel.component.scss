@@ -1,0 +1,251 @@
+.mission-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.mission-panel-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--lootlion-border);
+}
+
+.mission-panel-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--lootlion-text-muted);
+}
+
+.mission-add-btn {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid var(--lootlion-border);
+  background: rgba(76, 167, 113, 0.2);
+  color: var(--lootlion-text);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.mission-add-btn.is-open,
+.mission-add-btn:hover {
+  background: rgba(76, 167, 113, 0.38);
+  border-color: rgba(76, 167, 113, 0.55);
+}
+
+.mission-create-form {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--lootlion-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+}
+
+.mission-label {
+  font-size: 0.75rem;
+  color: var(--lootlion-text-muted);
+  margin-top: 0.25rem;
+}
+
+.mission-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.4rem 0.55rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid var(--lootlion-border);
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--lootlion-text);
+  font: inherit;
+}
+
+.mission-textarea {
+  resize: vertical;
+  min-height: 2.5rem;
+}
+
+.mission-reward-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.mission-check {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.mission-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.mission-btn {
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(76, 167, 113, 0.45);
+  background: rgba(76, 167, 113, 0.25);
+  color: var(--lootlion-text);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.mission-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.mission-btn--ghost {
+  background: transparent;
+  border-color: var(--lootlion-border);
+}
+
+.mission-btn--danger {
+  background: rgba(200, 80, 80, 0.22);
+  border-color: rgba(200, 80, 80, 0.45);
+}
+
+.mission-error {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #f0a0a0;
+}
+
+.mission-hint {
+  margin: 0;
+  font-size: 0.75rem;
+}
+
+.mission-panel-body {
+  padding: 0.65rem 0.75rem 1rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.mission-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.mission-radio-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.mission-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.mission-row-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.mission-spawn-btn {
+  padding: 0.2rem 0.45rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(41, 173, 201, 0.45);
+  background: rgba(41, 173, 201, 0.15);
+  color: var(--lootlion-text);
+  font: inherit;
+  font-size: 0.68rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.mission-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid var(--lootlion-border);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.mission-row-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.mission-row-title {
+  display: block;
+  font-weight: 500;
+  font-size: 0.84rem;
+  word-break: break-word;
+}
+
+.mission-row-meta {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  color: var(--lootlion-text-muted);
+}
+
+.mission-delete-btn {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: none;
+  border-radius: var(--lootlion-radius-sm);
+  background: rgba(200, 80, 80, 0.18);
+  color: #f0c0c0;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.mission-delete-btn:hover {
+  background: rgba(200, 80, 80, 0.32);
+}
+
+.mission-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 200;
+}
+
+.mission-dialog {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 201;
+  min-width: min(90vw, 320px);
+  padding: 1rem;
+  border-radius: var(--lootlion-radius);
+  border: 1px solid var(--lootlion-border);
+  background: var(--lootlion-bg-elevated);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.mission-dialog-text {
+  margin: 0 0 0.85rem;
+  font-size: 0.88rem;
+}

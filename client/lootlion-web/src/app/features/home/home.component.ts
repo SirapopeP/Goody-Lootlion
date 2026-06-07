@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -6,11 +6,14 @@ import { catchError, finalize, of, switchMap } from 'rxjs';
 import { HouseholdsService } from '../../api/generated/api/households.service';
 import { AuthSessionService } from '../../core/auth/auth-session.service';
 import { ActiveHouseholdService } from '../../core/household/active-household.service';
+import { MissionInstanceDto, MissionInstanceStatus } from '../../core/mission/mission.models';
+import { HomeMissionCenterComponent } from './mission-center/home-mission-center.component';
+import { HomeMissionPanelComponent } from './mission-panel/home-mission-panel.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [TranslocoPipe, RouterLink],
+  imports: [TranslocoPipe, RouterLink, HomeMissionPanelComponent, HomeMissionCenterComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -20,14 +23,23 @@ export class HomeComponent {
   readonly session = inject(AuthSessionService);
   private readonly destroyRef = inject(DestroyRef);
 
-  /** ภาพรวมครอบครัว (เฟส 3) — รายละเอียดภารกิจรอเฟส 4 */
   readonly overviewName = signal<string | null>(null);
   readonly overviewMemberCount = signal<number | null>(null);
   readonly overviewMembershipPending = signal(false);
   readonly overviewLoading = signal(false);
 
+  private readonly householdInstances = signal<MissionInstanceDto[]>([]);
+  readonly ongoingCurrent = computed(
+    () => this.householdInstances().filter((m) => m.status === MissionInstanceStatus.Active).length
+  );
+  readonly ongoingMax = computed(() => Math.max(this.householdInstances().length, 1));
+
   constructor() {
     this.loadOverview();
+  }
+
+  onInstancesChanged(instances: MissionInstanceDto[]): void {
+    this.householdInstances.set(instances);
   }
 
   private loadOverview(): void {

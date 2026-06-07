@@ -17,7 +17,8 @@ public sealed class LootlionDbContext : IdentityDbContext<AppUser, IdentityRole<
 
     public DbSet<Household> Households => Set<Household>();
     public DbSet<HouseholdMember> HouseholdMembers => Set<HouseholdMember>();
-    public DbSet<Mission> Missions => Set<Mission>();
+    public DbSet<MissionTemplate> MissionTemplates => Set<MissionTemplate>();
+    public DbSet<MissionInstance> MissionInstances => Set<MissionInstance>();
     public DbSet<LedgerEntry> LedgerEntries => Set<LedgerEntry>();
     public DbSet<RewardCatalogItem> RewardCatalogItems => Set<RewardCatalogItem>();
     public DbSet<WishlistItem> WishlistItems => Set<WishlistItem>();
@@ -38,6 +39,7 @@ public sealed class LootlionDbContext : IdentityDbContext<AppUser, IdentityRole<
             e.HasKey(x => x.Id);
             e.Property(x => x.Name).HasMaxLength(256);
             e.Property(x => x.AllowChildPickJoin).HasDefaultValue(true);
+            e.Property(x => x.TimeZoneId).HasMaxLength(64).HasDefaultValue("Asia/Bangkok");
             e.HasIndex(x => x.CreatedUtc);
         });
 
@@ -52,12 +54,28 @@ public sealed class LootlionDbContext : IdentityDbContext<AppUser, IdentityRole<
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        builder.Entity<Mission>(e =>
+        builder.Entity<MissionTemplate>(e =>
         {
             e.HasKey(x => x.Id);
             e.Property(x => x.Title).HasMaxLength(512);
             e.Property(x => x.Description).HasMaxLength(4000);
-            e.HasIndex(x => new { x.HouseholdId, x.Status });
+            e.HasIndex(x => new { x.HouseholdId, x.IsActive });
+            e.HasOne(x => x.Household)
+                .WithMany()
+                .HasForeignKey(x => x.HouseholdId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<MissionInstance>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.Property(x => x.PeriodKey).HasMaxLength(128);
+            e.HasIndex(x => new { x.TemplateId, x.PeriodKey }).IsUnique();
+            e.HasIndex(x => new { x.HouseholdId, x.Status, x.AssignedToUserId });
+            e.HasOne(x => x.Template)
+                .WithMany(x => x.Instances)
+                .HasForeignKey(x => x.TemplateId)
+                .OnDelete(DeleteBehavior.Cascade);
             e.HasOne(x => x.Household)
                 .WithMany()
                 .HasForeignKey(x => x.HouseholdId)
