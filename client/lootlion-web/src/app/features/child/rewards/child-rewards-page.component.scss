@@ -1,0 +1,83 @@
+.child-rewards-head h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.15rem;
+}
+
+.child-rewards-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.child-rewards-tab {
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(41, 173, 201, 0.35);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.child-rewards-tab.is-active {
+  color: var(--lootlion-accent-teal);
+  border-color: var(--lootlion-accent-teal);
+}
+
+.child-rewards-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.child-rewards-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(41, 173, 201, 0.22);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.child-rewards-title {
+  display: block;
+  font-weight: 600;
+}
+
+.child-rewards-meta {
+  font-size: 0.78rem;
+  opacity: 0.8;
+}
+
+.child-rewards-redeem {
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid var(--lootlion-accent-teal);
+  background: rgba(41, 173, 201, 0.15);
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.child-rewards-redeem:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.child-rewards-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+}
+
+.child-rewards-subtitle {
+  margin: 0 0 0.45rem;
+  font-size: 0.9rem;
+}

@@ -1,0 +1,61 @@
+<div class="missions-report">
+  <header class="missions-report-head">
+    <h1>{{ 'missionsReport.title' | transloco }}</h1>
+    <a routerLink="/" class="missions-report-back">{{ 'missionsReport.backHome' | transloco }}</a>
+  </header>
+
+  @if (!session.isAuthenticated()) {
+    <p class="ll-text-muted">{{ 'missionsReport.signInHint' | transloco }}</p>
+  } @else if (!activeHousehold.activeHouseholdId()) {
+    <p class="ll-text-muted">{{ 'missionsReport.noHouseholdHint' | transloco }}</p>
+  } @else if (loading()) {
+    <p class="ll-text-muted">{{ 'missionsReport.loading' | transloco }}</p>
+  } @else {
+    <section class="missions-report-stats" [attr.aria-label]="'missionsReport.statsSection' | transloco">
+      <div class="stat-card">
+        <span class="stat-value">{{ templateCount() }}</span>
+        <span class="stat-label">{{ 'missionsReport.statTemplates' | transloco }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{{ boardCount() }}</span>
+        <span class="stat-label">{{ 'missionsReport.statBoard' | transloco }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{{ pendingCount() }}</span>
+        <span class="stat-label">{{ 'missionsReport.statPending' | transloco }}</span>
+      </div>
+    </section>
+
+    <section class="missions-report-rank" [attr.aria-label]="'rank.sectionTitle' | transloco">
+      <h2>{{ 'rank.leaderboardTitle' | transloco }}</h2>
+      @if (wallet.leaderboardLoading()) {
+        <p class="ll-text-muted">{{ 'rank.loading' | transloco }}</p>
+      } @else if (!wallet.leaderboard().length) {
+        <p class="ll-text-muted">{{ 'rank.empty' | transloco }}</p>
+      } @else {
+        <table class="rank-table">
+          <thead>
+            <tr>
+              <th>{{ 'rank.colRank' | transloco }}</th>
+              <th>{{ 'rank.colMember' | transloco }}</th>
+              <th>{{ 'rank.colLevel' | transloco }}</th>
+              <th>{{ 'rank.colExp' | transloco }}</th>
+              <th>{{ 'rank.colCoin' | transloco }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of wallet.leaderboard(); track row.userId) {
+              <tr>
+                <td>#{{ row.rank }}</td>
+                <td>{{ row.displayName ?? '—' }}</td>
+                <td>{{ row.level ?? 1 }}</td>
+                <td>{{ row.expTotal ?? 0 }}</td>
+                <td>{{ row.coinBalance ?? 0 }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
+  }
+</div>

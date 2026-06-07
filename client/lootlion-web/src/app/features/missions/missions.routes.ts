@@ -4,6 +4,6 @@ export const MISSIONS_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./missions-placeholder.component').then((m) => m.MissionsPlaceholderComponent)
+      import('./missions-report-page.component').then((m) => m.MissionsReportPageComponent)
   }
 ];

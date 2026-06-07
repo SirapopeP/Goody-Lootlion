@@ -1,0 +1,55 @@
+<div class="profile-page">
+  <header class="profile-page-head">
+    <h1>{{ 'profilePage.title' | transloco }}</h1>
+    <a routerLink="/" class="profile-page-back">{{ 'profilePage.backHome' | transloco }}</a>
+  </header>
+
+  @if (!session.isAuthenticated()) {
+    <p class="ll-text-muted">{{ 'profilePage.signInHint' | transloco }}</p>
+  } @else {
+    <section class="profile-card">
+      <h2>{{ 'profilePage.accountSection' | transloco }}</h2>
+      <p>{{ userDisplay().displayName ?? userDisplay().email ?? '—' }}</p>
+      <p class="ll-text-muted">{{ userDisplay().email ?? '—' }}</p>
+    </section>
+
+    @if (!activeHousehold.activeHouseholdId()) {
+      <p class="ll-text-muted">{{ 'profilePage.noHouseholdHint' | transloco }}</p>
+    } @else if (loading()) {
+      <p class="ll-text-muted">{{ 'profilePage.loading' | transloco }}</p>
+    } @else {
+      @if (wallet.balance(); as bal) {
+        <section class="profile-card">
+          <h2>{{ 'profilePage.walletSection' | transloco }}</h2>
+          <p>{{ 'layout.coinLine' | transloco: { n: bal.coinBalance ?? 0 } }}</p>
+          <p>{{ 'wallet.expLine' | transloco: { n: bal.expTotal ?? 0 } }}</p>
+          <p>{{ 'wallet.levelShort' | transloco: { n: bal.level ?? 1 } }}</p>
+        </section>
+      }
+
+      <section class="profile-card">
+        <h2>{{ 'profilePage.ledgerSection' | transloco }}</h2>
+        @if (!wallet.ledger().length) {
+          <p class="ll-text-muted">{{ 'profilePage.ledgerEmpty' | transloco }}</p>
+        } @else {
+          <ul class="ledger-list">
+            @for (e of wallet.ledger(); track e.id) {
+              <li class="ledger-row">
+                <span class="ledger-type">{{ e.entryType ?? '—' }}</span>
+                <span class="ledger-delta">
+                  @if (e.deltaCoin) {
+                    {{ e.deltaCoin > 0 ? '+' : '' }}{{ e.deltaCoin }} coin
+                  }
+                  @if (e.deltaExp) {
+                    · {{ e.deltaExp > 0 ? '+' : '' }}{{ e.deltaExp }} EXP
+                  }
+                </span>
+                <span class="ledger-date ll-text-muted">{{ e.createdUtc | date: 'short' }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    }
+  }
+</div>

@@ -1,0 +1,29 @@
+<div class="child-settings">
+  <header class="child-settings-head">
+    <h1>{{ 'childSettings.title' | transloco }}</h1>
+  </header>
+
+  @if (session.isAuthenticated()) {
+    <section class="child-settings-card">
+      <h2>{{ 'childSettings.accountSection' | transloco }}</h2>
+      <p>{{ userDisplay().displayName ?? userDisplay().email ?? '—' }}</p>
+      <p class="ll-text-muted">{{ userDisplay().email ?? '—' }}</p>
+    </section>
+
+    <section class="child-settings-card">
+      <h2>{{ 'childSettings.preferencesSection' | transloco }}</h2>
+      <app-language-toggle />
+    </section>
+
+    <nav class="child-settings-links">
+      <a routerLink="/households">{{ 'childSettings.householdsLink' | transloco }}</a>
+    </nav>
+
+    <button type="button" class="child-settings-logout" (click)="logout()">
+      {{ 'layout.logout' | transloco }}
+    </button>
+  } @else {
+    <p class="ll-text-muted">{{ 'childSettings.signInHint' | transloco }}</p>
+    <a routerLink="/auth/login">{{ 'layout.login' | transloco }}</a>
+  }
+</div>

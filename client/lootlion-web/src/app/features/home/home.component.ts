@@ -9,11 +9,12 @@ import { ActiveHouseholdService } from '../../core/household/active-household.se
 import { MissionInstanceDto, MissionInstanceStatus } from '../../core/mission/mission.models';
 import { HomeMissionCenterComponent } from './mission-center/home-mission-center.component';
 import { HomeMissionPanelComponent } from './mission-panel/home-mission-panel.component';
+import { HomeRankPanelComponent } from './rank/home-rank-panel.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [TranslocoPipe, RouterLink, HomeMissionPanelComponent, HomeMissionCenterComponent],
+  imports: [TranslocoPipe, RouterLink, HomeMissionPanelComponent, HomeMissionCenterComponent, HomeRankPanelComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

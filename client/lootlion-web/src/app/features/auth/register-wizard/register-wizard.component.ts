@@ -5,6 +5,7 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AuthService } from '../../../api/generated/api/auth.service';
 import { HouseholdsService } from '../../../api/generated/api/households.service';
 import { HouseholdDto } from '../../../api/generated/model/householdDto';
+import { RegistrationRoleDto } from '../../../api/generated/model/registrationRoleDto';
 import { readApiErrorMessage } from '../../../core/auth/api-error';
 import { AuthSessionService } from '../../../core/auth/auth-session.service';
 import { LanguageToggleComponent } from '../../../core/i18n/language-toggle.component';
@@ -218,7 +219,7 @@ export class RegisterWizardComponent implements OnInit {
     this.authApi
       .apiAuthRegisterWizardPost({
         nickname: this.draft.nickname,
-        role: 1,
+        role: RegistrationRoleDto.Child,
         createNewHousehold: false,
         newHouseholdName: null,
         joinHouseholdIdAsParent: null,
@@ -261,7 +262,7 @@ export class RegisterWizardComponent implements OnInit {
     this.authApi
       .apiAuthRegisterWizardPost({
         nickname: this.draft.nickname,
-        role: 0,
+        role: RegistrationRoleDto.Parent,
         createNewHousehold: createNew,
         newHouseholdName: createNew ? this.draft.newHouseholdName.trim() : null,
         joinHouseholdIdAsParent: !createNew && this.draft.joinHouseholdId ? this.draft.joinHouseholdId : null,

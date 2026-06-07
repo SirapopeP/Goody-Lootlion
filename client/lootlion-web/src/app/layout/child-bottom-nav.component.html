@@ -1,0 +1,14 @@
+<nav class="child-bottom-nav" [attr.aria-label]="'childNav.aria' | transloco">
+  <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }" class="child-nav-item">
+    {{ 'childNav.mission' | transloco }}
+  </a>
+  <a routerLink="/rewards" routerLinkActive="is-active" class="child-nav-item">
+    {{ 'childNav.reward' | transloco }}
+  </a>
+  <a routerLink="/family" routerLinkActive="is-active" class="child-nav-item">
+    {{ 'childNav.family' | transloco }}
+  </a>
+  <a routerLink="/settings" routerLinkActive="is-active" class="child-nav-item">
+    {{ 'childNav.setting' | transloco }}
+  </a>
+</nav>

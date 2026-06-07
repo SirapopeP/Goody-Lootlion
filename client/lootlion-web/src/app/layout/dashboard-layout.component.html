@@ -72,16 +72,34 @@
       >
         <div class="avatar" aria-hidden="true"></div>
         <div class="level-row">
-          <span class="level-tag">{{ 'layout.levelPlaceholder' | transloco }}</span>
-          <div class="level-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-            <div class="level-fill"></div>
-          </div>
+          @if (wallet.balance(); as bal) {
+            <span class="level-tag">{{ 'wallet.levelShort' | transloco: { n: bal.level ?? 1 } }}</span>
+            <div
+              class="level-bar"
+              role="progressbar"
+              [attr.aria-valuenow]="levelProgressPercent()"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              <div class="level-fill" [style.width.%]="levelProgressPercent()"></div>
+            </div>
+          } @else {
+            <span class="level-tag">{{ 'layout.levelPlaceholder' | transloco }}</span>
+            <div class="level-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+              <div class="level-fill"></div>
+            </div>
+          }
         </div>
         @if (session.isAuthenticated()) {
           <p class="handle">
             {{ userDisplay().displayName ?? userDisplay().email ?? ('layout.userFallback' | transloco) }}
           </p>
-          <p class="coin-line">{{ 'layout.coinLine' | transloco: { n: walletCoinPlaceholder } }}</p>
+          <p class="coin-line">
+            {{ 'layout.coinLine' | transloco: { n: wallet.balance()?.coinBalance ?? 0 } }}
+          </p>
+          @if (wallet.balance()?.expTotal !== undefined) {
+            <p class="exp-line ll-text-muted">{{ 'wallet.expLine' | transloco: { n: wallet.balance()?.expTotal ?? 0 } }}</p>
+          }
           <p class="fullname ll-text-muted">
             {{ userDisplay().email ?? '—' }}
           </p>
@@ -139,7 +157,7 @@
           <ul class="family-list" role="list">
             @for (m of familyMembers(); track m.userId) {
               <li class="family-row" role="listitem">
-                <span class="family-lv">{{ 'layout.levelPlaceholder' | transloco }}</span>
+                <span class="family-lv">{{ memberLevelLabel(m.userId) }}</span>
                 <span class="family-id">{{ m.displayName ?? m.email ?? '—' }}</span>
                 <span class="family-role">{{ memberRoleLabel(m.role) }}</span>
               </li>

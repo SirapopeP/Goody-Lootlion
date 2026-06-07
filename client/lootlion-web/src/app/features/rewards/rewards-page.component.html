@@ -1,0 +1,89 @@
+<div class="rewards-page">
+  <header class="rewards-page-head">
+    <h1>{{ 'rewards.pageTitle' | transloco }}</h1>
+    <a routerLink="/" class="rewards-page-back">{{ 'rewards.backHome' | transloco }}</a>
+  </header>
+
+  @if (!activeHousehold.activeHouseholdId()) {
+    <p class="ll-text-muted">{{ 'rewards.noHouseholdHint' | transloco }}</p>
+  } @else {
+    @if (wallet.balance(); as bal) {
+      <p class="rewards-balance">{{ 'layout.coinLine' | transloco: { n: bal.coinBalance ?? 0 } }}</p>
+    }
+
+    <div class="rewards-tabs">
+      <button type="button" class="rewards-tab" [class.is-active]="activeTab() === 'catalog'" (click)="setTab('catalog')">
+        {{ 'rewards.tabCatalog' | transloco }}
+      </button>
+      <button type="button" class="rewards-tab" [class.is-active]="activeTab() === 'wishlist'" (click)="setTab('wishlist')">
+        {{ 'rewards.tabWishlist' | transloco }} ({{ pendingWishlist().length }})
+      </button>
+      <button type="button" class="rewards-tab" [class.is-active]="activeTab() === 'create'" (click)="setTab('create')">
+        {{ 'rewards.tabCreate' | transloco }}
+      </button>
+    </div>
+
+    @if (loading()) {
+      <p class="ll-text-muted">{{ 'rewards.loading' | transloco }}</p>
+    } @else if (activeTab() === 'catalog') {
+      @if (!catalog().length) {
+        <p class="ll-text-muted">{{ 'rewards.catalogEmpty' | transloco }}</p>
+      } @else {
+        <ul class="rewards-list">
+          @for (item of catalog(); track item.id) {
+            <li class="rewards-row">
+              <span class="rewards-row-title">{{ item.title ?? '—' }}</span>
+              <span class="rewards-row-meta">{{ item.costCoin ?? 0 }} {{ 'home.mission.coinShort' | transloco }}</span>
+            </li>
+          }
+        </ul>
+      }
+    } @else if (activeTab() === 'wishlist') {
+      @if (!pendingWishlist().length) {
+        <p class="ll-text-muted">{{ 'rewards.wishlistEmpty' | transloco }}</p>
+      } @else {
+        <ul class="rewards-list">
+          @for (item of pendingWishlist(); track item.id) {
+            <li class="rewards-row rewards-row--wishlist">
+              <div>
+                <span class="rewards-row-title">{{ item.title ?? '—' }}</span>
+                <span class="rewards-row-meta">
+                  {{ 'rewards.suggestedCost' | transloco: { n: item.suggestedCoinCost ?? 0 } }}
+                </span>
+              </div>
+              <div class="rewards-row-actions">
+                <button type="button" class="rewards-btn" (click)="openApprove(item)">{{ 'rewards.approve' | transloco }}</button>
+                <button type="button" class="rewards-btn rewards-btn--ghost" (click)="reject(item)">{{ 'rewards.reject' | transloco }}</button>
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    } @else {
+      <form class="rewards-form" [formGroup]="createForm" (ngSubmit)="submitCreate()">
+        <label for="rw-title">{{ 'rewards.fieldTitle' | transloco }}</label>
+        <input id="rw-title" type="text" formControlName="title" />
+        <label for="rw-desc">{{ 'rewards.fieldDescription' | transloco }}</label>
+        <textarea id="rw-desc" rows="2" formControlName="description"></textarea>
+        <label for="rw-cost">{{ 'rewards.fieldCost' | transloco }}</label>
+        <input id="rw-cost" type="number" min="1" formControlName="costCoin" />
+        <button type="submit" class="rewards-btn" [disabled]="submitting()">
+          {{ submitting() ? ('rewards.creating' | transloco) : ('rewards.createSubmit' | transloco) }}
+        </button>
+      </form>
+    }
+  }
+</div>
+
+@if (approveTargetId()) {
+  <div class="rewards-dialog-backdrop" (click)="dismissApprove()"></div>
+  <div class="rewards-dialog" role="dialog">
+    <p>{{ 'rewards.approvePrompt' | transloco }}</p>
+    <label for="rw-approve-cost">{{ 'rewards.fieldFinalCost' | transloco }}</label>
+    <input id="rw-approve-cost" type="number" min="1" [value]="approveCost()" (input)="approveCost.set(+$any($event.target).value)" />
+    <div class="rewards-dialog-actions">
+      <button type="button" class="rewards-btn rewards-btn--ghost" (click)="dismissApprove()">{{ 'rewards.cancel' | transloco }}</button>
+      <button type="button" class="rewards-btn" [disabled]="submitting()" (click)="confirmApprove()">{{ 'rewards.approveConfirm' | transloco }}</button>
+    </div>
+  </div>
+}

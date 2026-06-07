@@ -1,0 +1,140 @@
+.rewards-page {
+  max-width: 800px;
+}
+
+.rewards-page-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.rewards-page-head h1 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.rewards-page-back {
+  color: var(--lootlion-accent-teal);
+  text-decoration: none;
+  font-size: 0.88rem;
+}
+
+.rewards-balance {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+}
+
+.rewards-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+}
+
+.rewards-tab {
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(41, 173, 201, 0.35);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.rewards-tab.is-active {
+  border-color: var(--lootlion-accent-teal);
+  color: var(--lootlion-accent-teal);
+}
+
+.rewards-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.rewards-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(41, 173, 201, 0.22);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.rewards-row--wishlist {
+  flex-wrap: wrap;
+}
+
+.rewards-row-title {
+  display: block;
+  font-weight: 600;
+}
+
+.rewards-row-meta {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.rewards-row-actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.rewards-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-width: 420px;
+}
+
+.rewards-form label {
+  font-size: 0.82rem;
+}
+
+.rewards-btn {
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid var(--lootlion-accent-teal);
+  background: rgba(41, 173, 201, 0.15);
+  color: inherit;
+  cursor: pointer;
+}
+
+.rewards-btn--ghost {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: transparent;
+}
+
+.rewards-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 50;
+}
+
+.rewards-dialog {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 51;
+  width: min(92vw, 360px);
+  padding: 1rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(41, 173, 201, 0.35);
+  background: #0d1520;
+}
+
+.rewards-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}

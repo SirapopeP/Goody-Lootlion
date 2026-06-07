@@ -8,6 +8,7 @@ import { ActiveHouseholdService } from '../../../core/household/active-household
 import { MissionApiService } from '../../../core/mission/mission-api.service';
 import { MissionInstanceDto, MissionInstanceStatus } from '../../../core/mission/mission.models';
 import { ToastService } from '../../../core/toast/toast.service';
+import { WalletFacadeService } from '../../../core/wallet/wallet-facade.service';
 
 type CenterTab = 'board' | 'mine' | 'pending' | 'done';
 
@@ -25,6 +26,7 @@ export class HomeMissionCenterComponent {
   private readonly toast = inject(ToastService);
   private readonly transloco = inject(TranslocoService);
   readonly session = inject(AuthSessionService);
+  private readonly wallet = inject(WalletFacadeService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly membershipPending = input(false);
@@ -96,7 +98,13 @@ export class HomeMissionCenterComponent {
     if (!instance.id) {
       return;
     }
-    this.runAction(instance.id, () => this.missionApi.approve(instance.id!), 'home.mission.approveSuccess', 'home.mission.approveFailed');
+    this.runAction(
+      instance.id,
+      () => this.missionApi.approve(instance.id!),
+      'home.mission.approveSuccess',
+      'home.mission.approveFailed',
+      true
+    );
   }
 
   reject(instance: MissionInstanceDto): void {
@@ -110,7 +118,8 @@ export class HomeMissionCenterComponent {
     instanceId: string,
     call: () => ReturnType<MissionApiService['claim']>,
     successKey: string,
-    failKey: string
+    failKey: string,
+    refreshWallet = false
   ): void {
     const hid = this.activeHousehold.activeHouseholdId();
     if (!hid) {
@@ -125,6 +134,9 @@ export class HomeMissionCenterComponent {
       .subscribe({
         next: () => {
           this.toast.success(this.transloco.translate(successKey));
+          if (refreshWallet) {
+            this.wallet.requestRefresh(hid);
+          }
           this.reloadAll(hid);
         },
         error: (err) => this.toast.fromApiError(err, failKey),

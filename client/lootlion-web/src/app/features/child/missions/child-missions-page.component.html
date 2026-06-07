@@ -1,0 +1,31 @@
+<div class="child-missions">
+  <header class="child-missions-head">
+    <h1>{{ 'childMissions.title' | transloco }}</h1>
+    @if (wallet.balance(); as bal) {
+      <p class="child-missions-points ll-text-muted">
+        {{ 'wallet.expLine' | transloco: { n: bal.expTotal ?? 0 } }}
+        · {{ 'layout.coinLine' | transloco: { n: bal.coinBalance ?? 0 } }}
+      </p>
+    }
+  </header>
+
+  <div class="child-missions-stats">
+    <div class="child-stat">
+      <span class="child-stat-value">{{ activeCount() }}</span>
+      <span class="child-stat-label">{{ 'childMissions.statActive' | transloco }}</span>
+    </div>
+    <div class="child-stat">
+      <span class="child-stat-value">{{ pendingCount() }}</span>
+      <span class="child-stat-label">{{ 'childMissions.statPending' | transloco }}</span>
+    </div>
+    <div class="child-stat">
+      <span class="child-stat-value">{{ doneCount() }}</span>
+      <span class="child-stat-label">{{ 'childMissions.statDone' | transloco }}</span>
+    </div>
+  </div>
+
+  <app-home-mission-center
+    [membershipPending]="membershipPending()"
+    (instancesChanged)="onInstancesChanged($event)"
+  />
+</div>

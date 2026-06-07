@@ -14,7 +14,6 @@ export interface HouseholdMemberDto {
     displayName?: string | null;
     email?: string | null;
     role?: string | null;
-    /** "Active" | "Pending" */
     membershipStatus?: string | null;
 }
 

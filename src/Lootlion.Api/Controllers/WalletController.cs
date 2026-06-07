@@ -27,4 +27,9 @@ public sealed class WalletController : ControllerBase
     [ProducesResponseType(typeof(IReadOnlyList<LedgerEntryDto>), StatusCodes.Status200OK)]
     public Task<IReadOnlyList<LedgerEntryDto>> Ledger(Guid householdId, [FromQuery] int take = 50, CancellationToken cancellationToken = default) =>
         _wallet.GetLedgerAsync(this.GetCurrentUserId(), householdId, take, cancellationToken);
+
+    [HttpGet("household/{householdId:guid}/leaderboard")]
+    [ProducesResponseType(typeof(IReadOnlyList<HouseholdLeaderboardEntryDto>), StatusCodes.Status200OK)]
+    public Task<IReadOnlyList<HouseholdLeaderboardEntryDto>> Leaderboard(Guid householdId, CancellationToken cancellationToken) =>
+        _wallet.GetLeaderboardAsync(this.GetCurrentUserId(), householdId, cancellationToken);
 }

@@ -1,0 +1,35 @@
+.child-settings-head h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+}
+
+.child-settings-card {
+  margin-bottom: 0.85rem;
+  padding: 0.75rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(41, 173, 201, 0.28);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.child-settings-card h2 {
+  margin: 0 0 0.45rem;
+  font-size: 0.9rem;
+}
+
+.child-settings-links {
+  margin-bottom: 0.85rem;
+}
+
+.child-settings-links a {
+  color: var(--lootlion-accent-teal);
+  text-decoration: none;
+}
+
+.child-settings-logout {
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}

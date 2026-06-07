@@ -1,0 +1,28 @@
+<section class="rank-panel" [attr.aria-label]="'rank.sectionTitle' | transloco">
+  <h2 class="rank-panel-title">{{ 'rank.sectionTitle' | transloco }}</h2>
+  @if (!session.isAuthenticated()) {
+    <p class="ll-text-muted">{{ 'rank.signInHint' | transloco }}</p>
+  } @else if (membershipPending()) {
+    <p class="ll-text-muted">{{ 'rank.pendingHint' | transloco }}</p>
+  } @else if (!activeHousehold.activeHouseholdId()) {
+    <p class="ll-text-muted">{{ 'rank.noHouseholdHint' | transloco }}</p>
+  } @else if (wallet.leaderboardLoading()) {
+    <p class="ll-text-muted">{{ 'rank.loading' | transloco }}</p>
+  } @else if (!wallet.leaderboard().length) {
+    <p class="ll-text-muted">{{ 'rank.empty' | transloco }}</p>
+  } @else {
+    <ol class="rank-list">
+      @for (row of wallet.leaderboard().slice(0, 5); track row.userId) {
+        <li class="rank-row">
+          <span class="rank-pos">#{{ row.rank }}</span>
+          <span class="rank-name">{{ row.displayName ?? '—' }}</span>
+          <span class="rank-meta">
+            {{ 'wallet.levelShort' | transloco: { n: row.level ?? 1 } }}
+            · {{ row.expTotal ?? 0 }} EXP
+            · {{ row.coinBalance ?? 0 }} {{ 'home.mission.coinShort' | transloco }}
+          </span>
+        </li>
+      }
+    </ol>
+  }
+</section>

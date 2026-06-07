@@ -14,5 +14,8 @@ export interface WalletBalanceDto {
     userId?: string;
     coinBalance?: number;
     expTotal?: number;
+    level?: number;
+    expInCurrentLevel?: number;
+    expToNextLevel?: number;
 }
 

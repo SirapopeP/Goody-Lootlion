@@ -1,0 +1,30 @@
+<div class="child-family">
+  <header class="child-family-head">
+    <h1>{{ 'childFamily.title' | transloco }}</h1>
+    @if (householdName(); as name) {
+      <p class="ll-text-muted">{{ 'childFamily.householdLine' | transloco: { name } }}</p>
+    }
+  </header>
+
+  @if (!session.isAuthenticated()) {
+    <p class="ll-text-muted">{{ 'childFamily.signInHint' | transloco }}</p>
+  } @else if (loading()) {
+    <p class="ll-text-muted">{{ 'childFamily.loading' | transloco }}</p>
+  } @else if (membershipPending()) {
+    <p>{{ 'layout.familyPendingApproval' | transloco }}</p>
+  } @else if (!householdName()) {
+    <p class="ll-text-muted">{{ 'childFamily.noHousehold' | transloco }}</p>
+    <a routerLink="/households">{{ 'layout.households' | transloco }}</a>
+  } @else {
+    <ul class="child-family-list">
+      @for (m of members(); track m.userId) {
+        <li class="child-family-row">
+          <span class="child-family-lv">{{ memberLevelLabel(m.userId) }}</span>
+          <span class="child-family-name">{{ m.displayName ?? m.email ?? '—' }}</span>
+          <span class="child-family-role">{{ memberRoleLabel(m.role) }}</span>
+        </li>
+      }
+    </ul>
+    <a routerLink="/households" class="child-family-link">{{ 'childFamily.manageLink' | transloco }}</a>
+  }
+</div>

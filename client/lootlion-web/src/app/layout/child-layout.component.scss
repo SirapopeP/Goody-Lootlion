@@ -1,0 +1,10 @@
+.child-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.child-shell-main {
+  flex: 1;
+  padding: 1rem 1rem calc(4.5rem + env(safe-area-inset-bottom));
+}

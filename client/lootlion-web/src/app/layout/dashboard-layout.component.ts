@@ -9,6 +9,7 @@ import { parseJwtUserDisplay } from '../core/auth/jwt-payload';
 import { AuthSessionService } from '../core/auth/auth-session.service';
 import { MenuAccessService } from '../core/auth/menu-access.service';
 import { ActiveHouseholdService } from '../core/household/active-household.service';
+import { WalletFacadeService } from '../core/wallet/wallet-facade.service';
 import { LanguageToggleComponent } from '../core/i18n/language-toggle.component';
 import { ParticlesBackgroundComponent } from '../shared/ui/particles-background/particles-background.component';
 import { EditProfileDialogComponent } from './edit-profile-dialog.component';
@@ -36,6 +37,7 @@ export class DashboardLayoutComponent {
   private readonly router = inject(Router);
   private readonly householdsApi = inject(HouseholdsService);
   private readonly activeHousehold = inject(ActiveHouseholdService);
+  readonly wallet = inject(WalletFacadeService);
   private readonly transloco = inject(TranslocoService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -45,9 +47,6 @@ export class DashboardLayoutComponent {
   readonly inventoryUsed = 0;
   readonly workerCap = 10;
   readonly workerUsed = 0;
-
-  /** Placeholder until wallet balance is exposed by API */
-  readonly walletCoinPlaceholder = 250;
 
   readonly familyHouseholdName = signal<string | null>(null);
   /** สมาชิกในบ้านที่เลือก — ว่างถ้ายัง Pending (ยังไม่ได้รับอนุมัติ) */
@@ -84,6 +83,7 @@ export class DashboardLayoutComponent {
           if (!picked?.id || pending) {
             return of([] as HouseholdMemberDto[]);
           }
+          this.wallet.requestRefresh(picked.id);
           return this.householdsApi.apiHouseholdsHouseholdIdMembersGet(picked.id);
         }),
         catchError(() => {
@@ -96,6 +96,20 @@ export class DashboardLayoutComponent {
       .subscribe((members) => {
         this.familyMembers.set(members ?? []);
       });
+  }
+
+  levelProgressPercent(): number {
+    const b = this.wallet.balance();
+    const inLevel = b?.expInCurrentLevel ?? 0;
+    return Math.min(100, Math.max(0, inLevel));
+  }
+
+  memberLevelLabel(userId: string | undefined): string {
+    const lv = this.wallet.levelByUserId(userId);
+    if (lv === null) {
+      return this.transloco.translate('layout.levelPlaceholder');
+    }
+    return this.transloco.translate('wallet.levelShort', { n: lv });
   }
 
   memberRoleLabel(role: string | null | undefined): string {

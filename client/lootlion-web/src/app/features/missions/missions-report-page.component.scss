@@ -1,0 +1,76 @@
+.missions-report {
+  max-width: 960px;
+}
+
+.missions-report-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.missions-report-head h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.missions-report-back {
+  color: var(--lootlion-accent-teal);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.missions-report-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.stat-card {
+  padding: 0.75rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(41, 173, 201, 0.28);
+  background: rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--lootlion-accent-teal);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.missions-report-rank h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.rank-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.rank-table th,
+.rank-table td {
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+
+.rank-table th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}

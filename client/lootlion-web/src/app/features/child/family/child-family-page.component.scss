@@ -1,0 +1,35 @@
+.child-family-head h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.15rem;
+}
+
+.child-family-list {
+  margin: 0 0 0.75rem;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.child-family-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.35rem 0.5rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(41, 173, 201, 0.22);
+  background: rgba(0, 0, 0, 0.15);
+  font-size: 0.84rem;
+}
+
+.child-family-lv {
+  font-weight: 700;
+  color: var(--lootlion-accent-teal);
+}
+
+.child-family-link {
+  color: var(--lootlion-accent-teal);
+  text-decoration: none;
+  font-size: 0.86rem;
+}

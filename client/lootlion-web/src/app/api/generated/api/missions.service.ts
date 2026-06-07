@@ -17,9 +17,13 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
-import { CreateMissionRequest } from '../model/createMissionRequest';
+import { CreateMissionTemplateRequest } from '../model/createMissionTemplateRequest';
 // @ts-ignore
-import { MissionDto } from '../model/missionDto';
+import { MissionInstanceDto } from '../model/missionInstanceDto';
+// @ts-ignore
+import { MissionInstanceStatus } from '../model/missionInstanceStatus';
+// @ts-ignore
+import { MissionTemplateDto } from '../model/missionTemplateDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -38,18 +42,18 @@ export class MissionsService extends BaseService {
     }
 
     /**
-     * @endpoint get /api/Missions/household/{householdId}
+     * @endpoint get /api/Missions/board/household/{householdId}
      * @param householdId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public apiMissionsHouseholdHouseholdIdGet(householdId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MissionDto>>;
-    public apiMissionsHouseholdHouseholdIdGet(householdId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MissionDto>>>;
-    public apiMissionsHouseholdHouseholdIdGet(householdId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MissionDto>>>;
-    public apiMissionsHouseholdHouseholdIdGet(householdId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiMissionsBoardHouseholdHouseholdIdGet(householdId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MissionInstanceDto>>;
+    public apiMissionsBoardHouseholdHouseholdIdGet(householdId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MissionInstanceDto>>>;
+    public apiMissionsBoardHouseholdHouseholdIdGet(householdId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MissionInstanceDto>>>;
+    public apiMissionsBoardHouseholdHouseholdIdGet(householdId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (householdId === null || householdId === undefined) {
-            throw new Error('Required parameter householdId was null or undefined when calling apiMissionsHouseholdHouseholdIdGet.');
+            throw new Error('Required parameter householdId was null or undefined when calling apiMissionsBoardHouseholdHouseholdIdGet.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -82,9 +86,9 @@ export class MissionsService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/Missions/household/${this.configuration.encodeParam({name: "householdId", value: householdId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let localVarPath = `/api/Missions/board/household/${this.configuration.encodeParam({name: "householdId", value: householdId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<MissionDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<MissionInstanceDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -98,18 +102,18 @@ export class MissionsService extends BaseService {
     }
 
     /**
-     * @endpoint post /api/Missions/{missionId}/approve
-     * @param missionId 
+     * @endpoint post /api/Missions/instances/{instanceId}/approve
+     * @param instanceId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public apiMissionsMissionIdApprovePost(missionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MissionDto>;
-    public apiMissionsMissionIdApprovePost(missionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MissionDto>>;
-    public apiMissionsMissionIdApprovePost(missionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MissionDto>>;
-    public apiMissionsMissionIdApprovePost(missionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (missionId === null || missionId === undefined) {
-            throw new Error('Required parameter missionId was null or undefined when calling apiMissionsMissionIdApprovePost.');
+    public apiMissionsInstancesInstanceIdApprovePost(instanceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MissionInstanceDto>;
+    public apiMissionsInstancesInstanceIdApprovePost(instanceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MissionInstanceDto>>;
+    public apiMissionsInstancesInstanceIdApprovePost(instanceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MissionInstanceDto>>;
+    public apiMissionsInstancesInstanceIdApprovePost(instanceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (instanceId === null || instanceId === undefined) {
+            throw new Error('Required parameter instanceId was null or undefined when calling apiMissionsInstancesInstanceIdApprovePost.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -142,9 +146,9 @@ export class MissionsService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/Missions/${this.configuration.encodeParam({name: "missionId", value: missionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approve`;
+        let localVarPath = `/api/Missions/instances/${this.configuration.encodeParam({name: "instanceId", value: instanceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approve`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<MissionDto>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<MissionInstanceDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -158,18 +162,18 @@ export class MissionsService extends BaseService {
     }
 
     /**
-     * @endpoint post /api/Missions/{missionId}/reject
-     * @param missionId 
+     * @endpoint post /api/Missions/instances/{instanceId}/claim
+     * @param instanceId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public apiMissionsMissionIdRejectPost(missionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MissionDto>;
-    public apiMissionsMissionIdRejectPost(missionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MissionDto>>;
-    public apiMissionsMissionIdRejectPost(missionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MissionDto>>;
-    public apiMissionsMissionIdRejectPost(missionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (missionId === null || missionId === undefined) {
-            throw new Error('Required parameter missionId was null or undefined when calling apiMissionsMissionIdRejectPost.');
+    public apiMissionsInstancesInstanceIdClaimPost(instanceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MissionInstanceDto>;
+    public apiMissionsInstancesInstanceIdClaimPost(instanceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MissionInstanceDto>>;
+    public apiMissionsInstancesInstanceIdClaimPost(instanceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MissionInstanceDto>>;
+    public apiMissionsInstancesInstanceIdClaimPost(instanceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (instanceId === null || instanceId === undefined) {
+            throw new Error('Required parameter instanceId was null or undefined when calling apiMissionsInstancesInstanceIdClaimPost.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -202,9 +206,9 @@ export class MissionsService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/Missions/${this.configuration.encodeParam({name: "missionId", value: missionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reject`;
+        let localVarPath = `/api/Missions/instances/${this.configuration.encodeParam({name: "instanceId", value: instanceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/claim`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<MissionDto>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<MissionInstanceDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -218,18 +222,18 @@ export class MissionsService extends BaseService {
     }
 
     /**
-     * @endpoint post /api/Missions/{missionId}/submit
-     * @param missionId 
+     * @endpoint post /api/Missions/instances/{instanceId}/reject
+     * @param instanceId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public apiMissionsMissionIdSubmitPost(missionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MissionDto>;
-    public apiMissionsMissionIdSubmitPost(missionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MissionDto>>;
-    public apiMissionsMissionIdSubmitPost(missionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MissionDto>>;
-    public apiMissionsMissionIdSubmitPost(missionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (missionId === null || missionId === undefined) {
-            throw new Error('Required parameter missionId was null or undefined when calling apiMissionsMissionIdSubmitPost.');
+    public apiMissionsInstancesInstanceIdRejectPost(instanceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MissionInstanceDto>;
+    public apiMissionsInstancesInstanceIdRejectPost(instanceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MissionInstanceDto>>;
+    public apiMissionsInstancesInstanceIdRejectPost(instanceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MissionInstanceDto>>;
+    public apiMissionsInstancesInstanceIdRejectPost(instanceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (instanceId === null || instanceId === undefined) {
+            throw new Error('Required parameter instanceId was null or undefined when calling apiMissionsInstancesInstanceIdRejectPost.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -262,9 +266,9 @@ export class MissionsService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/Missions/${this.configuration.encodeParam({name: "missionId", value: missionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/submit`;
+        let localVarPath = `/api/Missions/instances/${this.configuration.encodeParam({name: "instanceId", value: instanceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reject`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<MissionDto>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<MissionInstanceDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -278,16 +282,269 @@ export class MissionsService extends BaseService {
     }
 
     /**
-     * @endpoint post /api/Missions
-     * @param createMissionRequest 
+     * @endpoint post /api/Missions/instances/{instanceId}/submit
+     * @param instanceId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public apiMissionsPost(createMissionRequest?: CreateMissionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MissionDto>;
-    public apiMissionsPost(createMissionRequest?: CreateMissionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MissionDto>>;
-    public apiMissionsPost(createMissionRequest?: CreateMissionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MissionDto>>;
-    public apiMissionsPost(createMissionRequest?: CreateMissionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public apiMissionsInstancesInstanceIdSubmitPost(instanceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MissionInstanceDto>;
+    public apiMissionsInstancesInstanceIdSubmitPost(instanceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MissionInstanceDto>>;
+    public apiMissionsInstancesInstanceIdSubmitPost(instanceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MissionInstanceDto>>;
+    public apiMissionsInstancesInstanceIdSubmitPost(instanceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (instanceId === null || instanceId === undefined) {
+            throw new Error('Required parameter instanceId was null or undefined when calling apiMissionsInstancesInstanceIdSubmitPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Missions/instances/${this.configuration.encodeParam({name: "instanceId", value: instanceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/submit`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<MissionInstanceDto>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @endpoint get /api/Missions/mine/household/{householdId}
+     * @param householdId 
+     * @param status 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public apiMissionsMineHouseholdHouseholdIdGet(householdId: string, status?: MissionInstanceStatus, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MissionInstanceDto>>;
+    public apiMissionsMineHouseholdHouseholdIdGet(householdId: string, status?: MissionInstanceStatus, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MissionInstanceDto>>>;
+    public apiMissionsMineHouseholdHouseholdIdGet(householdId: string, status?: MissionInstanceStatus, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MissionInstanceDto>>>;
+    public apiMissionsMineHouseholdHouseholdIdGet(householdId: string, status?: MissionInstanceStatus, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (householdId === null || householdId === undefined) {
+            throw new Error('Required parameter householdId was null or undefined when calling apiMissionsMineHouseholdHouseholdIdGet.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Missions/mine/household/${this.configuration.encodeParam({name: "householdId", value: householdId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<MissionInstanceDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @endpoint get /api/Missions/pending/household/{householdId}
+     * @param householdId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public apiMissionsPendingHouseholdHouseholdIdGet(householdId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MissionInstanceDto>>;
+    public apiMissionsPendingHouseholdHouseholdIdGet(householdId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MissionInstanceDto>>>;
+    public apiMissionsPendingHouseholdHouseholdIdGet(householdId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MissionInstanceDto>>>;
+    public apiMissionsPendingHouseholdHouseholdIdGet(householdId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (householdId === null || householdId === undefined) {
+            throw new Error('Required parameter householdId was null or undefined when calling apiMissionsPendingHouseholdHouseholdIdGet.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Missions/pending/household/${this.configuration.encodeParam({name: "householdId", value: householdId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<MissionInstanceDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @endpoint get /api/Missions/templates/household/{householdId}
+     * @param householdId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public apiMissionsTemplatesHouseholdHouseholdIdGet(householdId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<MissionTemplateDto>>;
+    public apiMissionsTemplatesHouseholdHouseholdIdGet(householdId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<MissionTemplateDto>>>;
+    public apiMissionsTemplatesHouseholdHouseholdIdGet(householdId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<MissionTemplateDto>>>;
+    public apiMissionsTemplatesHouseholdHouseholdIdGet(householdId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (householdId === null || householdId === undefined) {
+            throw new Error('Required parameter householdId was null or undefined when calling apiMissionsTemplatesHouseholdHouseholdIdGet.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Missions/templates/household/${this.configuration.encodeParam({name: "householdId", value: householdId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<MissionTemplateDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @endpoint post /api/Missions/templates
+     * @param createMissionTemplateRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public apiMissionsTemplatesPost(createMissionTemplateRequest?: CreateMissionTemplateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MissionTemplateDto>;
+    public apiMissionsTemplatesPost(createMissionTemplateRequest?: CreateMissionTemplateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MissionTemplateDto>>;
+    public apiMissionsTemplatesPost(createMissionTemplateRequest?: CreateMissionTemplateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MissionTemplateDto>>;
+    public apiMissionsTemplatesPost(createMissionTemplateRequest?: CreateMissionTemplateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -330,12 +587,132 @@ export class MissionsService extends BaseService {
             }
         }
 
-        let localVarPath = `/api/Missions`;
+        let localVarPath = `/api/Missions/templates`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<MissionDto>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<MissionTemplateDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: createMissionRequest,
+                body: createMissionTemplateRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @endpoint post /api/Missions/templates/{templateId}/cancel
+     * @param templateId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public apiMissionsTemplatesTemplateIdCancelPost(templateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MissionTemplateDto>;
+    public apiMissionsTemplatesTemplateIdCancelPost(templateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MissionTemplateDto>>;
+    public apiMissionsTemplatesTemplateIdCancelPost(templateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MissionTemplateDto>>;
+    public apiMissionsTemplatesTemplateIdCancelPost(templateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (templateId === null || templateId === undefined) {
+            throw new Error('Required parameter templateId was null or undefined when calling apiMissionsTemplatesTemplateIdCancelPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Missions/templates/${this.configuration.encodeParam({name: "templateId", value: templateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/cancel`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<MissionTemplateDto>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @endpoint post /api/Missions/templates/{templateId}/spawn
+     * @param templateId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public apiMissionsTemplatesTemplateIdSpawnPost(templateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MissionInstanceDto>;
+    public apiMissionsTemplatesTemplateIdSpawnPost(templateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MissionInstanceDto>>;
+    public apiMissionsTemplatesTemplateIdSpawnPost(templateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MissionInstanceDto>>;
+    public apiMissionsTemplatesTemplateIdSpawnPost(templateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (templateId === null || templateId === undefined) {
+            throw new Error('Required parameter templateId was null or undefined when calling apiMissionsTemplatesTemplateIdSpawnPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Missions/templates/${this.configuration.encodeParam({name: "templateId", value: templateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/spawn`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<MissionInstanceDto>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

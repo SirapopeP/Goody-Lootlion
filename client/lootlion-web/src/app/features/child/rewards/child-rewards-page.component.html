@@ -1,0 +1,90 @@
+<div class="child-rewards">
+  <header class="child-rewards-head">
+    <h1>{{ 'childNav.reward' | transloco }}</h1>
+    @if (wallet.balance(); as bal) {
+      <p class="ll-text-muted">{{ 'layout.coinLine' | transloco: { n: bal.coinBalance ?? 0 } }}</p>
+    }
+  </header>
+
+  @if (!activeHousehold.activeHouseholdId()) {
+    <p class="ll-text-muted">{{ 'rewards.noHouseholdHint' | transloco }}</p>
+  } @else {
+    <div class="child-rewards-tabs">
+      <button type="button" class="child-rewards-tab" [class.is-active]="activeTab() === 'catalog'" (click)="setTab('catalog')">
+        {{ 'rewards.tabCatalog' | transloco }}
+      </button>
+      <button type="button" class="child-rewards-tab" [class.is-active]="activeTab() === 'wishlist'" (click)="setTab('wishlist')">
+        {{ 'rewards.tabMyWishlist' | transloco }}
+      </button>
+      <button type="button" class="child-rewards-tab" [class.is-active]="activeTab() === 'history'" (click)="setTab('history')">
+        {{ 'rewards.tabHistory' | transloco }}
+      </button>
+    </div>
+
+    @if (loading()) {
+      <p class="ll-text-muted">{{ 'rewards.loading' | transloco }}</p>
+    } @else if (activeTab() === 'catalog') {
+      @if (!catalog().length) {
+        <p class="ll-text-muted">{{ 'rewards.catalogEmpty' | transloco }}</p>
+      } @else {
+        <ul class="child-rewards-list">
+          @for (item of catalog(); track item.id) {
+            <li class="child-rewards-row">
+              <div>
+                <span class="child-rewards-title">{{ item.title ?? '—' }}</span>
+                <span class="child-rewards-meta">{{ item.costCoin ?? 0 }} {{ 'home.mission.coinShort' | transloco }}</span>
+              </div>
+              <button
+                type="button"
+                class="child-rewards-redeem"
+                [disabled]="!canAfford(item.costCoin) || redeemingId() === item.id"
+                (click)="redeem(item)"
+              >
+                {{ 'rewards.redeem' | transloco }}
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    } @else if (activeTab() === 'wishlist') {
+      <form class="child-rewards-form" [formGroup]="wishlistForm" (ngSubmit)="submitWishlist()">
+        <label for="cw-title">{{ 'rewards.wishlistFieldTitle' | transloco }}</label>
+        <input id="cw-title" type="text" formControlName="title" />
+        <label for="cw-desc">{{ 'rewards.fieldDescription' | transloco }}</label>
+        <textarea id="cw-desc" rows="2" formControlName="description"></textarea>
+        <label for="cw-cost">{{ 'rewards.wishlistFieldCost' | transloco }}</label>
+        <input id="cw-cost" type="number" min="1" formControlName="suggestedCoinCost" />
+        <button type="submit" class="child-rewards-redeem" [disabled]="submitting()">
+          {{ 'rewards.wishlistSubmit' | transloco }}
+        </button>
+      </form>
+
+      <h2 class="child-rewards-subtitle">{{ 'rewards.myWishlistItems' | transloco }}</h2>
+      @if (!wishlist().length) {
+        <p class="ll-text-muted">{{ 'rewards.myWishlistEmpty' | transloco }}</p>
+      } @else {
+        <ul class="child-rewards-list">
+          @for (item of wishlist(); track item.id) {
+            <li class="child-rewards-row">
+              <span class="child-rewards-title">{{ item.title ?? '—' }}</span>
+              <span class="child-rewards-meta">{{ item.status ?? '—' }}</span>
+            </li>
+          }
+        </ul>
+      }
+    } @else {
+      @if (!redemptions().length) {
+        <p class="ll-text-muted">{{ 'rewards.historyEmpty' | transloco }}</p>
+      } @else {
+        <ul class="child-rewards-list">
+          @for (r of redemptions(); track r.id) {
+            <li class="child-rewards-row">
+              <span class="child-rewards-title">{{ 'rewards.redemptionLine' | transloco: { coin: r.coinSpent ?? 0 } }}</span>
+              <span class="child-rewards-meta">{{ r.status ?? '—' }}</span>
+            </li>
+          }
+        </ul>
+      }
+    }
+  }
+</div>

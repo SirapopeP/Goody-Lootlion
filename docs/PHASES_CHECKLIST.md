@@ -14,7 +14,11 @@
 | 4c-2 | **ครบ** — Parent template panel (`HomeMissionPanelComponent`) — BoardClaim / DirectAssign |
 | 4c-3 | **ครบ** — Panel กลาง board/claim/submit/approve (`HomeMissionCenterComponent`) |
 | 4c-4 | **ครบ** — Recurrence (Daily/Weekly/Monthly/Interval) + spawn หลัง approve / manual หลัง reject |
-| 4b ถัดไป | กระเป๋า, Rank, child bottom nav — ดู [UI_NAVIGATION_PLAN.md](./UI_NAVIGATION_PLAN.md) |
+| 4b | **ครบ** — Wallet จริงใน sidebar, leaderboard API, rank panel, `/missions` report, profile wallet |
+| 4c-child | **ครบ** — Child shell + bottom nav MISSION/REWARD/FAMILY/SETTING |
+| 5 | **ครบ** — Parent `/rewards` (catalog + wishlist approve) + Child rewards tab (redeem + wishlist) |
+| 5b | **รอ** — Commission (defer) |
+| 6 | **รอ** — Deploy / E2E |
 
 ---
 
@@ -117,7 +121,7 @@
 
 - [x] Child: **claim** จากบอร์ด, **submit** ภารกิจของตัวเอง
 - [x] Parent: **approve / reject** รายการ pending
-- [ ] Child bottom nav แยก (ยังใช้ layout เดิมบน desktop)
+- [x] Child bottom nav แยก — `ChildLayoutComponent` + 4 แท็บ
 
 ### เฟส 4c-4 — Recurrence (ครบ)
 
@@ -125,20 +129,21 @@
 - [x] Spawn รอบถัดไปอัตโนมัติหลัง **approve** เท่านั้น
 - [x] หลัง **reject** — หยุดจน Parent กด **เปิดรอบใหม่** (`POST templates/{id}/spawn`)
 
-### เฟส 4b — กระเป๋า + Rank (ถัดไป)
+### เฟส 4b — กระเป๋า + Rank (ครบ)
 
-- [ ] แสดงยอด **coin / exp** จริงใน sidebar (`WalletService`)
-- [ ] **รายงานภารกิจ** + **กระดาน Rank / อันดับ**
-- [ ] หน้า `/missions` — รายงานหรือจัดการขั้นสูง (หรือรวมเข้าหน้าแรก)
+- [x] แสดงยอด **coin / exp / level** จริงใน sidebar (`WalletFacadeService` + `GET .../balance`)
+- [x] **กระดาน Rank** — `GET .../leaderboard` + `HomeRankPanelComponent`
+- [x] หน้า `/missions` — `MissionsReportPageComponent` (สถิติ + leaderboard)
+- [x] หน้า `/profile` — balance + ledger ล่าสุด
 
-### เฟส 4c-child — Child: มุมมองและเมนูแยก (backlog)
+### เฟส 4c-child — Child: มุมมองและเมนูแยก (ครบ)
 
-อ้างอิง mockup mobile — แท็บล่าง **MISSION | REWARD | FAMILY | SETTING** (ไม่ใช้เมนูชุดเดียวกับ parent)
+อ้างอิง mockup mobile — แท็บล่าง **MISSION | REWARD | FAMILY | SETTING**
 
-- [ ] Layout หรือ navigation แยกตาม role (bottom nav สำหรับ child)
-- [ ] แท็บ **MISSION** — รายการภารกิจของตัวเอง + สถิติ MISSIONS/PENDING/DONE + ปุ่ม **SUBMIT**
-- [ ] แท็บ **FAMILY** — ภาพรวมครอบครัว (สมาชิก, สถิติ, mapping) ตาม mockup
-- [ ] แท็บ **SETTING** — รายการตั้งค่า (family management, permission ฯลฯ)
+- [x] Layout แยกตาม role (`childShellCanMatch` + `ChildLayoutComponent`)
+- [x] แท็บ **MISSION** — `ChildMissionsPageComponent` + `HomeMissionCenterComponent`
+- [x] แท็บ **FAMILY** — `ChildFamilyPageComponent`
+- [x] แท็บ **SETTING** — `ChildSettingsPageComponent`
 
 ### เฟส 4 — ขยาย (หลัง 4c)
 
@@ -147,11 +152,11 @@
 
 ---
 
-## เฟส 5 — รางวัล + Wishlist + แลกรับรางวัล
+## เฟส 5 — รางวัล + Wishlist + แลกรับรางวัล (ครบ)
 
-- [ ] **Catalog รางวัล** และ **แลกของด้วย coin** (เมนู “แลกรับรางวัล” ในแผนงาน)
-- [ ] Wishlist → อนุมัติ → ปรากฏใน catalog (ตามสัญญา API ที่มี)
-- [ ] (ถ้ามีใน requirement) เชื่อมกับการแสดงรางวัลบน Dashboard
+- [x] **Catalog รางวัล** — Parent `RewardsPageComponent` (`/rewards`)
+- [x] Wishlist → อนุมัติ/ปฏิเสธ → catalog (`RewardFacadeService`)
+- [x] Child **แลกของด้วย coin** — `ChildRewardsPageComponent` แท็บ REWARD
 
 ---
 
@@ -176,11 +181,9 @@
 
 | ลำดับ | โฟกัส | เหตุผลสั้น ๆ |
 |--------|--------|----------------|
-| 1 | **เฟส 4b — กระเป๋า + Rank** | coin/exp จริง + leaderboard |
-| 2 | **เฟส 4c-child — Child bottom nav** | mockup mobile แยกจาก parent |
-| 4 | **เฟส 5 — แลกรางวัล + Wishlist** | Child แท็บ REWARD + Parent catalog |
-| 5 | **เฟส 5b — Commission** | หลังมีกติกาเรื่อง coin/exp ชัด |
-| 6 | **เฟส 6 — ทดสอบ + deploy + observability บน K8s** | หลังฟีเจอร์หลักคงที่ |
+| 1 | **เฟส 5b — Commission** | หลังมีกติกาเรื่อง coin/exp ชัด (defer) |
+| 2 | **เฟส 6 — ทดสอบ + deploy + observability บน K8s** | หลังฟีเจอร์หลักคงที่ |
+| — | แก้ไข Mission Template, cosmetic profile | backlog |
 
 รายละเอียด navigation Parent/Child: [UI_NAVIGATION_PLAN.md](./UI_NAVIGATION_PLAN.md)  
 รายละเอียดรันท้องถิ่น: [LOCAL_DEVELOPMENT.md](./LOCAL_DEVELOPMENT.md)

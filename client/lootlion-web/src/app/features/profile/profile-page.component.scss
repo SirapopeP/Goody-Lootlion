@@ -1,0 +1,57 @@
+.profile-page {
+  max-width: 720px;
+}
+
+.profile-page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.profile-page-head h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.profile-page-back {
+  color: var(--lootlion-accent-teal);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.profile-card {
+  margin-bottom: 1rem;
+  padding: 0.85rem;
+  border-radius: var(--lootlion-radius-sm);
+  border: 1px solid rgba(41, 173, 201, 0.28);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.profile-card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.ledger-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ledger-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.15rem 0.5rem;
+  font-size: 0.84rem;
+}
+
+.ledger-date {
+  grid-column: 1 / -1;
+  font-size: 0.78rem;
+}

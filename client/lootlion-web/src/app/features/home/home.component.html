@@ -28,6 +28,8 @@
     }
   </section>
 
+  <app-home-rank-panel [membershipPending]="overviewMembershipPending()" />
+
   <div class="quest-grid">
     <aside class="quest-panel quest-panel-side" [attr.aria-label]="'home.missionColumn' | transloco">
       <app-home-mission-panel [membershipPending]="overviewMembershipPending()" />

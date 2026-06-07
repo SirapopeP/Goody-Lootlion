@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { HouseholdLeaderboardEntryDto } from '../model/householdLeaderboardEntryDto';
+// @ts-ignore
 import { LedgerEntryDto } from '../model/ledgerEntryDto';
 // @ts-ignore
 import { WalletBalanceDto } from '../model/walletBalanceDto';
@@ -85,6 +87,66 @@ export class WalletService extends BaseService {
         let localVarPath = `/api/Wallet/household/${this.configuration.encodeParam({name: "householdId", value: householdId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/balance`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WalletBalanceDto>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @endpoint get /api/Wallet/household/{householdId}/leaderboard
+     * @param householdId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public apiWalletHouseholdHouseholdIdLeaderboardGet(householdId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<HouseholdLeaderboardEntryDto>>;
+    public apiWalletHouseholdHouseholdIdLeaderboardGet(householdId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<HouseholdLeaderboardEntryDto>>>;
+    public apiWalletHouseholdHouseholdIdLeaderboardGet(householdId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<HouseholdLeaderboardEntryDto>>>;
+    public apiWalletHouseholdHouseholdIdLeaderboardGet(householdId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (householdId === null || householdId === undefined) {
+            throw new Error('Required parameter householdId was null or undefined when calling apiWalletHouseholdHouseholdIdLeaderboardGet.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Wallet/household/${this.configuration.encodeParam({name: "householdId", value: householdId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/leaderboard`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<HouseholdLeaderboardEntryDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

@@ -21,15 +21,15 @@ import { AddMemberBody } from '../model/addMemberBody';
 // @ts-ignore
 import { CreateHouseholdRequest } from '../model/createHouseholdRequest';
 // @ts-ignore
-import { HouseholdDto } from '../model/householdDto';
+import { DeleteHouseholdBody } from '../model/deleteHouseholdBody';
 // @ts-ignore
-import { HouseholdMineDto } from '../model/householdMineDto';
+import { HouseholdDto } from '../model/householdDto';
 // @ts-ignore
 import { HouseholdMemberDto } from '../model/householdMemberDto';
 // @ts-ignore
-import { UserSearchHitDto } from '../model/userSearchHitDto';
+import { HouseholdMineDto } from '../model/householdMineDto';
 // @ts-ignore
-import { DeleteHouseholdBody } from '../model/deleteHouseholdBody';
+import { UserSearchHitDto } from '../model/userSearchHitDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -45,6 +45,205 @@ export class HouseholdsService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * @endpoint get /api/Households/for-child-registration
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public apiHouseholdsForChildRegistrationGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<HouseholdDto>>;
+    public apiHouseholdsForChildRegistrationGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<HouseholdDto>>>;
+    public apiHouseholdsForChildRegistrationGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<HouseholdDto>>>;
+    public apiHouseholdsForChildRegistrationGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Households/for-child-registration`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<HouseholdDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @endpoint post /api/Households/{householdId}/delete
+     * @param householdId 
+     * @param deleteHouseholdBody 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public apiHouseholdsHouseholdIdDeletePost(householdId: string, deleteHouseholdBody?: DeleteHouseholdBody, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public apiHouseholdsHouseholdIdDeletePost(householdId: string, deleteHouseholdBody?: DeleteHouseholdBody, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public apiHouseholdsHouseholdIdDeletePost(householdId: string, deleteHouseholdBody?: DeleteHouseholdBody, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public apiHouseholdsHouseholdIdDeletePost(householdId: string, deleteHouseholdBody?: DeleteHouseholdBody, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (householdId === null || householdId === undefined) {
+            throw new Error('Required parameter householdId was null or undefined when calling apiHouseholdsHouseholdIdDeletePost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Households/${this.configuration.encodeParam({name: "householdId", value: householdId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/delete`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: deleteHouseholdBody,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @endpoint get /api/Households/{householdId}/invite-candidates
+     * @param householdId 
+     * @param q 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public apiHouseholdsHouseholdIdInviteCandidatesGet(householdId: string, q?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<UserSearchHitDto>>;
+    public apiHouseholdsHouseholdIdInviteCandidatesGet(householdId: string, q?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<UserSearchHitDto>>>;
+    public apiHouseholdsHouseholdIdInviteCandidatesGet(householdId: string, q?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<UserSearchHitDto>>>;
+    public apiHouseholdsHouseholdIdInviteCandidatesGet(householdId: string, q?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (householdId === null || householdId === undefined) {
+            throw new Error('Required parameter householdId was null or undefined when calling apiHouseholdsHouseholdIdInviteCandidatesGet.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'q',
+            <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Households/${this.configuration.encodeParam({name: "householdId", value: householdId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/invite-candidates`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<UserSearchHitDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -95,6 +294,128 @@ export class HouseholdsService extends BaseService {
         let localVarPath = `/api/Households/${this.configuration.encodeParam({name: "householdId", value: householdId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/members`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<HouseholdMemberDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @endpoint post /api/Households/{householdId}/members/{memberUserId}/approve
+     * @param householdId 
+     * @param memberUserId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public apiHouseholdsHouseholdIdMembersMemberUserIdApprovePost(householdId: string, memberUserId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public apiHouseholdsHouseholdIdMembersMemberUserIdApprovePost(householdId: string, memberUserId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public apiHouseholdsHouseholdIdMembersMemberUserIdApprovePost(householdId: string, memberUserId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public apiHouseholdsHouseholdIdMembersMemberUserIdApprovePost(householdId: string, memberUserId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (householdId === null || householdId === undefined) {
+            throw new Error('Required parameter householdId was null or undefined when calling apiHouseholdsHouseholdIdMembersMemberUserIdApprovePost.');
+        }
+        if (memberUserId === null || memberUserId === undefined) {
+            throw new Error('Required parameter memberUserId was null or undefined when calling apiHouseholdsHouseholdIdMembersMemberUserIdApprovePost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Households/${this.configuration.encodeParam({name: "householdId", value: householdId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/members/${this.configuration.encodeParam({name: "memberUserId", value: memberUserId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approve`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @endpoint post /api/Households/{householdId}/members/{memberUserId}/reject
+     * @param householdId 
+     * @param memberUserId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public apiHouseholdsHouseholdIdMembersMemberUserIdRejectPost(householdId: string, memberUserId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public apiHouseholdsHouseholdIdMembersMemberUserIdRejectPost(householdId: string, memberUserId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public apiHouseholdsHouseholdIdMembersMemberUserIdRejectPost(householdId: string, memberUserId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public apiHouseholdsHouseholdIdMembersMemberUserIdRejectPost(householdId: string, memberUserId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (householdId === null || householdId === undefined) {
+            throw new Error('Required parameter householdId was null or undefined when calling apiHouseholdsHouseholdIdMembersMemberUserIdRejectPost.');
+        }
+        if (memberUserId === null || memberUserId === undefined) {
+            throw new Error('Required parameter memberUserId was null or undefined when calling apiHouseholdsHouseholdIdMembersMemberUserIdRejectPost.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Households/${this.configuration.encodeParam({name: "householdId", value: householdId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/members/${this.configuration.encodeParam({name: "memberUserId", value: memberUserId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reject`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -300,72 +621,6 @@ export class HouseholdsService extends BaseService {
                 reportProgress: reportProgress
             }
         );
-    }
-
-    /** GET /api/Households/for-child-registration (AllowAnonymous) */
-    public apiHouseholdsForChildRegistrationGet(): Observable<Array<HouseholdDto>> {
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.get<Array<HouseholdDto>>(`${basePath}/api/Households/for-child-registration`, {
-            headers: this.defaultHeaders,
-            ...(withCredentials ? { withCredentials } : {}),
-        });
-    }
-
-    /** GET /api/Households/{householdId}/invite-candidates */
-    public apiHouseholdsHouseholdIdInviteCandidatesGet(householdId: string, q: string): Observable<Array<UserSearchHitDto>> {
-        if (householdId === null || householdId === undefined) {
-            throw new Error('Required parameter householdId was null or undefined when calling apiHouseholdsHouseholdIdInviteCandidatesGet.');
-        }
-        let localVarHeaders = this.defaultHeaders;
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
-        const localVarPath = `/api/Households/${this.configuration.encodeParam({name: 'householdId', value: householdId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid'})}/invite-candidates`;
-        const { basePath, withCredentials } = this.configuration;
-        const params = new HttpParams().set('q', q ?? '');
-        return this.httpClient.get<Array<UserSearchHitDto>>(`${basePath}${localVarPath}`, {
-            headers: localVarHeaders,
-            params,
-            ...(withCredentials ? { withCredentials } : {}),
-        });
-    }
-
-    /** POST /api/Households/{householdId}/members/{memberUserId}/approve */
-    public apiHouseholdsHouseholdIdMembersMemberUserIdApprovePost(householdId: string, memberUserId: string): Observable<void> {
-        let localVarHeaders = this.defaultHeaders;
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
-        const localVarPath = `/api/Households/${this.configuration.encodeParam({name: 'householdId', value: householdId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid'})}/members/${this.configuration.encodeParam({name: 'memberUserId', value: memberUserId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid'})}/approve`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.post<void>(`${basePath}${localVarPath}`, null, {
-            headers: localVarHeaders,
-            ...(withCredentials ? { withCredentials } : {}),
-        });
-    }
-
-    /** POST /api/Households/{householdId}/members/{memberUserId}/reject */
-    public apiHouseholdsHouseholdIdMembersMemberUserIdRejectPost(householdId: string, memberUserId: string): Observable<void> {
-        let localVarHeaders = this.defaultHeaders;
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
-        const localVarPath = `/api/Households/${this.configuration.encodeParam({name: 'householdId', value: householdId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid'})}/members/${this.configuration.encodeParam({name: 'memberUserId', value: memberUserId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid'})}/reject`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.post<void>(`${basePath}${localVarPath}`, null, {
-            headers: localVarHeaders,
-            ...(withCredentials ? { withCredentials } : {}),
-        });
-    }
-
-    /** POST /api/Households/{householdId}/delete */
-    public apiHouseholdsHouseholdIdDeletePost(householdId: string, deleteHouseholdBody?: DeleteHouseholdBody): Observable<void> {
-        if (householdId === null || householdId === undefined) {
-            throw new Error('Required parameter householdId was null or undefined when calling apiHouseholdsHouseholdIdDeletePost.');
-        }
-        let localVarHeaders = this.defaultHeaders;
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders, 'Bearer ');
-        localVarHeaders = localVarHeaders.set('Content-Type', 'application/json');
-        const localVarPath = `/api/Households/${this.configuration.encodeParam({name: 'householdId', value: householdId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid'})}/delete`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.post<void>(`${basePath}${localVarPath}`, deleteHouseholdBody ?? {}, {
-            headers: localVarHeaders,
-            ...(withCredentials ? { withCredentials } : {}),
-        });
     }
 
 }

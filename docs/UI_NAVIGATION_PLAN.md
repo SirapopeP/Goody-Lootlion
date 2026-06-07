@@ -1,68 +1,60 @@
 # แผน Navigation และมุมมอง UI (Lootlion)
 
-เอกสารนี้จับคู่ **แผนงาน Figma / mockup** กับโครงสร้าง Angular ปัจจุบัน
-
 อ้างอิงเช็คลิสงาน: [PHASES_CHECKLIST.md](./PHASES_CHECKLIST.md)
 
 ---
 
 ## สรุปแนวทาง
 
-| บทบาท | โฟกัส UI | Navigation หลัก |
-|--------|-----------|-----------------|
-| **Parent** | Quest Board — จัดการ **Template** (panel ซ้าย), อนุมัติ (panel กลาง) | Top nav + sidebar |
-| **Child** | รับจากบอร์ด / ส่งงาน / แลกรางวัล | Panel กลางบนหน้าแรก (desktop) — **bottom nav ยังไม่ implement** |
+| บทบาท | Shell | Navigation |
+|--------|-------|------------|
+| **Parent** | `DashboardLayoutComponent` | Top nav + sidebar (coin/EXP/level จริง) |
+| **Child** | `ChildLayoutComponent` | Bottom nav: MISSION \| REWARD \| FAMILY \| SETTING |
 
-โมเดลข้อมูล: **MissionTemplate** (แม่แบบ) + **MissionInstance** (รอบงาน)
+Route แยกด้วย `childShellCanMatch` / `parentShellCanMatch` ใน [`app.routes.ts`](../client/lootlion-web/src/app/app.routes.ts)
 
 ---
 
-## Parent — Quest Board หน้าแรก (`/`)
-
-### โครงสร้าง (implement แล้ว)
+## Parent — Quest Board (`/`)
 
 | Panel | Component | API |
 |-------|-----------|-----|
-| ซ้าย — Template | `HomeMissionPanelComponent` | `GET/POST /api/Missions/templates/...` |
-| กลาง — Instance | `HomeMissionCenterComponent` | `board`, `mine`, `pending`, `instances/...` |
+| Overview | `HomeComponent` | Households mine |
+| Rank (top 5) | `HomeRankPanelComponent` | `GET /api/Wallet/.../leaderboard` |
+| Template ซ้าย | `HomeMissionPanelComponent` | Missions templates |
+| Instance กลาง | `HomeMissionCenterComponent` | board / mine / pending |
 
-### Panel ซ้าย (Parent)
-
-- สร้าง template: **BoardClaim** (ไม่บังคับ assign) หรือ **DirectAssign**
-- Recurrence: None / Daily / Weekly / Monthly / IntervalDays
-- ลบ template: `POST templates/{id}/cancel`
-- เปิดรอบใหม่หลัง reject: `POST templates/{id}/spawn` เมื่อ `canSpawnNextRound`
-
-### Panel กลาง
-
-| แท็บ | ผู้ใช้ | การทำงาน |
-|------|--------|----------|
-| Board | Child | `claim` |
-| My missions | ทุกคน | `submit` (Active) |
-| Pending | Parent | `approve` / `reject` |
-| Done | ทุกคน | รายการ Approved |
+| Route | หน้า |
+|-------|------|
+| `/missions` | `MissionsReportPageComponent` — สถิติ + leaderboard เต็ม |
+| `/rewards` | `RewardsPageComponent` — catalog + wishlist approve |
+| `/profile` | `ProfilePageComponent` — wallet + ledger |
 
 ---
 
-## Child — มุมมอง Mobile (backlog)
+## Child — Mobile shell
 
-Bottom nav **MISSION | REWARD | FAMILY | SETTING** — ยังไม่แยก layout
+| แท็บ | Route | Component |
+|------|-------|-------------|
+| MISSION | `/` | `ChildMissionsPageComponent` |
+| REWARD | `/rewards` | `ChildRewardsPageComponent` |
+| FAMILY | `/family` | `ChildFamilyPageComponent` |
+| SETTING | `/settings` | `ChildSettingsPageComponent` |
 
-บน desktop ปัจจุบัน child ใช้ `HomeMissionCenterComponent` แท็บ **Board** + **Mine** บนหน้าแรก
-
----
-
-## กติกาธุรกิจ (ยืนยันแล้ว)
-
-- **Rejected + recurring:** ไม่ spawn อัตโนมัติ — Parent กด **เปิดรอบใหม่**
-- **Approved + recurring:** spawn รอบถัดไปอัตโนมัติ
-- **Timezone:** `Household.TimeZoneId` (IANA) สำหรับ `PeriodKey`
-- **BoardClaim:** 1 instance ต่อ `(TemplateId, PeriodKey)`
+`/households` ใช้ร่วมได้จาก child shell (จัดการครอบครัว)
 
 ---
 
-## ลำดับถัดไป
+## Wallet + Rank (เฟส 4b)
 
-1. **4b** — Wallet ใน sidebar + Rank
-2. **4c-child** — Bottom nav ตาม mockup mobile
-3. **5** — Rewards / Wishlist UI
+- Sidebar: `WalletFacadeService` → balance + level progress
+- Family list: level จาก leaderboard
+- หลัง approve ภารกิจ / redeem รางวัล → `wallet.requestRefresh()`
+
+---
+
+## ถัดไป (ยังไม่ทำ)
+
+- **5b** Commission
+- **6** Deploy / E2E
+- แก้ไข Mission Template, ตัวละคร/cosmetic

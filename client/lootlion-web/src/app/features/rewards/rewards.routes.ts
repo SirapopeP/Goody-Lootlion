@@ -4,6 +4,6 @@ export const REWARDS_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./rewards-placeholder.component').then((m) => m.RewardsPlaceholderComponent)
+      import('./rewards-page.component').then((m) => m.RewardsPageComponent)
   }
 ];

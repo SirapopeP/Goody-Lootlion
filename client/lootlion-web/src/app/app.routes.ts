@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authCanMatch } from './core/auth/auth.guard';
+import { childShellCanMatch, missionsParentCanMatch, parentShellCanMatch } from './core/auth/child-shell.guard';
 import { rewardsParentCanMatch, wishlistChildCanMatch } from './core/auth/household-route.guard';
 
 export const routes: Routes = [
@@ -9,7 +10,22 @@ export const routes: Routes = [
   },
   {
     path: '',
-    canMatch: [authCanMatch],
+    canMatch: [authCanMatch, childShellCanMatch],
+    loadComponent: () => import('./layout/child-layout.component').then((m) => m.ChildLayoutComponent),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/child/child.routes').then((m) => m.CHILD_ROUTES),
+      },
+      {
+        path: 'households',
+        loadChildren: () => import('./features/household/household.routes').then((m) => m.HOUSEHOLD_ROUTES),
+      },
+    ],
+  },
+  {
+    path: '',
+    canMatch: [authCanMatch, parentShellCanMatch],
     loadComponent: () =>
       import('./layout/dashboard-layout.component').then((m) => m.DashboardLayoutComponent),
     children: [
@@ -23,6 +39,7 @@ export const routes: Routes = [
       },
       {
         path: 'missions',
+        canMatch: [missionsParentCanMatch],
         loadChildren: () => import('./features/missions/missions.routes').then((m) => m.MISSIONS_ROUTES),
       },
       {
